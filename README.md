@@ -1,4 +1,4 @@
-# LunaticRave2_rewrite
+# OpenLR2
 Rewritten source code of bms player Lunatic Rave 2
 Project started Jan, 2021. And now it's about to release.
 
@@ -19,15 +19,15 @@ sending score to LR2IR is disabled to avoid accidents.
  - behavior mismatch on NONSTOP MIX
 
 # libraries
-*DxLib (3.02 -> 3.12a)
+*DxLib 3.02 -> 3.12a
 	suspected orginal library is dxlib 3.01 ~ dxlib3.02
 	but, to avoid LoadJpegImage() crash error I used dxlib3.12a (2014/4/19)
- 
-*SQLite 3.6.7
-	version doesn't matter
 
-*FMODex 4.13.4(080401)
-	is replaced with FMOD 20207(220518)
+*FMODex 4.13.4(080401) -> FMOD 20207(220518) 
 	because I can't find the library of correspondng version
 	Unfortunately, due to this problem the audio FX is not same with original version.
  
+*SQLite 3.6.7
+
+*tinyxml
+
