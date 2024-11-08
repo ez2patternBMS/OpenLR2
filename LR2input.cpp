@@ -1002,7 +1002,7 @@ void ProcessInput(inputStructure *is, int interval) {
 		if (is->mouse_buttonL == 0 || is->mouse_buttonL == 3) {
 			is->mouse_buttonL = 0;
 		}
-		else if (GetTimeWrap() - (double)is->drag_start_time <=32.0 == 0) {
+		else if (GetTimeWrap() - (double)is->drag_start_time > 32.0) {
 			is->mouse_buttonL = 3;
 		}
 		else {
@@ -1012,7 +1012,7 @@ void ProcessInput(inputStructure *is, int interval) {
 	else {
 		if (is->mouse_buttonL != 1 && is->mouse_buttonL != 2) {
 			is->mouse_buttonL = 1;
-			if (300.0 <= GetTimeWrap() - (double)is->drag_start_time) {
+			if (GetTimeWrap() - (double)is->drag_start_time >= 300.0) {
 				is->drag_start_time = GetTimeWrap();
 			}
 			else {
