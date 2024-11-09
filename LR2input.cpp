@@ -3276,7 +3276,7 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, game *g, BMSMETA *meta
 			double dmg = max(dmg_notebase * 10, dmg_totalbase) / 10.0;
 
 			if (!gp->is2Pplay) {
-				switch (g->config.play.gaugeOption[0]) {
+				switch (g->config.play.gaugeOption[p]) {
 				default:
 					gp->player[p].judge_damage[5] = total[p] / (float)notes;
 					gp->player[p].judge_damage[4] = total[p] / (float)notes;
@@ -3328,7 +3328,7 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, game *g, BMSMETA *meta
 				}
 			}
 			else if (gp->courseType == 2) {
-				switch (g->config.play.gaugeOption[0]) {
+				switch (g->config.play.gaugeOption[p]) {
 				default:
 					gp->player[p].judge_damage[5] = 0.1;
 					gp->player[p].judge_damage[4] = 0.1;
@@ -3372,7 +3372,7 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, game *g, BMSMETA *meta
 				}
 			}
 			else {
-				switch (g->config.play.gaugeOption[0]) {
+				switch (g->config.play.gaugeOption[p]) {
 				default:
 					gp->player[p].judge_damage[5] = 0.1;
 					gp->player[p].judge_damage[4] = 0.1;
