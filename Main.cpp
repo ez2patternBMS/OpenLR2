@@ -154,7 +154,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				gs.cmd_auto = '\x01';
 			}
 			else if (tStr2.left(2).isSame("-n")) {
-				atol(tStr1.right(tStr1.length() - 2).outstr());
+				atol(tStr1.right(tStr1.length() - 2));
 			}
 		}
 		gs.config.system.thread = 0;
@@ -180,9 +180,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		if (gs.config.select.disabledifficultyfilter == 1) gs.config.select.ignoredifficultyall = 0;
 		memcpy(&gs.sSelect.filter, &gs.config.select, sizeof(CONFIG_SELECT));
 		cstrSprintf(&newPath, "LR2files/Replay/%s", gs.config.player.id);
-		CreateDirectoryA(newPath.outstr(), NULL);
+		CreateDirectoryA(newPath, NULL);
 		cstrSprintf(&newPath, "LR2files/Ghost/%s", gs.config.player.id);
-		CreateDirectoryA(newPath.outstr(), NULL);
+		CreateDirectoryA(newPath, NULL);
 		CreateDirectoryA("LR2files/SkinCustomize", NULL);
 		ReadKeyConfig(&gs, "LR2files\\Config\\keyconfig.xml");
 		gs.is_clicked_screenModeChange = 0;
@@ -245,7 +245,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		CSTR title;
 		cstrSprintf(&title, "LR2 beta3 version 100201"); ///define versionstring?
-		SetMainWindowText(title.outstr());
+		SetMainWindowText(title);
 		title.fillzero();
 		SetOutApplicationLogValidFlag(gs.config.system.outputlog);
 		SetMultiThreadFlag(1);

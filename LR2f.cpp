@@ -364,7 +364,7 @@ int ProcS_Keyconfig(game *g) {
 	}
 	if (g->KeyInput.config_button_inMap > 0) {
 		for (int i = 0; i < 16; i++) {
-			t = GetKeyIDname(g->config.input.buttonMap[g->KeyInput.config_button_inMap][i]).outstr();
+			t = GetKeyIDname(g->config.input.buttonMap[g->KeyInput.config_button_inMap][i]);
 			SetObjectString(i + 40, t, g->txtStruct.objectStr);
 		}
 	}
@@ -6644,10 +6644,10 @@ int ReadLR2SoundSet(game *g, CSTR filepath, char reFlag) {
 	if (g->audio.is_fmod_disabled == 0) FMOD_System_Update(g->audio.fmodSys);
 
 	CSTR path;
-	cstrSprintf(&path, "LR2files\\SkinCustomize\\%s.xml", MD5str(filepath.outstr()));
-	ReadSkinCustomize(&sku, path.outstr());
+	cstrSprintf(&path, "LR2files\\SkinCustomize\\%s.xml", MD5str(filepath));
+	ReadSkinCustomize(&sku, path);
 	
-	CSTR dir(filepath.getDirectory().outstr());
+	CSTR dir(filepath.getDirectory());
 
 	for (int i = 0; i < 100; i++) {
 		IFSWITCH[i] = 0;
@@ -6658,7 +6658,7 @@ int ReadLR2SoundSet(game *g, CSTR filepath, char reFlag) {
 		int t = sku.customize_value[i];
 		if (899 < t &&  t < 1000) dst_op[t] = 1;
 	}
-	hFile = fopen(filepath.outstr(), "r");
+	hFile = fopen(filepath, "r");
 	if (!hFile) return 0;
 	CSTR fBuf(260);
 	char* pFbuf;
@@ -6714,7 +6714,7 @@ int ReadLR2SoundSet(game *g, CSTR filepath, char reFlag) {
 				wildStr[wildCount].assign(&csv.str[2]);
 				wildCFilename[wildCount].assign(&sku.customize_filename[wildCount]);
 				if (wildCFilename[wildCount].isSame("RANDOM")) {
-					wildCFilename[wildCount].assign(GetRandomFile(wildStr[wildCount], 1).outstr());
+					wildCFilename[wildCount].assign(GetRandomFile(wildStr[wildCount], 1));
 				}
 				wildCount++;
 				*fBuf.atPos(0) = 0;
@@ -6728,8 +6728,8 @@ int ReadLR2SoundSet(game *g, CSTR filepath, char reFlag) {
 			}
 
 			for (int i = 0; i < wildCount; i++) {
-				if (wildStr[i].isSame(csv.str[1].left(wildStr[i].length()).outstr()) && wildCFilename[i].isDiff("RANDOM") && wildCFilename[i].isDiff("ERROR") && wildCFilename[i].length() > 0) {
-					csv.str[1].replace("*", wildCFilename[i].outstr());
+				if (wildStr[i].isSame(csv.str[1].left(wildStr[i].length())) && wildCFilename[i].isDiff("RANDOM") && wildCFilename[i].isDiff("ERROR") && wildCFilename[i].length() > 0) {
+					csv.str[1].replace("*", wildCFilename[i]);
 				}
 			}
 
@@ -8017,7 +8017,7 @@ int ProcI_SkinSelect(game *g) {
 int MakeSkinPreview(game *g, skstruct *sk, SkinManage *sm) {
 	//disable
 	if (g->config.system.disableskinpreview == 1 || sm->Data[sm->previewID].type == SKINTYPE_SOUNDSET) {
-		int grh = LoadGraph(sm->Data[sm->previewID].thumbnail.outstr(), 0);
+		int grh = LoadGraph(sm->Data[sm->previewID].thumbnail, 0);
 		if (grh != -1) {
 			DrawExtendGraph(0, 0, 640, 480, grh, 0);
 			ScreenCapture(g->skstruct.GrHandle[105]);
@@ -8027,7 +8027,7 @@ int MakeSkinPreview(game *g, skstruct *sk, SkinManage *sm) {
 	}
 	//enable
 	for (int i = 0; i < 900; i++) {
-		g->skstruct.op[i] = (GetOptionFlag_dst(g, i)>0);
+		g->skstruct.op[i] = (GetOptionFlag_dst(g, i) > 0);
 		g->skstruct2.op[i] = (GetOptionFlag_dst(g, i) > 0);
 	}
 	for (int i = 0; i < 100; i++) {
@@ -10876,8 +10876,8 @@ int SetObjectValue_Button(game *g, skstruct *sk, Timer *T, char flag) {
 					g->skinData.previewCustomID = 0;
 					CSTR tcstr;
 					SkinUser sku;
-					cstrSprintf(&tcstr, "LR2files\\SkinCustomize\\%s.xml", MD5str(g->skinData.Data[g->skinData.previewID].skinFile.outstr()));
-					ReadSkinCustomize(&sku, tcstr.outstr());
+					cstrSprintf(&tcstr, "LR2files\\SkinCustomize\\%s.xml", MD5str(g->skinData.Data[g->skinData.previewID].skinFile));
+					ReadSkinCustomize(&sku, tcstr);
 
 					for (int j = 0; j < 100; j++) { // VULNERABILITY : out of index sku (array size 40, but access to 100)
 						if (g->skinData.Data[g->skinData.previewID].customs[j].dst_op_start == 0) {
@@ -10935,8 +10935,8 @@ int SetObjectValue_Button(game *g, skstruct *sk, Timer *T, char flag) {
 					g->skinData.previewCustomID = 0;
 					CSTR tcstr;
 					SkinUser sku;
-					cstrSprintf(&tcstr, "LR2files\\SkinCustomize\\%s.xml", MD5str(g->skinData.Data[g->skinData.previewID].skinFile.outstr()));
-					ReadSkinCustomize(&sku, tcstr.outstr());
+					cstrSprintf(&tcstr, "LR2files\\SkinCustomize\\%s.xml", MD5str(g->skinData.Data[g->skinData.previewID].skinFile));
+					ReadSkinCustomize(&sku, tcstr);
 
 					for (int j = 0; j < 100; j++) { // VULNERABILITY : out of index sku (array size 40, but access to 100)
 						if (g->skinData.Data[g->skinData.previewID].customs[j].dst_op_start == 0) {
@@ -11030,8 +11030,8 @@ int SetObjectValue_Button(game *g, skstruct *sk, Timer *T, char flag) {
 
 					CSTR tcstr;
 					SkinUser sku;
-					cstrSprintf(&tcstr, "LR2files\\SkinCustomize\\%s.xml", MD5str(g->skinData.Data[g->skinData.previewID].skinFile.outstr()));
-					ReadSkinCustomize(&sku, tcstr.outstr());
+					cstrSprintf(&tcstr, "LR2files\\SkinCustomize\\%s.xml", MD5str(g->skinData.Data[g->skinData.previewID].skinFile));
+					ReadSkinCustomize(&sku, tcstr);
 
 					for (int j = 0; j < 100; j++) { // VULNERABILITY : out of index sku (array size 40, but access to 100)
 						if (g->skinData.Data[g->skinData.previewID].customs[j].dst_op_start == 0) {
@@ -13383,7 +13383,7 @@ int ProcS_SkinSelect(game *g) {
 	int &n = d.previewID;
 	SkinHeader &skd = d.Data[n];
 
-	cstrSprintf(&path, "LR2files\\SkinCustomize\\%s.xml", MD5str(skd.skinFile.outstr()));
+	cstrSprintf(&path, "LR2files\\SkinCustomize\\%s.xml", MD5str(skd.skinFile));
 	ReadSkinCustomize(&sku, path);
 
 	for (int i = 0; i < 20; i++) {
@@ -14097,7 +14097,7 @@ int GetFileUnixtime(CSTR str) {
 	}
 
 	lpFindFileData = &FindFileData;
-	hFindFile = FindFirstFileA(str.outstr(), lpFindFileData);
+	hFindFile = FindFirstFileA(str, lpFindFileData);
 	if (hFindFile == (HANDLE)-1) {
 		ErrorLogFmtAdd("ファイルのLR2TIME取得エラー:%sが見つからない\n", str);
 		return -1;
@@ -14116,11 +14116,11 @@ CSTR GetRandomFileOnDir(CSTR path, char fOnlyName) {
 	LPWIN32_FIND_DATAA lpFindFileData;
 	HANDLE hFindFile;
 	int fileCount = 0;
-	CSTR str1 = CSTR( path.left(path.findStrPos("*")).outstr() );
-	CSTR str2 = CSTR( path.right(path.length() - str1.length() - 1).outstr() );
+	CSTR str1 = CSTR( path.left(path.findStrPos("*")) );
+	CSTR str2 = CSTR( path.right(path.length() - str1.length() - 1) );
 	CSTR str3 = CSTR( str1 );
 	str3.add("*");
-	hFindFile = FindFirstFileA(str3.outstr(), &FindFileData);
+	hFindFile = FindFirstFileA(str3, &FindFileData);
 	if (hFindFile == (HANDLE)-1) {
 		//oBuf = CSTR("ERROR");
 		return CSTR("ERROR");
@@ -14135,7 +14135,7 @@ CSTR GetRandomFileOnDir(CSTR path, char fOnlyName) {
 		if (fileCount > 0) {
 			fileCount = GetRand(fileCount - 1);
 
-			hFindFile = FindFirstFileA(str3.outstr(), &FindFileData);
+			hFindFile = FindFirstFileA(str3, &FindFileData);
 			if (hFindFile != (HANDLE)-1) {
 				do {
 					if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
@@ -14184,7 +14184,7 @@ bool CheckStringHead(CSTR *bigS, CSTR *head){
 //4385f0
 bool GetStringBodyStr(CSTR *str, CSTR head, CSTR *oBuf){
 	if (CheckStringHead(str, &head)) {
-		oBuf->assign(str->right(str->length() - head.length() - 1).outstr() );
+		oBuf->assign(str->right(str->length() - head.length() - 1) );
 		return true;
 	}
 	return false;
@@ -14193,7 +14193,7 @@ bool GetStringBodyStr(CSTR *str, CSTR head, CSTR *oBuf){
 //4386c0
 bool GetStringBodyInt(CSTR *str, CSTR haed, int *oBuf) {
 	if (CheckStringHead(str, &haed)) {
-		*oBuf = atol(str->right(str->length() - haed.length() - 1).outstr());
+		*oBuf = atol(str->right(str->length() - haed.length() - 1));
 		return true;
 	}
 	return false;
@@ -14354,7 +14354,7 @@ bool IsFileExist(CSTR path) {
 		cur = path.atPos(path.length() - 1);
 		*cur = 0;
 	}
-	hFindFile = FindFirstFileA(path.outstr(), &findFileData);
+	hFindFile = FindFirstFileA(path, &findFileData);
 	FindClose(hFindFile);
 	/*if (hFindFile != (HANDLE)-1) {
 		FindClose(hFindFile);
@@ -14448,17 +14448,17 @@ int SplitCSV(CSTR csvStr, CSVbuf *oBuf, const char *splitter) {
 			}
 			if (oBuf->str[i].left(1).isSame("!")) {
 				oBuf->str[i].lastCut(oBuf->str[i].length() - 1);
-				oBuf->val[i] = -atol(oBuf->str[i].outstr());
+				oBuf->val[i] = -atol(oBuf->str[i]);
 			}
 			else {
-				oBuf->val[i] = atol(oBuf->str[i].outstr());
+				oBuf->val[i] = atol(oBuf->str[i]);
 			}
 			csvStr.lastCut(csvStr.length() - pos - 1);
 			bEnd = true;
 		}
 		else {
 			//logic arranged
-			oBuf->str[i].assign( csvStr.left(pos).outstr() );
+			oBuf->str[i].assign( csvStr.left(pos) );
 			if ( oBuf->str[i].left(1).isSame("\"") ){
 				if (oBuf->str[i].right(1).isSame("\"")) {
 					oBuf->str[i].nullAtPos(oBuf->str[i].length() - 1);
@@ -14467,10 +14467,10 @@ int SplitCSV(CSTR csvStr, CSVbuf *oBuf, const char *splitter) {
 			}
 			if (oBuf->str[i].left(1).isSame("!")) {
 				oBuf->str[i].lastCut(oBuf->str[i].length() - 1);
-				oBuf->val[i] = -atol(oBuf->str[i].outstr());
+				oBuf->val[i] = -atol(oBuf->str[i]);
 			}
 			else {
-				oBuf->val[i] = atol(oBuf->str[i].outstr());
+				oBuf->val[i] = atol(oBuf->str[i]);
 			}
 			csvStr.lastCut(csvStr.length() - pos - 1);
 		}
@@ -14730,11 +14730,11 @@ CSTR GetRandomFile(CSTR path, char fOnlyName) {
 
 	//call function if wildcard is on directory
 	if (path.findStrPos("*/") != -1 || path.findStrPos("*\\") != -1 || path.right(1).isSame("*")) {
-		return CSTR(GetRandomFileOnDir(path, fOnlyName).outstr());
+		return CSTR(GetRandomFileOnDir(path, fOnlyName));
 	}
 
 	//count files for random
-	hFindFile = FindFirstFileA(path.outstr(), &FindFileData);
+	hFindFile = FindFirstFileA(path, &FindFileData);
 	if (hFindFile == (HANDLE)-1) return CSTR("ERROR");
 	
 	count = 0;
@@ -14746,14 +14746,14 @@ CSTR GetRandomFile(CSTR path, char fOnlyName) {
 	count = GetRand(count - 1);
 
 	//get file by random
-	hFindFile = FindFirstFileA(path.outstr(), &FindFileData);
+	hFindFile = FindFirstFileA(path, &FindFileData);
 	if (hFindFile == (HANDLE)-1) return CSTR("ERROR");
 
 	for (int i = 0; i < count; i++) {
 		FindNextFile(hFindFile, &FindFileData);
 	}
 	FindClose(hFindFile);
-	path.assign(path.getDirectory().outstr());
+	path.assign(path.getDirectory());
 	path.add(FindFileData.cFileName);
 	if (fOnlyName) {
 		path.assign(FindFileData.cFileName);
@@ -14765,10 +14765,10 @@ CSTR GetRandomFile(CSTR path, char fOnlyName) {
 //43abe0
 CSTR GetRandomFileNoError(CSTR path, CSTR dir) {
 	CSTR filepath = CSTR();
-	filepath.assign(GetRandomFile(path, 0).outstr());
+	filepath.assign(GetRandomFile(path, 0));
 	if (filepath.isDiff("ERROR")) return CSTR(filepath);
 	dir.add(&path);
-	filepath.assign(GetRandomFile(path, 0).outstr());
+	filepath.assign(GetRandomFile(path, 0));
 	if (filepath.isDiff("ERROR")) return CSTR(filepath);
 	return CSTR(path);
 }
@@ -15896,35 +15896,35 @@ int GetSongData(CSTR songMD5, SONGDATA *song, sqlite3 *sql, SONGSELECT *ss) {
 	if (sqlite3_step(stmt) == 100) {
 		song->maxBPM = sqlite3_column_int(stmt, 16);
 		song->minBPM = sqlite3_column_int(stmt, 17);
-		song->hash = SQL_GetColumn(0, stmt).outstr();
+		song->hash = SQL_GetColumn(0, stmt);
 		if (song->hash.isSame("9cbea4427d7e8caff0d28f9d7600cdec"))
 			song->title = AutomationFactory();
 		else
-			song->title = SQL_GetColumn(1, stmt).outstr();
-		song->subtitle = SQL_GetColumn(2, stmt).outstr();
-		song->genre = SQL_GetColumn(3, stmt).outstr();
-		song->filepath = SQL_GetColumn(7, stmt).outstr();
+			song->title = SQL_GetColumn(1, stmt);
+		song->subtitle = SQL_GetColumn(2, stmt);
+		song->genre = SQL_GetColumn(3, stmt);
+		song->filepath = SQL_GetColumn(7, stmt);
 		song->folderType = sqlite3_column_int(stmt, 8);
 		song->level = sqlite3_column_int(stmt, 14);
-		song->artist = SQL_GetColumn(4, stmt).outstr();
-		song->subartist = SQL_GetColumn(5, stmt).outstr();
+		song->artist = SQL_GetColumn(4, stmt);
+		song->subartist = SQL_GetColumn(5, stmt);
 		song->keymode = sqlite3_column_int(stmt, 18);
 		song->judge = sqlite3_column_int(stmt, 19);
 		song->longnote = sqlite3_column_int(stmt, 20);
 		song->bga = sqlite3_column_int(stmt, 21);
 		song->random = sqlite3_column_int(stmt, 22);
-		song->folder = SQL_GetColumn(9, stmt).outstr();
+		song->folder = SQL_GetColumn(9, stmt);
 		song->txt = sqlite3_column_int(stmt, 25);
 		song->favorite = sqlite3_column_int(stmt, 24);
 		song->adddate = sqlite3_column_int(stmt, 27);
 		
-		song->stagefile = SQL_GetColumn(10, stmt).outstr();
+		song->stagefile = SQL_GetColumn(10, stmt);
 		if (song->stagefile.isDiff("(null)") && song->stagefile.length() > 4)
 			song->isStagefile = 1;
-		song->banner = SQL_GetColumn(11, stmt).outstr();
+		song->banner = SQL_GetColumn(11, stmt);
 		if (song->banner.isDiff("(null)") && song->banner.length() > 4)
 			song->isBanner = 1;
-		song->backBMP = SQL_GetColumn(12, stmt).outstr();
+		song->backBMP = SQL_GetColumn(12, stmt);
 		if (song->backBMP.isDiff("(null)") && song->backBMP.length() > 4)
 			song->isBackBMP = 1;
 
@@ -15933,7 +15933,7 @@ int GetSongData(CSTR songMD5, SONGDATA *song, sqlite3 *sql, SONGSELECT *ss) {
 		else
 			song->fulltitle = song->title;
 
-		song->tag = SQL_GetColumn(6, stmt).outstr();
+		song->tag = SQL_GetColumn(6, stmt);
 		song->difficulty = sqlite3_column_int(stmt, 15);
 		cstrSprintf(&replayPath, "LR2files/Replay/%s/%s.lr2rep", ss->playerID, song->hash);
 		song->replayExist = IsFileExist(replayPath);
@@ -15962,7 +15962,7 @@ int GetSongData(CSTR songMD5, SONGDATA *song, sqlite3 *sql, SONGSELECT *ss) {
 			song->mybest.rseed = sqlite3_column_int(stmt, 51);
 			song->mybest.complete = sqlite3_column_int(stmt, 52);
 
-			besthash = SQL_GetColumn(46, stmt).outstr();
+			besthash = SQL_GetColumn(46, stmt);
 			if (isSameScoreHash(&song->mybest, &ss->playerPassMD5, &song->hash, &besthash)) {
 				song->mybest.stat_exscore = song->mybest.stat_great + song->mybest.stat_pgreat * 2;
 				if (song->mybest.total_notes < 1) 
@@ -18182,7 +18182,7 @@ void LRDrawTextInput(int* hFont, DSTdraw *dstd, int* hInput, ImageFont *imgfont)
 	int grLen;
 	int len1, len2;
 	if (*hInput != -1) {
-		GetKeyInputString(buf.outstr(), *hInput);
+		GetKeyInputString(buf, *hInput);
 		if (imgfont->size < 1) {
 			if (dstd->h != 0.0 || dstd->w != 0.0 || *hFont != -1) {
 				SetDrawMode(dstd->filter);
@@ -18199,7 +18199,7 @@ void LRDrawTextInput(int* hFont, DSTdraw *dstd, int* hInput, ImageFont *imgfont)
 			LRDrawText(hFont, dstd, &buf, imgfont);
 			grLen = 0;
 			if (GetKeyInputCursorPosition(*hInput)) {
-				CSTR tCstr = CSTR(buf.left(GetKeyInputCursorPosition(*hInput)).outstr());
+				CSTR tCstr = CSTR(buf.left(GetKeyInputCursorPosition(*hInput)));
 				grLen = GetTextGraphLength(&tCstr, imgfont);
 			}
 			if (pIME == NULL)	buf.fillzero();
@@ -18215,17 +18215,17 @@ void LRDrawTextInput(int* hFont, DSTdraw *dstd, int* hInput, ImageFont *imgfont)
 					
 					if (pos2 <= pos1) break;
 					if (pos1) {
-						CSTR tCstr = CSTR(buf.left(pos1).outstr());
+						CSTR tCstr = CSTR(buf.left(pos1));
 						pos1 = GetTextGraphLength(&tCstr, imgfont);
 					}
 					len1 = pos1;
-					CSTR tCstr = CSTR(buf.left(pos2).outstr());
+					CSTR tCstr = CSTR(buf.left(pos2));
 					len2 = GetTextGraphLength(&tCstr, imgfont);
 					DrawBox(dstd->x + len1 + 1.0, dstd->y, dstd->x + len2 - 1.0, dstd->h + dstd->y, (grLen == pIME->SelectClause) ? GetColor(255, 0, 0) : GetColor(64, 64, 64),1);
 				}
 				LRDrawText(hFont, dstd, &buf, imgfont);
 			}
-			GetIMEInputModeStr(buf.outstr());
+			GetIMEInputModeStr(buf);
 			dstd->y = 480.0 - dstd->h;
 			dstd->x = 640.0;
 			dstd->align = 2;
@@ -19737,7 +19737,7 @@ int ReadImageFont(CSTR filename, ImageFont *imgfont) {
 	
 	str1 = filename.getDirectory();
 
-	if (strcmp(str1.outstr(), imgfont->filepath)) {
+	if (strcmp(str1, imgfont->filepath)) {
 		imgfont->size = 0;
 		imgfont->kerning = 0;
 		for (int i = 0; i < 0x3bce; i++) {
@@ -19758,9 +19758,9 @@ int ReadImageFont(CSTR filename, ImageFont *imgfont) {
 		
 		CSTR str2 = CSTR(256);
 		CSVbuf csvBuf;
-		strcpy(imgfont->filepath, str1.outstr());
+		strcpy(imgfont->filepath, str1);
 		
-		while (FileRead_gets(str2.outstr(),250,f) != -1) {
+		while (FileRead_gets(str2, 250, f) != -1) {
 			if (*str2.atPos(0) == '#') {
 				str2.trimWhiteSpace();
 				DealWhiteSpace(&str2);
@@ -19779,7 +19779,7 @@ int ReadImageFont(CSTR filename, ImageFont *imgfont) {
 					imgfont->size = csvBuf.val[1];
 				}
 				else if (*str2.atPos(1) == 'T') {
-					strcpy(imgfont->images[csvBuf.val[1]].filename, csvBuf.str[2].outstr());
+					strcpy(imgfont->images[csvBuf.val[1]].filename, csvBuf.str[2]);
 				}
 			}
 			*str2.atPos(0) = '\0';
@@ -20156,8 +20156,8 @@ int ReadSkin(skstruct *sk,CSTR FilePath, int unused, int skin_num, SkinUser* sku
 	ErrorLogFmtAdd("スキンの読み込みを開始します。 %s\n", FilePath);
 	ErrorLogTabAdd();
 
-	pFile = fopen(FilePath.outstr(), "r");
-	CSTR dir = CSTR(FilePath.getDirectory().outstr());
+	pFile = fopen(FilePath, "r");
+	CSTR dir = CSTR(FilePath.getDirectory());
 	line = 0;
 
 	if (!pFile) {
@@ -20279,13 +20279,13 @@ int ReadSkin(skstruct *sk,CSTR FilePath, int unused, int skin_num, SkinUser* sku
 										sk->grIsMovie[sk->count] = 0;
 									}
 									for (int i = 0; i < sk->customfile_count; i++) {
-										if (sk->customfileRANDOM[i].isSame(csv.str[1].left(sk->customfileRANDOM[i].length()).outstr()) && sk->customfile[i].isDiff("RANDOM") != 0 && sk->customfile[i].isDiff("ERROR") && sk->customfile[i].length() > 0 ) {
-											csv.str[1].replace("*", sk->customfile[i].outstr());
+										if (sk->customfileRANDOM[i].isSame(csv.str[1].left(sk->customfileRANDOM[i].length())) && sk->customfile[i].isDiff("RANDOM") != 0 && sk->customfile[i].isDiff("ERROR") && sk->customfile[i].length() > 0 ) {
+											csv.str[1].replace("*", sk->customfile[i]);
 											break;
 										}
 									}
-									CSTR temp = CSTR(GetRandomFileNoError(csv.str[1], dir).outstr(), 0);
-									sk->GrHandle[sk->count] = LoadGraph(temp.outstr());
+									CSTR temp = CSTR(GetRandomFileNoError(csv.str[1], dir), 0);
+									sk->GrHandle[sk->count] = LoadGraph(temp);
 									sk->caption[sk->count].assign(&temp);
 								}
 								sk->count++;
@@ -20298,7 +20298,7 @@ int ReadSkin(skstruct *sk,CSTR FilePath, int unused, int skin_num, SkinUser* sku
 						}
 						else {
 							SplitCSV(fBuf, &csv, ",");
-							sk->fontHandle[sk->num_of_struct] = CreateFontToHandle(sk->fontname.outstr(), csv.val[1], csv.val[2], csv.val[3], 0, -1, 0, -1);//, -1);
+							sk->fontHandle[sk->num_of_struct] = CreateFontToHandle(sk->fontname, csv.val[1], csv.val[2], csv.val[3], 0, -1, 0, -1);//, -1);
 							if (sk->fontHandle[sk->num_of_struct] == -1) {
 								sk->fontHandle[sk->num_of_struct] = 0;
 							}
@@ -20881,8 +20881,8 @@ int ReadSkin(skstruct *sk,CSTR FilePath, int unused, int skin_num, SkinUser* sku
 						else if (csv.val[2] == 1 || sk->disableimagefont == 0) {
 							if (csv.str[1].isDiff("CONTINUE")) {
 								for (int i = 0; i < sk->customfile_count; i++) {
-									if(sk->customfileRANDOM[i].isSame(csv.str[1].left(sk->customfileRANDOM[i].length()).outstr()) && sk->customfile[i].isDiff("RANDOM") && sk->customfile[i].isDiff("ERROR") && sk->customfile[i].length() > 0){
-										csv.str[1].replace("*", sk->customfile[i].outstr());
+									if(sk->customfileRANDOM[i].isSame(csv.str[1].left(sk->customfileRANDOM[i].length())) && sk->customfile[i].isDiff("RANDOM") && sk->customfile[i].isDiff("ERROR") && sk->customfile[i].length() > 0){
+										csv.str[1].replace("*", sk->customfile[i]);
 										//line?
 										break;
 									}
@@ -20932,16 +20932,16 @@ int ReadSkin(skstruct *sk,CSTR FilePath, int unused, int skin_num, SkinUser* sku
 					else if (fBuf.left(8).isSame("#INCLUDE")) {
 						SplitCSV(fBuf, &csv, ",");
 						for (int i = 0; i < sk->customfile_count; i++) {
-							if (sk->customfileRANDOM[i].isSame(csv.str[1].left(sk->customfileRANDOM[i].length()).outstr())
+							if (sk->customfileRANDOM[i].isSame(csv.str[1].left(sk->customfileRANDOM[i].length()))
 								&& sk->customfile[i].isDiff("RANDOM") && sk->customfile[i].isDiff("ERROR")
 								&& (sk->customfile[i].length() > 0)) {
 								
-								csv.str[1].replace("*", sk->customfile[i].outstr());
+								csv.str[1].replace("*", sk->customfile[i]);
 								break;
 							}
 						}
 						if (tSkin_num == 0) tSkin_num = 1;
-						tSkin_num += ReadSkin(sk, GetRandomFileNoError(csv.str[1], dir).outstr(), unused, tSkin_num, sku, flag_skipFont);
+						tSkin_num += ReadSkin(sk, GetRandomFileNoError(csv.str[1], dir), unused, tSkin_num, sku, flag_skipFont);
 					}
 					else if (fBuf.left(13).isSame("#CUSTOMOPTION")) {
 						sk->customfile_count++;
@@ -20951,7 +20951,7 @@ int ReadSkin(skstruct *sk,CSTR FilePath, int unused, int skin_num, SkinUser* sku
 						sk->customfileRANDOM[sk->customfile_count].assign(&csv.str[2]);
 						sk->customfile[sk->customfile_count].assign(&sku->customize_filename[sk->customfile_count]);
 						if (sk->customfile[sk->customfile_count].isSame("RANDOM")) {
-							sk->customfile[sk->customfile_count].assign( GetRandomFile(sk->customfileRANDOM[sk->customfile_count], 1).outstr() );
+							sk->customfile[sk->customfile_count].assign( GetRandomFile(sk->customfileRANDOM[sk->customfile_count], 1) );
 						}
 						sk->customfile_count++;
 					}
@@ -21076,9 +21076,9 @@ int LoadScene(skstruct *sk, CSTR skinfile, int p5, char font) {
 	SkinUser tsku;
 	CSTR tStr;
 	InitSkin(sk, p5, font);
-	sk->skinMD5.assign(MD5str(skinfile.outstr()));
+	sk->skinMD5.assign(MD5str(skinfile));
 	cstrSprintf(&tStr, "LR2files\\SkinCustomize\\%s.xml",sk->skinMD5.body);
-	ReadSkinCustomize(&tsku, tStr.outstr());
+	ReadSkinCustomize(&tsku, tStr);
 	(sk->adjust).shift_x = tsku.adjust.shift_x;
 	(sk->adjust).shift_y = tsku.adjust.shift_y;
 	(sk->adjust).rate_x = tsku.adjust.rate_x;
@@ -21117,9 +21117,9 @@ int ParseLR2SkinCustom(SkinManage *skm, CSTR filepath) {
 	FILE *pFile;
 	char* pBuffer;
 
-	cstrSprintf(&md5Filepath, "LR2files\\SkinCustomize\\%s.xml", MD5str(filepath.outstr()) );
-	ReadSkinCustomize(&skCustom, md5Filepath.outstr());
-	pFile = fopen(filepath.outstr(), "r");
+	cstrSprintf(&md5Filepath, "LR2files\\SkinCustomize\\%s.xml", MD5str(filepath) );
+	ReadSkinCustomize(&skCustom, md5Filepath);
+	pFile = fopen(filepath, "r");
 	if (!pFile) return 0;
 
 	pBuffer = buffer.outstr();
@@ -21175,7 +21175,7 @@ int ParseLR2SkinCustom(SkinManage *skm, CSTR filepath) {
 			SplitCSV(buffer, &csvBuf, ",");
 			rCustom.title.assign(&csvBuf.str[1]);
 			rCustom.dst_op_start = 0;
-			hFindFile = FindFirstFileA(csvBuf.str[2].outstr(), &findFileData);
+			hFindFile = FindFirstFileA(csvBuf.str[2], &findFileData);
 			do {
 				flag = 0; //logic arranged
 				if ( (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) 	flag = 2;
@@ -21217,7 +21217,7 @@ int ParseLR2SkinCustom(SkinManage *skm, CSTR filepath) {
 		pBuffer = buffer.outstr();
 	}
 	fclose(pFile);
-	WriteSkinCustomizeXml(&skCustom, md5Filepath.outstr());
+	WriteSkinCustomizeXml(&skCustom, md5Filepath);
 	return 0;
 }
 
@@ -21231,7 +21231,7 @@ int MakeSkinList(SkinManage *skm, CSTR dir) {
 		dir.add("\\");
 	
 	filter.assign(&dir).add("*");
-	hFindFile = FindFirstFileA(filter.outstr(), &findFileData);
+	hFindFile = FindFirstFileA(filter, &findFileData);
 	do{
 		if ( (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {
 			filter.assign(&dir).add(findFileData.cFileName);
@@ -24456,7 +24456,7 @@ int ReadOptionstrFile(OptionString *arrOpStr, CSTR filepath) {
 	CSVbuf csv;
 
 	DefineOptionStrNum(arrOpStr);
-	pFile = fopen(filepath.outstr(), "r");
+	pFile = fopen(filepath, "r");
 	if (pFile == 0) {
 		ErrorLogAdd("オプション文字列リストが見つかりません。\n");
 		return 0;

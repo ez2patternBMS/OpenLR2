@@ -991,13 +991,13 @@ int ReadSkinCustomize(SkinUser *sku, char *FilePath) {
 		CSTR tmp;
 
 		cstrSprintf(&tmp, "config_%d", i); //cstrSprintf(&tmp, "confit_%d", i);
-		if( hXml && (xmlCur = hXml->FirstChildElement("skincustomize")) && (xmlCur = xmlCur->FirstChildElement("skinconfig")) && (xmlCur = xmlCur->FirstChildElement(tmp.outstr())) )
+		if( hXml && (xmlCur = hXml->FirstChildElement("skincustomize")) && (xmlCur = xmlCur->FirstChildElement("skinconfig")) && (xmlCur = xmlCur->FirstChildElement(tmp)) )
 			sku->customize_value[i] = atol(xmlCur->ToElement()->GetText());
 		else
 			sku->customize_value[i] = 0;
 
 		cstrSprintf(&tmp, "filename_%d", i);
-		ReadXml_Str("skincustomize", "customfile", tmp.outstr(), CSTR(""), &sku->customize_filename[i], hXml);
+		ReadXml_Str("skincustomize", "customfile", tmp, CSTR(""), &sku->customize_filename[i], hXml);
 	}
 
 	////0~39 repeat
