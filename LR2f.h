@@ -365,7 +365,7 @@ int SOUND_normalize(AUDIO * aud, SOUNDDATA * sound);
 int RecordSound(AUDIO * aud, SOUNDDATA * sound, double time, double len);
 int RecordFadeout(AUDIO * aud, double from, double length);
 int LoadSound(AUDIO * aud, SOUNDDATA * sound, CSTR filepath, int loop, int disableDSP, int previewFlag);
-int PlaySound(AUDIO * aud, SOUNDDATA * sound, FMOD_CHANNELGROUP * channelgroup, int stage);
+int PlaySound(AUDIO * aud, SOUNDDATA * sound, FMOD_CHANNELGROUP *channelgroup, int stage);
 int SOUND_FmodToDxlib(AUDIO * aud);
 int ApplySoundFX(AUDIO * aud, int flag, char disable);
 int InitFade(AUDIO * aud);

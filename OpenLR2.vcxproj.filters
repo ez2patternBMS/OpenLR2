@@ -77,30 +77,6 @@
     <ClInclude Include="md5.h">
       <Filter>OpenLR2</Filter>
     </ClInclude>
-    <ClInclude Include="FMODex\fmod.h">
-      <Filter>FMODex</Filter>
-    </ClInclude>
-    <ClInclude Include="FMODex\fmod.hpp">
-      <Filter>FMODex</Filter>
-    </ClInclude>
-    <ClInclude Include="FMODex\fmod_codec.h">
-      <Filter>FMODex</Filter>
-    </ClInclude>
-    <ClInclude Include="FMODex\fmod_common.h">
-      <Filter>FMODex</Filter>
-    </ClInclude>
-    <ClInclude Include="FMODex\fmod_dsp.h">
-      <Filter>FMODex</Filter>
-    </ClInclude>
-    <ClInclude Include="FMODex\fmod_dsp_effects.h">
-      <Filter>FMODex</Filter>
-    </ClInclude>
-    <ClInclude Include="FMODex\fmod_errors.h">
-      <Filter>FMODex</Filter>
-    </ClInclude>
-    <ClInclude Include="FMODex\fmod_output.h">
-      <Filter>FMODex</Filter>
-    </ClInclude>
     <ClInclude Include="sqlite\sqlite3.h">
       <Filter>sqlite</Filter>
     </ClInclude>
@@ -125,11 +101,26 @@
     <ClInclude Include="DxLib\DxVertexShader.h">
       <Filter>dxlib</Filter>
     </ClInclude>
+    <ClInclude Include="FMODex\fmod.h">
+      <Filter>FMODex</Filter>
+    </ClInclude>
+    <ClInclude Include="FMODex\fmod.hpp">
+      <Filter>FMODex</Filter>
+    </ClInclude>
+    <ClInclude Include="FMODex\fmod_codec.h">
+      <Filter>FMODex</Filter>
+    </ClInclude>
+    <ClInclude Include="FMODex\fmod_dsp.h">
+      <Filter>FMODex</Filter>
+    </ClInclude>
+    <ClInclude Include="FMODex\fmod_errors.h">
+      <Filter>FMODex</Filter>
+    </ClInclude>
+    <ClInclude Include="FMODex\fmod_output.h">
+      <Filter>FMODex</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="FMODex\fmod_vc.lib">
-      <Filter>FMODex</Filter>
-    </Library>
     <Library Include="DxLib\DxDrawFunc.lib">
       <Filter>dxlib</Filter>
     </Library>
@@ -310,20 +301,9 @@
     <Library Include="DxLib\zlib_x64_d.lib">
       <Filter>dxlib</Filter>
     </Library>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="FMODex\fmod.cs">
+    <Library Include="FMODex\fmodex_vc.lib">
       <Filter>FMODex</Filter>
-    </None>
-    <None Include="FMODex\fmod.dll">
-      <Filter>FMODex</Filter>
-    </None>
-    <None Include="FMODex\fmod_dsp.cs">
-      <Filter>FMODex</Filter>
-    </None>
-    <None Include="FMODex\fmod_errors.cs">
-      <Filter>FMODex</Filter>
-    </None>
+    </Library>
   </ItemGroup>
   <ItemGroup>
     <Text Include="DxLib\DxLib.txt">

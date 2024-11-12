@@ -1,5 +1,6 @@
 ﻿#pragma comment(lib,"ws2_32.lib")
 #pragma comment(lib,"vfw32.lib")
+#pragma comment(lib,"fmodex_vc.lib")
 #include <winsock2.h>
 #include <vfw.h>
 #include <Windows.h>
@@ -24562,8 +24563,8 @@ int ReadOptionstrFile(OptionString *arrOpStr, CSTR filepath) {
 
 
 ////SOUND section
-//we can't get the fmodex 4.13.04 or compatible lib, we use fmod.dll from fmod 2.02.07
-//so....
+//we got the fmodex 4.13.04. so we have no version problem now.
+//still there are writings for migration, for future
 
 // 140611 1.04.00 FMOD_HARDWARE and FMOD_SOFTWARE flags have been removed. All voices are software mixed in FMOD Studio.
 // 190314 2.00.00 The minimum supported version of Windows has been lifted from Windows XP to Windows 7. Coupled with this change we have removed the legacy DirectSound and WinMM output modes.
@@ -25037,7 +25038,8 @@ int SOUND_normalize(AUDIO *aud, SOUNDDATA *sound){
 	channels = 2;
 	bitdepth = 16;
 	FMOD_Sound_GetFormat(sound->fmod_sound, NULL, NULL, &channels, &bitdepth);
-	FMOD_Sound_GetDefaults(sound->fmod_sound, &samples, NULL);// , NULL, NULL);
+	//FMOD_Sound_GetDefaults(sound->fmod_sound, &samples, NULL);//20207
+	FMOD_Sound_GetDefaults(sound->fmod_sound, &samples, NULL, NULL, NULL); //41304, 42200
 
 	void* ptr1 = 0;
 	void* ptr2 = 0;
@@ -25159,7 +25161,7 @@ int LoadSound(AUDIO *aud, SOUNDDATA *sound, CSTR filepath, int loop, int disable
 		FMOD_MODE mode = 0;
 		FMOD_RESULT result;
 		if (aud->cmd_mediaOut) {
-			mode = FMOD_ACCURATETIME | FMOD_LOOP_OFF; // | FMOD_HARDWARE not exist in 20207
+			mode = FMOD_ACCURATETIME | FMOD_LOOP_OFF | FMOD_HARDWARE; // | FMOD_HARDWARE not exist in 20207
 			result = FMOD_System_CreateSound(aud->fmodSys, filepath, mode, NULL, &sound->fmod_sound); 
 			SOUND_normalize(aud, sound);
 		}
@@ -25167,36 +25169,36 @@ int LoadSound(AUDIO *aud, SOUNDDATA *sound, CSTR filepath, int loop, int disable
 			if (previewFlag == 0) {
 				if (loop == 0) {
 					if (disableDSP == 0) {
-						mode = FMOD_LOOP_OFF; // | FMOD_SOFTWARE not exist in 20207
+						mode = FMOD_LOOP_OFF | FMOD_SOFTWARE; // | FMOD_SOFTWARE not exist in 20207
 					}
 					else {
-						mode = FMOD_LOOP_OFF; // | FMOD_HARDWARE not exist in 20207
+						mode = FMOD_LOOP_OFF | FMOD_HARDWARE; // | FMOD_HARDWARE not exist in 20207
 					}
 				}
 				else {
 					if (disableDSP == 0) {
-						mode = FMOD_LOOP_NORMAL; // | FMOD_SOFTWARE not exist in 20207
+						mode = FMOD_LOOP_NORMAL | FMOD_SOFTWARE; // | FMOD_SOFTWARE not exist in 20207
 					}
 					else {
-						mode = FMOD_LOOP_NORMAL; // | FMOD_HARDWARE not exist in 20207
+						mode = FMOD_LOOP_NORMAL | FMOD_HARDWARE; // | FMOD_HARDWARE not exist in 20207
 					}
 				}
 			}
 			else {
 				if (loop == 0) {
 					if (disableDSP == 0) {
-						mode = FMOD_CREATESTREAM | FMOD_LOOP_OFF; // | FMOD_SOFTWARE not exist in 20207
+						mode = FMOD_CREATESTREAM | FMOD_LOOP_OFF | FMOD_SOFTWARE; // | FMOD_SOFTWARE not exist in 20207
 					}
 					else {
-						mode = FMOD_CREATESTREAM | FMOD_LOOP_OFF; // | FMOD_HARDWARE not exist in 20207
+						mode = FMOD_CREATESTREAM | FMOD_LOOP_OFF | FMOD_HARDWARE; // | FMOD_HARDWARE not exist in 20207
 					}
 				}
 				else {
 					if (disableDSP == 0) {
-						mode = FMOD_CREATESTREAM | FMOD_LOOP_NORMAL; // | FMOD_SOFTWARE not exist in 20207
+						mode = FMOD_CREATESTREAM | FMOD_LOOP_NORMAL | FMOD_SOFTWARE; // | FMOD_SOFTWARE not exist in 20207
 					}
 					else {
-						mode = FMOD_CREATESTREAM | FMOD_LOOP_NORMAL; // | FMOD_HARDWARE not exist in 20207
+						mode = FMOD_CREATESTREAM | FMOD_LOOP_NORMAL | FMOD_HARDWARE; // | FMOD_HARDWARE not exist in 20207
 					}
 				}
 			}
@@ -25209,7 +25211,7 @@ int LoadSound(AUDIO *aud, SOUNDDATA *sound, CSTR filepath, int loop, int disable
 			sound->filename.assign(&filepath);
 			sound->load = 1;
 			FMOD_Sound_GetLength(sound->fmod_sound, &sound->length, 1);
-			if (sound->length > 239999) {
+			if (sound->length >= 240000) {
 				sound->length = 240000;
 			}
 		}
@@ -25272,8 +25274,8 @@ int PlaySound(AUDIO *aud, SOUNDDATA *sound, FMOD_CHANNELGROUP *channelgroup, int
 		
 		FMOD_Channel_GetCurrentSound(sound->fmod_channel, &tempSound);
 		if (tempSound == sound->fmod_sound) FMOD_Channel_Stop(sound->fmod_channel);
-		//FMOD_System_PlaySound(aud->fmodSys, FMOD_CHANNEL_FREE, sound->fmod_sound, false, &sound->fmod_channel); // 41304
-		FMOD_System_PlaySound(aud->fmodSys, sound->fmod_sound, NULL, false, &sound->fmod_channel); //20207
+		FMOD_System_PlaySound(aud->fmodSys, FMOD_CHANNEL_FREE, sound->fmod_sound, false, &sound->fmod_channel); // 41304
+		//FMOD_System_PlaySound(aud->fmodSys, sound->fmod_sound, NULL, false, &sound->fmod_channel); //20207
 		FMOD_Channel_SetChannelGroup(sound->fmod_channel, channelgroup);
 	}
 	else if(aud->replay2avi){
@@ -25323,7 +25325,7 @@ int SOUND_FmodToDxlib(AUDIO *aud) {
 	return 0;
 }
 
-//4b9340 //FAILURE in reverb and chorus
+//4b9340
 int ApplySoundFX(AUDIO *aud, int flag, char disable) {
 
 	float _volume,_pitch;
@@ -25361,46 +25363,43 @@ int ApplySoundFX(AUDIO *aud, int flag, char disable) {
 	}
 	
 	if (aud->param.DSP_pitch == NULL) {
-		if ((((aud->param.pitch_type == 1) || (aud->param.pitch_type == 2)) && (aud->param.pitch_amount != 0)) && (aud->param.pitch_on == 1)) {
+		if ((aud->param.pitch_type == 1 || aud->param.pitch_type == 2) && (aud->param.pitch_amount != 0) && (aud->param.pitch_on == 1)) {
 			FMOD_System_CreateDSPByType(aud->fmodSys, FMOD_DSP_TYPE_PITCHSHIFT, &aud->param.DSP_pitch);
 			FMOD_DSP_SetActive(aud->param.DSP_pitch, 1);
-			//FMOD_System_AddDSP(aud->fmodSys, aud->param.DSP_pitch, NULL); //41304
-			FMOD_System_GetMasterChannelGroup(aud->fmodSys, &_chnMaster); //20207
-			FMOD_ChannelGroup_AddDSP(_chnMaster, FMOD_CHANNELCONTROL_DSP_TAIL, aud->param.DSP_pitch); //20207 //tail is appropriate?
+			FMOD_System_AddDSP(aud->fmodSys, aud->param.DSP_pitch, NULL); //41304
+			//FMOD_System_GetMasterChannelGroup(aud->fmodSys, &_chnMaster); //20207
+			//FMOD_ChannelGroup_AddDSP(_chnMaster, FMOD_CHANNELCONTROL_DSP_TAIL, aud->param.DSP_pitch); //20207 //tail is appropriate?
 		}
 	}
-	else {
-		if (((aud->param.pitch_type == 0) || (aud->param.pitch_amount == 0)) || (aud->param.pitch_on == 0)) {
-			FMOD_DSP_Release(aud->param.DSP_pitch);
-			aud->param.DSP_pitch = NULL;
-		}
+	else if (aud->param.pitch_type == 0 || aud->param.pitch_amount == 0 || aud->param.pitch_on == 0) {
+		FMOD_DSP_Release(aud->param.DSP_pitch);
+		aud->param.DSP_pitch = NULL;
 	}
+
 	if (aud->param.pitch_on == 0) {
 		FMOD_ChannelGroup_SetPitch(aud->chnBgm, 1.0);
 		FMOD_ChannelGroup_SetPitch(aud->chnKey, 1.0);
 	}
+	else if ((aud->param.pitch_type == 0) || (aud->param.pitch_type == 2)) {
+		int pitch = aud->param.pitch_amount;
+		double dMul;
+		dMul = 1.0;
+		if (pitch > 0) {
+			for (; pitch > 0; pitch--) {
+				dMul *= 1.0594631433486938; //check is done. it's 0x3ff0f38fa0000000 same with original
+			} //TOFIX? : sound freq/speed doesn't match game note speed (on +-12, 2.00000111 and 2.0 or 0.4999997226 and 0.5)
+		}
+		else if (pitch < 0) {
+			for (pitch = -pitch; pitch > 0; pitch--) {
+				dMul /= 1.0594631433486938;
+			}
+		}
+		FMOD_ChannelGroup_SetPitch(aud->chnBgm, dMul);
+		FMOD_ChannelGroup_SetPitch(aud->chnKey, dMul);
+	}
 	else {
-		if ((aud->param.pitch_type == 0) || (aud->param.pitch_type == 2)) {
-			int pitch = aud->param.pitch_amount;
-			double dMul;
-			dMul = 1.0;
-			if (pitch > 0) {
-				for (; pitch > 0; pitch--) {
-					dMul *= 1.0594631433486938;
-				}
-			}
-			else if (pitch < 0) {
-				for (pitch = -pitch; pitch > 0; pitch--) {
-					dMul /= 1.0594631433486938;
-				}
-			}
-			FMOD_ChannelGroup_SetPitch(aud->chnBgm, dMul);
-			FMOD_ChannelGroup_SetPitch(aud->chnKey, dMul);
-		}
-		else {
-			FMOD_ChannelGroup_SetPitch(aud->chnBgm, 1.0);
-			FMOD_ChannelGroup_SetPitch(aud->chnKey, 1.0);
-		}
+		FMOD_ChannelGroup_SetPitch(aud->chnBgm, 1.0);
+		FMOD_ChannelGroup_SetPitch(aud->chnKey, 1.0);
 	}
 
 	if (aud->param.pitch_on) {
@@ -25410,16 +25409,16 @@ int ApplySoundFX(AUDIO *aud, int flag, char disable) {
 			dMul = 1.0;
 			if (pitch > 0) {
 				for (; pitch > 0; pitch--) {
-					dMul *= 1.0594631433486938;
+					dMul *= 1.059463094359; //same with ParseBmsFile()
 				}
 			}
 			else if (pitch < 0) {
 				for (pitch = -pitch; pitch > 0; pitch--) {
-					dMul /= 1.0594631433486938;
+					dMul /= 1.059463094359;
 				}
 			}
-			//FMOD_DSP_SetParameter(aud->param.DSP_pitch, 0, dMul); //41304
-			FMOD_DSP_SetParameterFloat(aud->param.DSP_pitch, FMOD_DSP_PITCHSHIFT_PITCH, dMul); //20207
+			FMOD_DSP_SetParameter(aud->param.DSP_pitch, FMOD_DSP_PITCHSHIFT_PITCH, dMul); //41304
+			//FMOD_DSP_SetParameterFloat(aud->param.DSP_pitch, FMOD_DSP_PITCHSHIFT_PITCH, dMul); //20207
 		}
 		else if (aud->param.pitch_type == 2 && aud->param.DSP_pitch) {
 			int pitch = aud->param.pitch_amount;
@@ -25427,27 +25426,28 @@ int ApplySoundFX(AUDIO *aud, int flag, char disable) {
 			dMul = 1.0;
 			if (pitch > 0) {
 				for (; pitch > 0; pitch--) {
-					dMul /= 1.0594631433486938;
+					dMul /= 1.059463094359;
 				}
 			}
 			else if (pitch < 0) {
 				for (pitch = -pitch; pitch > 0; pitch--) {
-					dMul *= 1.0594631433486938;
+					dMul *= 1.059463094359;
 				}
 			}
-			//FMOD_DSP_SetParameter(aud->param.DSP_pitch, 0, dMul); //41304
-			FMOD_DSP_SetParameterFloat(aud->param.DSP_pitch, FMOD_DSP_PITCHSHIFT_PITCH, dMul); //20207
+			FMOD_DSP_SetParameter(aud->param.DSP_pitch, FMOD_DSP_PITCHSHIFT_PITCH, dMul); //41304
+			//FMOD_DSP_SetParameterFloat(aud->param.DSP_pitch, FMOD_DSP_PITCHSHIFT_PITCH, dMul); //20207
 		}
 	}
 
-	for (int i = 0; i < 7; i++) { //ERROR FIX : 6 to 7
+	//apply EQ
+	for (int i = 0; i < 6; i++) { //TOFIX : 6 to 7
 		if (aud->param.DSP_eq[i] == NULL) {
 			if (aud->param.eq_gain[i] && aud->param.eq_on == 1) {
 				FMOD_System_CreateDSPByType(aud->fmodSys, FMOD_DSP_TYPE_PARAMEQ, &aud->param.DSP_eq[i]);
 				FMOD_DSP_SetActive(aud->param.DSP_eq[i], 1);
-				//FMOD_System_AddDSP(aud->fmodSys, aud->param.DSP_pitch, NULL); //41304
-				FMOD_System_GetMasterChannelGroup(aud->fmodSys, &_chnMaster); //20207
-				FMOD_ChannelGroup_AddDSP(_chnMaster, FMOD_CHANNELCONTROL_DSP_TAIL, aud->param.DSP_eq[i]); //20207 //tail is appropriate?
+				FMOD_System_AddDSP(aud->fmodSys, aud->param.DSP_eq[i], NULL); //41304
+				//FMOD_System_GetMasterChannelGroup(aud->fmodSys, &_chnMaster); //20207
+				//FMOD_ChannelGroup_AddDSP(_chnMaster, FMOD_CHANNELCONTROL_DSP_TAIL, aud->param.DSP_eq[i]); //20207 //tail is appropriate?
 			}
 		}
 		else if (aud->param.eq_gain[i] == 0 || aud->param.eq_on == 0) {
@@ -25500,17 +25500,19 @@ int ApplySoundFX(AUDIO *aud, int flag, char disable) {
 					dMul /= 1.0352649688720703;
 				}
 			}
-
+			
 			if (aud->param.eq_gain[i]) {
-				//FMOD_DSP_SetParameter(aud->param.DSP_eq[i], 0, ); //41304
-				FMOD_DSP_SetParameterFloat(aud->param.DSP_eq[i], FMOD_DSP_PARAMEQ_CENTER, center); //20207
-				FMOD_DSP_SetParameterFloat(aud->param.DSP_eq[i], FMOD_DSP_PARAMEQ_BANDWIDTH, bandwidth); //20207
-				FMOD_DSP_SetParameterFloat(aud->param.DSP_eq[i], FMOD_DSP_PARAMEQ_GAIN, dMul); //20207
-
+				FMOD_DSP_SetParameter(aud->param.DSP_eq[i], FMOD_DSP_PARAMEQ_CENTER, center); //41304
+				FMOD_DSP_SetParameter(aud->param.DSP_eq[i], FMOD_DSP_PARAMEQ_BANDWIDTH, bandwidth); //41304
+				FMOD_DSP_SetParameter(aud->param.DSP_eq[i], FMOD_DSP_PARAMEQ_GAIN, dMul); //41304
+				//FMOD_DSP_SetParameterFloat(aud->param.DSP_eq[i], FMOD_DSP_PARAMEQ_CENTER, center); //20207
+				//FMOD_DSP_SetParameterFloat(aud->param.DSP_eq[i], FMOD_DSP_PARAMEQ_BANDWIDTH, bandwidth); //20207
+				//FMOD_DSP_SetParameterFloat(aud->param.DSP_eq[i], FMOD_DSP_PARAMEQ_GAIN, dMul); //20207
 			}
 		}
 	}
 
+	//apply FX
 	for (int i = 0; i < 3; i++) {
 		FMOD_DSP_TYPE type;
 		bool isSameType;
@@ -25521,8 +25523,8 @@ int ApplySoundFX(AUDIO *aud, int flag, char disable) {
 
 		switch (aud->param.fxType[i]) {
 			case 1:
-				//isSameType = type == FMOD_DSP_TYPE_REVERB; //41304
-				isSameType = type == FMOD_DSP_TYPE_SFXREVERB; //20207
+				isSameType = type == FMOD_DSP_TYPE_REVERB; //41304
+				//isSameType = type == FMOD_DSP_TYPE_SFXREVERB; //20207
 				break;
 			case 2:
 				isSameType = type == FMOD_DSP_TYPE_ECHO;
@@ -25545,128 +25547,132 @@ int ApplySoundFX(AUDIO *aud, int flag, char disable) {
 			default:
 				isSameType = type == FMOD_DSP_TYPE_UNKNOWN;
 		}
-		if (isSameType && flag == 0) {
-
-		}
-		else {
+		if (!isSameType || flag) {
 			if (aud->param.DSP_fx[i]) FMOD_DSP_Release(aud->param.DSP_fx[i]);
 
 			switch (aud->param.fxType[i]) {
-				case 1:
-					//FMOD_System_CreateDSPByType(aud->fmodSys, FMOD_DSP_TYPE_REVERB, &aud->param.DSP_fx[i]); //41304
-					FMOD_System_CreateDSPByType(aud->fmodSys, FMOD_DSP_TYPE_SFXREVERB, &aud->param.DSP_fx[i]);//20207
-					break;
-				case 2:
-					FMOD_System_CreateDSPByType(aud->fmodSys, FMOD_DSP_TYPE_ECHO, &aud->param.DSP_fx[i]);
-					break;
-				case 3:
-					FMOD_System_CreateDSPByType(aud->fmodSys, FMOD_DSP_TYPE_LOWPASS, &aud->param.DSP_fx[i]);
-					break;
-				case 4:
-					FMOD_System_CreateDSPByType(aud->fmodSys, FMOD_DSP_TYPE_HIGHPASS, &aud->param.DSP_fx[i]);
-					break;
-				case 5:
-					FMOD_System_CreateDSPByType(aud->fmodSys, FMOD_DSP_TYPE_FLANGE, &aud->param.DSP_fx[i]);
-					break;
-				case 6:
-					FMOD_System_CreateDSPByType(aud->fmodSys, FMOD_DSP_TYPE_CHORUS, &aud->param.DSP_fx[i]);
-					break;
-				case 7:
-					FMOD_System_CreateDSPByType(aud->fmodSys, FMOD_DSP_TYPE_DISTORTION, &aud->param.DSP_fx[i]);
-					break;
-				default:
-					aud->param.DSP_fx[i] = NULL;
-					continue;
+			case 1:
+				FMOD_System_CreateDSPByType(aud->fmodSys, FMOD_DSP_TYPE_REVERB, &aud->param.DSP_fx[i]); //41304
+				//FMOD_System_CreateDSPByType(aud->fmodSys, FMOD_DSP_TYPE_SFXREVERB, &aud->param.DSP_fx[i]);//20207
+				break;
+			case 2:
+				FMOD_System_CreateDSPByType(aud->fmodSys, FMOD_DSP_TYPE_ECHO, &aud->param.DSP_fx[i]);
+				break;
+			case 3:
+				FMOD_System_CreateDSPByType(aud->fmodSys, FMOD_DSP_TYPE_LOWPASS, &aud->param.DSP_fx[i]);
+				break;
+			case 4:
+				FMOD_System_CreateDSPByType(aud->fmodSys, FMOD_DSP_TYPE_HIGHPASS, &aud->param.DSP_fx[i]);
+				break;
+			case 5:
+				FMOD_System_CreateDSPByType(aud->fmodSys, FMOD_DSP_TYPE_FLANGE, &aud->param.DSP_fx[i]);
+				break;
+			case 6:
+				FMOD_System_CreateDSPByType(aud->fmodSys, FMOD_DSP_TYPE_CHORUS, &aud->param.DSP_fx[i]);
+				break;
+			case 7:
+				FMOD_System_CreateDSPByType(aud->fmodSys, FMOD_DSP_TYPE_DISTORTION, &aud->param.DSP_fx[i]);
+				break;
+			default:
+				aud->param.DSP_fx[i] = NULL;
+				continue;
 			}
 			FMOD_DSP_SetActive(aud->param.DSP_fx[i], 0);
-
-			if (aud->param.DSP_fx[i]) {
-				FMOD_BOOL isActive;
-				FMOD_DSP_GetActive(aud->param.DSP_fx[i], &isActive);
-				if (isActive == 0) {
-					if (aud->param.fx_on[i] == 1 && aud->param.fxType[i]) {
-						FMOD_DSP_SetActive(aud->param.DSP_fx[i], 1);
-						switch (aud->param.fxChannel[i]) {
-							default:
-							case 0 :
-								//FMOD_System_AddDSP(aud->fmodSys, aud->param.DSP_fx[i], NULL); //41304
-								FMOD_System_GetMasterChannelGroup(aud->fmodSys, &_chnMaster); //20207
-								FMOD_ChannelGroup_AddDSP(_chnMaster, FMOD_CHANNELCONTROL_DSP_TAIL, aud->param.DSP_fx[i]); //20207 //tail is appropriate?
-								break;
-							case 1:
-								FMOD_ChannelGroup_AddDSP(aud->chnKey, FMOD_CHANNELCONTROL_DSP_TAIL, aud->param.DSP_fx[i]); //20207 //tail is appropriate?
-								break;
-							case 2:
-								FMOD_ChannelGroup_AddDSP(aud->chnBgm, FMOD_CHANNELCONTROL_DSP_TAIL, aud->param.DSP_fx[i]); //20207 //tail is appropriate?
-								break;
-						}
-					}
-				}
-				else if (aud->param.fx_on[i] == 0 || aud->param.fxType[i] == 0) {
-					//FMOD_DSP_Remove(aud->param.DSP_fx[i]) //41304
-					FMOD_System_GetMasterChannelGroup(aud->fmodSys, &_chnMaster); //20207
-					FMOD_ChannelGroup_RemoveDSP(_chnMaster, aud->param.DSP_fx[i]);//20207
-					FMOD_DSP_SetActive(aud->param.DSP_fx[i], 0);
-				}
-
-				if (aud->param.fx_on[i]) {
-					float fTmp;
-					switch (aud->param.fxType[i]) {
+		}
+		if (aud->param.DSP_fx[i]) {
+			FMOD_BOOL isActive;
+			FMOD_DSP_GetActive(aud->param.DSP_fx[i], &isActive);
+			if (isActive == 0) {
+				if (aud->param.fx_on[i] == 1 && aud->param.fxType[i]) {
+					FMOD_DSP_SetActive(aud->param.DSP_fx[i], 1);
+					switch (aud->param.fxChannel[i]) {
+						default:
+						case 0 :
+							FMOD_System_AddDSP(aud->fmodSys, aud->param.DSP_fx[i], NULL); //41304
+							//FMOD_System_GetMasterChannelGroup(aud->fmodSys, &_chnMaster); //20207
+							//FMOD_ChannelGroup_AddDSP(_chnMaster, FMOD_CHANNELCONTROL_DSP_TAIL, aud->param.DSP_fx[i]); //20207 //tail is appropriate?
+							break;
 						case 1:
-							//FMOD_DSP_SetParameter(aud->param.DSP_fx[i], FMOD_DSP_REVERB_ROOM, aud->param.fxParam[i][0] / 100.0); //41304
-							//FMOD_DSP_SetParameter(aud->param.DSP_fx[i], FMOD_DSP_REVERB_WIDTH, 1.0); //41304
-							//FMOD_DSP_SetParameter(aud->param.DSP_fx[i], FMOD_DSP_REVERB_WETMIX, aud->param.fxParam[i][1] / 100.0); //41304
-
-							//FAILURE: I can't make the same reverb filter.... need study of FMOD
-							FMOD_DSP_SetParameterFloat(aud->param.DSP_fx[i], FMOD_DSP_SFXREVERB_DIFFUSION, aud->param.fxParam[i][0]);//20207
-							FMOD_DSP_SetParameterFloat(aud->param.DSP_fx[i], FMOD_DSP_SFXREVERB_WETLEVEL, aud->param.fxParam[i][1]-80);//20207
+							FMOD_ChannelGroup_AddDSP(aud->chnKey, aud->param.DSP_fx[i], NULL); //41304, 42200
+							//FMOD_ChannelGroup_AddDSP(aud->chnKey, FMOD_CHANNELCONTROL_DSP_TAIL, aud->param.DSP_fx[i]); //20207 //tail is appropriate?
 							break;
 						case 2:
-							FMOD_DSP_SetParameterFloat(aud->param.DSP_fx[i], FMOD_DSP_ECHO_DELAY, aud->param.fxParam[i][0] * 10.0);//20207
-							FMOD_DSP_SetParameterFloat(aud->param.DSP_fx[i], FMOD_DSP_ECHO_WETLEVEL, aud->param.fxParam[i][1] / 100.0);//20207 FMOD_DSP_ECHO_WETMIX 41304
-							break;
-						case 3:
-							fTmp = 22000.0;
-							for (int j = aud->param.fxParam[i][0]; j < 100; j++) {
-								fTmp /= 1.06;
-							}
-							FMOD_DSP_SetParameterFloat(aud->param.DSP_fx[i], FMOD_DSP_LOWPASS_CUTOFF, fTmp);//20207
-							FMOD_DSP_SetParameterFloat(aud->param.DSP_fx[i], FMOD_DSP_LOWPASS_RESONANCE, aud->param.fxParam[i][1] * 9.0 / 100.0 + 1.0);//20207
-							break;
-						case 4:
-							fTmp = 22.0;
-							for (int j = aud->param.fxParam[i][0]; j > 0 ; j--) {
-								fTmp *= 1.06;
-							}
-							FMOD_DSP_SetParameterFloat(aud->param.DSP_fx[i], FMOD_DSP_HIGHPASS_CUTOFF, fTmp);//20207
-							FMOD_DSP_SetParameterFloat(aud->param.DSP_fx[i], FMOD_DSP_HIGHPASS_RESONANCE, aud->param.fxParam[i][1] * 9.0 / 100.0 + 1.0);//20207
-							break;
-						case 5:
-							fTmp = 0.02;
-							for (int j = aud->param.fxParam[i][1]; j > 0; j--) {
-								fTmp *= 1.06;
-							}
-							FMOD_DSP_SetParameterFloat(aud->param.DSP_fx[i], FMOD_DSP_FLANGE_DEPTH, aud->param.fxParam[i][0]/100.0);//20207
-							FMOD_DSP_SetParameterFloat(aud->param.DSP_fx[i], FMOD_DSP_FLANGE_RATE, fTmp);//20207
-							break;
-						case 6:
-							FMOD_DSP_SetParameterFloat(aud->param.DSP_fx[i], FMOD_DSP_CHORUS_RATE, aud->param.fxParam[i][0] / 5.0);//20207
-							//FAILURE: I can't make the same chorus filter.... need study of FMOD
-							FMOD_DSP_SetParameterFloat(aud->param.DSP_fx[i], FMOD_DSP_CHORUS_DEPTH, aud->param.fxParam[i][1]);//20207 FMOD_DSP_CHORUS_DELAY 41304
-							break;
-						case 7:
-							//FMOD_DSP_SetParameter(aud->param.DSP_fx[i], 0, aud->param.fxParam[i][0] / 100.0); // 41304
-							FMOD_DSP_SetParameterFloat(aud->param.DSP_fx[i], FMOD_DSP_DISTORTION_LEVEL, aud->param.fxParam[i][0]/100.0);//20207
+							FMOD_ChannelGroup_AddDSP(aud->chnBgm, aud->param.DSP_fx[i], NULL); //41304, 42200
+							//FMOD_ChannelGroup_AddDSP(aud->chnBgm, FMOD_CHANNELCONTROL_DSP_TAIL, aud->param.DSP_fx[i]); //20207 //tail is appropriate?
 							break;
 					}
-
 				}
-
+			}
+			else if (aud->param.fx_on[i] == 0 || aud->param.fxType[i] == 0) {
+				FMOD_DSP_Remove(aud->param.DSP_fx[i]); //41304
+				//FMOD_System_GetMasterChannelGroup(aud->fmodSys, &_chnMaster); //20207
+				//FMOD_ChannelGroup_RemoveDSP(_chnMaster, aud->param.DSP_fx[i]);//20207
+				FMOD_DSP_SetActive(aud->param.DSP_fx[i], 0);
 			}
 
+			if (aud->param.fx_on[i]) {
+				float fTmp;
+				switch (aud->param.fxType[i]) {
+					case 1:
+						FMOD_DSP_SetParameter(aud->param.DSP_fx[i], FMOD_DSP_REVERB_ROOMSIZE, aud->param.fxParam[i][0] / 100.0); //41304, 42200
+						FMOD_DSP_SetParameter(aud->param.DSP_fx[i], FMOD_DSP_REVERB_WIDTH, 1.0); //41304, 42200
+						FMOD_DSP_SetParameter(aud->param.DSP_fx[i], FMOD_DSP_REVERB_WETMIX, aud->param.fxParam[i][1] / 100.0); //41304, 42200
+
+						//filter can't be same on fmod 20207 without much effort
+						//FMOD_DSP_REVERB_ROOM, aud->param.fxParam[i][0] / 100.0
+						//FMOD_DSP_SetParameterFloat(aud->param.DSP_fx[i], FMOD_DSP_SFXREVERB_DIFFUSION, aud->param.fxParam[i][0]);//20207
+						//FMOD_DSP_SetParameterFloat(aud->param.DSP_fx[i], FMOD_DSP_SFXREVERB_WETLEVEL, aud->param.fxParam[i][1]-80);//20207
+						break;
+					case 2:
+						//FMOD_DSP_SetParameterFloat(aud->param.DSP_fx[i], FMOD_DSP_ECHO_DELAY, aud->param.fxParam[i][0] * 10.0);//20207
+						//FMOD_DSP_SetParameterFloat(aud->param.DSP_fx[i], FMOD_DSP_ECHO_WETLEVEL, aud->param.fxParam[i][1] / 100.0);//20207
+						FMOD_DSP_SetParameter(aud->param.DSP_fx[i], FMOD_DSP_ECHO_DELAY, aud->param.fxParam[i][0] * 10.0);//41304
+						FMOD_DSP_SetParameter(aud->param.DSP_fx[i], FMOD_DSP_ECHO_WETMIX, aud->param.fxParam[i][1] / 100.0);//41304
+						break;
+					case 3:
+						fTmp = 22000.0;
+						for (int j = aud->param.fxParam[i][0]; j < 100; j++) {
+							fTmp /= 1.06;
+						}
+						//FMOD_DSP_SetParameterFloat(aud->param.DSP_fx[i], FMOD_DSP_LOWPASS_CUTOFF, fTmp);//20207
+						//FMOD_DSP_SetParameterFloat(aud->param.DSP_fx[i], FMOD_DSP_LOWPASS_RESONANCE, aud->param.fxParam[i][1] * 9.0 / 100.0 + 1.0);//20207
+						FMOD_DSP_SetParameter(aud->param.DSP_fx[i], FMOD_DSP_LOWPASS_CUTOFF, fTmp);//41304
+						FMOD_DSP_SetParameter(aud->param.DSP_fx[i], FMOD_DSP_LOWPASS_RESONANCE, aud->param.fxParam[i][1] * 9.0 / 100.0 + 1.0);//41304
+						break;
+					case 4:
+						fTmp = 22.0;
+						for (int j = aud->param.fxParam[i][0]; j > 0 ; j--) {
+							fTmp *= 1.06;
+						}
+						//FMOD_DSP_SetParameterFloat(aud->param.DSP_fx[i], FMOD_DSP_HIGHPASS_CUTOFF, fTmp);//20207
+						//FMOD_DSP_SetParameterFloat(aud->param.DSP_fx[i], FMOD_DSP_HIGHPASS_RESONANCE, aud->param.fxParam[i][1] * 9.0 / 100.0 + 1.0);//20207
+						FMOD_DSP_SetParameter(aud->param.DSP_fx[i], FMOD_DSP_HIGHPASS_CUTOFF, fTmp);//41304
+						FMOD_DSP_SetParameter(aud->param.DSP_fx[i], FMOD_DSP_HIGHPASS_RESONANCE, aud->param.fxParam[i][1] * 9.0 / 100.0 + 1.0);//41304
+						break;
+					case 5:
+						fTmp = 0.02;
+						for (int j = aud->param.fxParam[i][1]; j > 0; j--) {
+							fTmp *= 1.06;
+						}
+						//FMOD_DSP_SetParameterFloat(aud->param.DSP_fx[i], FMOD_DSP_FLANGE_DEPTH, aud->param.fxParam[i][0]/100.0);//20207
+						//FMOD_DSP_SetParameterFloat(aud->param.DSP_fx[i], FMOD_DSP_FLANGE_RATE, fTmp);//20207
+						FMOD_DSP_SetParameter(aud->param.DSP_fx[i], FMOD_DSP_FLANGE_DEPTH, aud->param.fxParam[i][0] / 100.0);//41304
+						FMOD_DSP_SetParameter(aud->param.DSP_fx[i], FMOD_DSP_FLANGE_RATE, fTmp);//41304
+						break;
+					case 6:
+						//FMOD_DSP_SetParameterFloat(aud->param.DSP_fx[i], FMOD_DSP_CHORUS_RATE, aud->param.fxParam[i][0] / 5.0);//20207
+						//FAILURE: I can't make the same chorus filter.... need study of FMOD
+						//FMOD_DSP_SetParameterFloat(aud->param.DSP_fx[i], FMOD_DSP_CHORUS_DEPTH, aud->param.fxParam[i][1]);//20207
+						FMOD_DSP_SetParameter(aud->param.DSP_fx[i], FMOD_DSP_CHORUS_RATE, aud->param.fxParam[i][0] / 5.0);//41304
+						FMOD_DSP_SetParameter(aud->param.DSP_fx[i], FMOD_DSP_CHORUS_DELAY, aud->param.fxParam[i][1]);//41304
+						break;
+					case 7:
+						FMOD_DSP_SetParameter(aud->param.DSP_fx[i], FMOD_DSP_DISTORTION_LEVEL, aud->param.fxParam[i][0] / 100.0); // 41304
+						//FMOD_DSP_SetParameterFloat(aud->param.DSP_fx[i], FMOD_DSP_DISTORTION_LEVEL, aud->param.fxParam[i][0]/100.0);//20207
+						break;
+				}
+			}
 		}
-
-
 	}
 
 	FMOD_System_Update(aud->fmodSys);
@@ -25732,18 +25738,18 @@ int InitSound(AUDIO *aud, uint bufferLength, int numBuffer, char fDisable, int o
 	int numHardwareChannels;
 
 	if (aud->cmd_mediaOut) {
-		//FMOD_System_Create(&aud->fmodSys);//41304
-		FMOD_System_Create(&aud->fmodSys, FMOD_VERSION);//20207
+		FMOD_System_Create(&aud->fmodSys);//41304
+		//FMOD_System_Create(&aud->fmodSys, FMOD_VERSION);//20207
 		FMOD_System_Init(aud->fmodSys, 1, 0, NULL);
 		return 1;
 	}
 	else if (aud->is_fmod_disabled != true) {
 		ErrorLogAdd("サウンドシステムの初期化を行います。\n");
-		//FMOD_System_Create(&aud->fmodSys);//41304
-		FMOD_System_Create(&aud->fmodSys, FMOD_VERSION);//20207
+		FMOD_System_Create(&aud->fmodSys);//41304
+		//FMOD_System_Create(&aud->fmodSys, FMOD_VERSION);//20207
 		if (outputType == 0) {
-			//FMOD_System_SetOutput(aud->fmodSys, FMOD_OUTPUTTYPE_DSOUND);//41304
-			FMOD_System_SetOutput(aud->fmodSys, FMOD_OUTPUTTYPE_AUTODETECT);//20207
+			FMOD_System_SetOutput(aud->fmodSys, FMOD_OUTPUTTYPE_DSOUND);//41304
+			//FMOD_System_SetOutput(aud->fmodSys, FMOD_OUTPUTTYPE_AUTODETECT);//20207
 			ErrorLogAdd("OUTPUT TYPE:DIRECTSOUND\n");
 		}
 		else if (outputType == 1) {
@@ -25755,8 +25761,8 @@ int InitSound(AUDIO *aud, uint bufferLength, int numBuffer, char fDisable, int o
 			ErrorLogAdd("OUTPUT TYPE:ASIO\n");
 		}
 		else{
-			//FMOD_System_SetOutput(aud->fmodSys, FMOD_OUTPUTTYPE_DSOUND);//41304
-			FMOD_System_SetOutput(aud->fmodSys, FMOD_OUTPUTTYPE_AUTODETECT);//20207
+			FMOD_System_SetOutput(aud->fmodSys, FMOD_OUTPUTTYPE_DSOUND);//41304
+			//FMOD_System_SetOutput(aud->fmodSys, FMOD_OUTPUTTYPE_AUTODETECT);//20207
 			ErrorLogAdd("OUTPUT TYPE:DIRECTSOUND\n");
 		}
 
@@ -25764,9 +25770,9 @@ int InitSound(AUDIO *aud, uint bufferLength, int numBuffer, char fDisable, int o
 		if (driver > numDrivers - 1) {
 			driver = 0;
 		}
-		//FMOD_System_GetDriverInfo(aud->fmodSys, driver, driverName, sizeof(driverName), NULL);//41304
+		FMOD_System_GetDriverInfo(aud->fmodSys, driver, driverName, sizeof(driverName), NULL);//41304
 		//FMOD_System_GetDriverName(aud->fmodSys, driver, driverName, sizeof(driverName));//41003
-		FMOD_System_GetDriverInfo(aud->fmodSys, driver, driverName, sizeof(driverName), NULL,NULL,NULL,NULL);//20207
+		//FMOD_System_GetDriverInfo(aud->fmodSys, driver, driverName, sizeof(driverName), NULL,NULL,NULL,NULL);//20207
 		ErrorLogFmtAdd("PLAYBACK DRIVER:%s\n", driverName);
 		FMOD_System_SetDriver(aud->fmodSys, driver);
 		ErrorLogAdd("バッファサイズの設定を行います...");
@@ -25774,11 +25780,11 @@ int InitSound(AUDIO *aud, uint bufferLength, int numBuffer, char fDisable, int o
 		ErrorLogAdd("\n");
 		FMOD_System_SetSoftwareChannels(aud->fmodSys, 0x100);
 		//FMOD_System_SetHardwareChannels(aud->fmodSys, 0x100);//44436
-		//FMOD_System_SetHardwareChannels(aud->fmodSys, 0x100, 0x100, 0x100, 0x100);//41304
+		FMOD_System_SetHardwareChannels(aud->fmodSys, 0x100, 0x100, 0x100, 0x100);//41304
 		FMOD_System_Init(aud->fmodSys, 0x100, 0, NULL);
 		//FMOD_System_GetHardwareChannels(aud->fmodSys, &numHardwareChannels);//44436
-		//FMOD_System_GetHardwareChannels(aud->fmodSys, &chn2D, &chn3D, &chnTotal); //41304
-		//ErrorLogFmtAdd("2Dチャンネル%d 3Dチャンネル%d 合計%d\n", chn2D, chn3D, chnTotal);//41304
+		FMOD_System_GetHardwareChannels(aud->fmodSys, &chn2D, &chn3D, &chnTotal); //41304
+		ErrorLogFmtAdd("2Dチャンネル%d 3Dチャンネル%d 合計%d\n", chn2D, chn3D, chnTotal);//41304
 		FMOD_System_CreateChannelGroup(aud->fmodSys, "bgm", &aud->chnBgm);
 		FMOD_System_CreateChannelGroup(aud->fmodSys, "key", &aud->chnKey);
 		FMOD_System_GetMasterChannelGroup(aud->fmodSys, &aud->chnMaster);
@@ -25787,12 +25793,12 @@ int InitSound(AUDIO *aud, uint bufferLength, int numBuffer, char fDisable, int o
 		for (int i = 0; i < 5; i++) {
 			cstrSprintf(&buf, "stage%d_bgm", i);
 			FMOD_System_CreateChannelGroup(aud->fmodSys, "chname", &aud->chnStageBgm[i]);
-			//FMOD_ChannelGroup_AddGroup(aud->chnBgm, aud->chnStageBgm[i]); //41304
-			FMOD_ChannelGroup_AddGroup(aud->chnBgm, aud->chnStageBgm[i],0,NULL);//20207
+			FMOD_ChannelGroup_AddGroup(aud->chnBgm, aud->chnStageBgm[i]); //41304
+			//FMOD_ChannelGroup_AddGroup(aud->chnBgm, aud->chnStageBgm[i],0,NULL);//20207
 			cstrSprintf(&buf, "stage%d_key", i);
 			FMOD_System_CreateChannelGroup(aud->fmodSys, "chname", &aud->chnStageKey[i]);
-			//FMOD_ChannelGroup_AddGroup(aud->chnKey, aud->chnStageKey[i]); //41304
-			FMOD_ChannelGroup_AddGroup(aud->chnKey, aud->chnStageKey[i],0, NULL);//20207
+			FMOD_ChannelGroup_AddGroup(aud->chnKey, aud->chnStageKey[i]); //41304
+			//FMOD_ChannelGroup_AddGroup(aud->chnKey, aud->chnStageKey[i],0, NULL);//20207
 		}
 		aud->param.DSP_eq[0] = (FMOD_DSP *)0x0;
 		aud->param.DSP_eq[1] = (FMOD_DSP *)0x0;

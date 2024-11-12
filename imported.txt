@@ -6,7 +6,7 @@
 
 *FMODex (4.13.4 -> 4.44.36)
  41003(071220) from https://blog.naver.com/incoinco/70077036847
- 41304(080401) wanted
+ 41304(080401) wanted < owns
  42200(0810??) from https://github.com/bgbotond/Cinder-FMOD
  >> 42200 lib corrupted
  44436(151208) from https://m.blog.naver.com/bloodsoda/220303041722

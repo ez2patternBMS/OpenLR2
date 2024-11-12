@@ -1036,7 +1036,7 @@ struct AUDIO_PARAM {
 	int fxChannel[3];
 	int eq_gain[7];
 	int pitch_amount; /* Created by retype action */
-	int pitch_type;
+	int pitch_type; //0:freq 1:pitch 2:speed
 	int volume_key;
 	int volume_BGM;
 	int volume_master;

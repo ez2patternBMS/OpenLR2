@@ -89,6 +89,7 @@
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
+      <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -117,6 +118,7 @@
       <AdditionalLibraryDirectories>.\DXlib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;legacy_stdio_definitions.lib;Winmm.lib;ws2_32.lib;vfw32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -160,9 +162,7 @@
     <ClInclude Include="FMODex\fmod.h" />
     <ClInclude Include="FMODex\fmod.hpp" />
     <ClInclude Include="FMODex\fmod_codec.h" />
-    <ClInclude Include="FMODex\fmod_common.h" />
     <ClInclude Include="FMODex\fmod_dsp.h" />
-    <ClInclude Include="FMODex\fmod_dsp_effects.h" />
     <ClInclude Include="FMODex\fmod_errors.h" />
     <ClInclude Include="FMODex\fmod_output.h" />
     <ClInclude Include="LR2f.h" />
@@ -236,13 +236,7 @@
     <Library Include="DxLib\zlib_d.lib" />
     <Library Include="DxLib\zlib_x64.lib" />
     <Library Include="DxLib\zlib_x64_d.lib" />
-    <Library Include="FMODex\fmod_vc.lib" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="FMODex\fmod.cs" />
-    <None Include="FMODex\fmod.dll" />
-    <None Include="FMODex\fmod_dsp.cs" />
-    <None Include="FMODex\fmod_errors.cs" />
+    <Library Include="FMODex\fmodex_vc.lib" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="DxLib\DxLib.txt" />

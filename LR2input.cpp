@@ -1379,7 +1379,7 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 
 	if (aud->param.pitch_on && (aud->param.pitch_type == 0 || aud->param.pitch_type == 2)) {
 		if (aud->param.pitch_amount > 0) {
-			for (int i = aud->param.pitch_amount; i; i--) gp->freqSpeedMultiplier *= 1.059463094359;
+			for (int i = aud->param.pitch_amount; i; i--) gp->freqSpeedMultiplier *= 1.059463094359; //0x3ff0f38f92d97431 same as origianl
 		}
 		else if (aud->param.pitch_amount < 0) {
 			for (int i = -aud->param.pitch_amount; i; i--) gp->freqSpeedMultiplier /= 1.059463094359;
