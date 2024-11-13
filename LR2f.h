@@ -185,8 +185,8 @@ CSTR MakeScoreHash(STATUS * stat, CSTR * passMD5, CSTR * songMD5);
 bool isSameScoreHash(STATUS * stat, CSTR * passMD5, CSTR * songMD5, CSTR * besthash);
 int UpdateScoreDB(CSTR hash, STATUS * stat, sqlite3 * sql, CSTR * passMD5);
 int UpdateSongDataTag(SONGDATA * song, sqlite3 * sql);
-CSTR MakePlayerStatusHash(PlayerStatus * ps);
-int UpdatePlayerStatus(PlayerStatus * ps, sqlite3 * sql);
+CSTR MakePlayerStatHash(PLAYERSTATISTIC * ps);
+int UpdatePlayerStat(PLAYERSTATISTIC * ps, sqlite3 * sql);
 int SaveIRID(int IRID, CSTR ID);
 
 int EditTag(SONGDATA * song, sqlite3 * sql);
@@ -215,7 +215,7 @@ int SearchCourseFromDB(sqlite3 * sql, SONGSELECT * ss, int keys, int multistagem
 //
 int LoadBmsListFromDB(CSTR query, sqlite3 * sql, SONGSELECT * ss, int * difficulty, int * key, int sort, int count);
 
-int ReadPlayerScore(CSTR id, CSTR pass, PlayerStatus * pstat);
+int ReadPlayerScore(CSTR id, CSTR pass, PLAYERSTATISTIC * pstat);
 
 int WriteRandomCourse(sqlite3 * sql, COURSESELECT * course, SONGSELECT * ss, CONFIG_COURSE cfg, int key);
 

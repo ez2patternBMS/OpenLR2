@@ -498,29 +498,29 @@ uint SetObjectValue_Num(game *g, int op) {
 			return Date.Sec;
 
 		case 30:
-			return g->gameplay.playerstatus.playcount;
+			return g->gameplay.playerstat.playcount;
 		case 31:
-			return g->gameplay.playerstatus.clear;
+			return g->gameplay.playerstat.clear;
 		case 32:
-			return g->gameplay.playerstatus.fail;
+			return g->gameplay.playerstat.fail;
 		case 33:
-			return g->gameplay.playerstatus.perfect;
+			return g->gameplay.playerstat.perfect;
 		case 34:
-			return g->gameplay.playerstatus.great;
+			return g->gameplay.playerstat.great;
 		case 35:
-			return g->gameplay.playerstatus.good;
+			return g->gameplay.playerstat.good;
 		case 36:
-			return g->gameplay.playerstatus.bad;
+			return g->gameplay.playerstat.bad;
 		case 37:
-			return g->gameplay.playerstatus.poor;
+			return g->gameplay.playerstat.poor;
 		case 38:
-			return g->gameplay.playerstatus.combo;
+			return g->gameplay.playerstat.combo;
 		case 39:
-			return g->gameplay.playerstatus.maxcombo;
+			return g->gameplay.playerstat.maxcombo;
 		case 40:
-			return g->gameplay.playerstatus.trial;
+			return g->gameplay.playerstat.trial;
 		case 41:
-			return g->gameplay.playerstatus.trial - 1;
+			return g->gameplay.playerstat.trial - 1;
 		case 42:
 			return g->sSelect.bmsList[g->sSelect.cur_song].level;
 		case 45:
@@ -1881,28 +1881,28 @@ int ApplyJudgeToScore(int judge, game *g, int player, int lane, Timer *T, char i
 
 		switch (judge) {
 			case 0: 
-				g->gameplay.playerstatus.poor++;
+				g->gameplay.playerstat.poor++;
 				break;
 			case 1:
-				g->gameplay.playerstatus.poor++;
+				g->gameplay.playerstat.poor++;
 				break;
 			case 2:
-				g->gameplay.playerstatus.bad++;
+				g->gameplay.playerstat.bad++;
 				break;
 			case 3:
-				g->gameplay.playerstatus.good++;
+				g->gameplay.playerstat.good++;
 				break;
 			case 4:
-				g->gameplay.playerstatus.great++;
+				g->gameplay.playerstat.great++;
 				break;
 			case 5:
-				g->gameplay.playerstatus.perfect++;
+				g->gameplay.playerstat.perfect++;
 				break;
 		}
 		if (judge > 2) {
-			g->gameplay.playerstatus.combo++;
-			if (g->gameplay.playerstatus.combo > g->gameplay.playerstatus.maxcombo)
-				g->gameplay.playerstatus.maxcombo = g->gameplay.playerstatus.combo;
+			g->gameplay.playerstat.combo++;
+			if (g->gameplay.playerstat.combo > g->gameplay.playerstat.maxcombo)
+				g->gameplay.playerstat.maxcombo = g->gameplay.playerstat.combo;
 		}
 		if (judge == 2 && judge == 1) {
 			g->gameplay.playerstatus.combo = 0;
@@ -6153,9 +6153,9 @@ int SetObjectStrings_SongSelect(game *g) {
 	SetObjectString(81, g->txtStruct.option_str[18].str[g->config.play.replay], g->txtStruct.objectStr);
 
 	SetObjectString(2, g->config.player.id, g->txtStruct.objectStr);
-	SetObjectString(82, GetMissonString(g->gameplay.playerstatus.trial, 0), g->txtStruct.objectStr);
+	SetObjectString(82, GetMissonString(g->gameplay.playerstat.trial, 0), g->txtStruct.objectStr);
 	SetObjectString(2, g->config.player.id, g->txtStruct.objectStr);
-	SetObjectString(83, GetMissonString(g->gameplay.playerstatus.trial, 1), g->txtStruct.objectStr);
+	SetObjectString(83, GetMissonString(g->gameplay.playerstat.trial, 1), g->txtStruct.objectStr);
 
 	if (g->config.course.optimumlevel_7 >= 1) {
 		CSTR tmp;
@@ -8068,49 +8068,49 @@ int CheckMission(game *g){
 	if (g->gameplay.isNosave) 
 		return 0;
 
-	if (g->gameplay.playerstatus.trial <= 0) 
-		g->gameplay.playerstatus.trial = 1;
+	if (g->gameplay.playerstat.trial <= 0) 
+		g->gameplay.playerstat.trial = 1;
 
-	level = g->gameplay.playerstatus.trial;
+	level = g->gameplay.playerstat.trial;
 	switch (level) {
 		case 1:
 			if (g->gameplay.player[0].totalnotes >= 100 && gauge == 2) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 2:
 			if ( (g->config.play.m_HIDSUD1 == g->config.play.m_HIDSUD2 || g->sSelect.bmsList[g->sSelect.cur_song].keymode < 10) 
 				&& g->gameplay.player[0].totalnotes >= 100 && g->config.play.m_HIDSUD1 == 1) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 3:
 			if ((g->config.play.m_HIDSUD1 == g->config.play.m_HIDSUD2 || g->sSelect.bmsList[g->sSelect.cur_song].keymode < 10)
 				&& g->gameplay.player[0].totalnotes >= 100 && g->config.play.m_HIDSUD1 == 2) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 4:
 			if (gauge == 0 && 80.0 <= g->gameplay.player[0].HP && g->gameplay.player[0].HP < 86.0) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 5:
 			if (g->config.play.random[0] != g->config.play.random[1]) {
 				if (9 < g->sSelect.bmsList[g->sSelect.cur_song].keymode) {
-					level = g->gameplay.playerstatus.trial;
+					level = g->gameplay.playerstat.trial;
 					break;
 				}
-				level = g->gameplay.playerstatus.trial;
+				level = g->gameplay.playerstat.trial;
 			}
 			if (g->gameplay.player[0].totalnotes >= 100 && gauge == 1 && g->config.play.random[0] == 3) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 6: //TOFIX: omitted note count condition
 			if (g->audio.param.pitch_on == 1 && (g->audio.param.pitch_type == 0 || g->audio.param.pitch_type == 2)) {
 				if (g->audio.param.pitch_amount >= 3) {
-					g->gameplay.playerstatus.trial = level + 1;
+					g->gameplay.playerstat.trial = level + 1;
 				}
 			}
 			break;
@@ -8118,53 +8118,53 @@ int CheckMission(game *g){
 			gauge = g->config.play.random[0];
 			if ((g->config.play.random[0] == g->config.play.random[1] || g->sSelect.bmsList[g->sSelect.cur_song].keymode < 10) 
 				&& g->gameplay.player[0].totalnotes >= 100 && g->config.play.random[0] == 5) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 8:
 			gauge = g->config.play.m_HIDSUD1;
 			if ((g->config.play.m_HIDSUD1 == g->config.play.m_HIDSUD2 || g->sSelect.bmsList[g->sSelect.cur_song].keymode < 10) 
 				&& g->gameplay.player[0].totalnotes >= 100 && g->config.play.m_HIDSUD1 == 3) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 9:
 			if (g->gameplay.player[0].exscore >= (g->gameplay.player[0].totalnotes * 2) / 9) { //TOFIX : is it AAA? 8/9 //TODO: check original in debugger
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 10:
-			if (g->gameplay.playerstatus.combo >= 2000) {
-				g->gameplay.playerstatus.trial = level + 1;
+			if (g->gameplay.playerstat.combo >= 2000) {
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 11:
 			if (g->gameplay.player[0].totalnotes >= 500 && gauge == 2) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 12:
 			if ((g->config.play.m_HIDSUD1 == g->config.play.m_HIDSUD2 || g->sSelect.bmsList[g->sSelect.cur_song].keymode < 10) 
 				&& 3 < g->gameplay.player[0].clearType && g->gameplay.player[0].totalnotes >= 500 && gauge == 1 && g->config.play.m_HIDSUD1 == 1) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 13:
 			if ((g->config.play.m_HIDSUD1 == g->config.play.m_HIDSUD2 || g->sSelect.bmsList[g->sSelect.cur_song].keymode < 10)
 				&& 3 < g->gameplay.player[0].clearType && g->gameplay.player[0].totalnotes >= 500 && gauge == 1 && g->config.play.m_HIDSUD1 == 2) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 14:
 			if ((g->config.play.random[0] == g->config.play.random[1] || g->sSelect.bmsList[g->sSelect.cur_song].keymode < 10)
 				&& g->gameplay.player[0].totalnotes >= 500 && g->config.play.random[0] == 5) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 15:
 			if (g->gameplay.isSpeedChanged == false && g->config.play.hiSpeed[0] == 50 &&
 				g->config.play.hsfix == 4 && g->gameplay.player[0].totalnotes >= 500) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 16:
@@ -8172,46 +8172,46 @@ int CheckMission(game *g){
 
 			if (g->config.play.m_HIDSUD1 != g->config.play.m_HIDSUD2) {
 				if (9 < g->sSelect.bmsList[g->sSelect.cur_song].keymode) {
-					level = g->gameplay.playerstatus.trial;
+					level = g->gameplay.playerstat.trial;
 					break;
 				}
-				level = g->gameplay.playerstatus.trial;
+				level = g->gameplay.playerstat.trial;
 			}
 			if (g->gameplay.player[0].totalnotes >= 500 && g->config.play.random[0] == 2 && g->config.play.m_HIDSUD1 == 3) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 17:
 			if (g->gameplay.player[0].max_combo == 333) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 18:
 			if (gauge == 4 && g->gameplay.player[0].totalnotes >= 100) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 19:
 			if (gauge != 5) break;
 			if (g->gameplay.player[0].totalnotes >= 100) { //TOFIX : note condition is omitted in string
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 20:
 			if (gauge == 0 && g->gameplay.player[0].HP >= 80.0 && g->gameplay.player[0].HP < 82.0) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 21:
 			if (gauge == 1 && g->gameplay.player[0].HP < 4.0) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 22:
 			if ((g->config.play.random[0] != g->config.play.random[1] && 9 < g->sSelect.bmsList[g->sSelect.cur_song].keymode) || gauge != 2) break;
 			if (g->config.play.random[0] == 3) {
 				if (g->gameplay.player[0].totalnotes >= 1000) {
-					g->gameplay.playerstatus.trial = level + 1;
+					g->gameplay.playerstat.trial = level + 1;
 				}
 			}
 			break;
@@ -8220,7 +8220,7 @@ int CheckMission(game *g){
 				|| g->config.play.m_HIDSUD1 != 1 || g->config.play.hsfix != 4 || g->config.play.hiSpeed[0] != 150)
 				break;
 			if (g->gameplay.player[0].totalnotes >= 1000) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 24:
@@ -8228,7 +8228,7 @@ int CheckMission(game *g){
 				|| g->config.play.m_HIDSUD1 != 2 || g->config.play.hsfix != 4) break;
 			if (g->config.play.hiSpeed[0] == 250) {
 				if (g->gameplay.player[0].totalnotes >= 1000) {
-					g->gameplay.playerstatus.trial = level + 1;
+					g->gameplay.playerstat.trial = level + 1;
 				}
 			}
 			break;
@@ -8236,7 +8236,7 @@ int CheckMission(game *g){
 			if (g->config.play.random[0] != g->config.play.random[1] && 9 < g->sSelect.bmsList[g->sSelect.cur_song].keymode) break;
 			if (g->config.play.random[0] == 5) {
 				if (g->gameplay.player[0].totalnotes >= 1000) {
-					g->gameplay.playerstatus.trial = level + 1;
+					g->gameplay.playerstat.trial = level + 1;
 				}
 			}
 			break;
@@ -8244,91 +8244,91 @@ int CheckMission(game *g){
 			if (g->config.play.m_HIDSUD1 != g->config.play.m_HIDSUD2 && 9 < g->sSelect.bmsList[g->sSelect.cur_song].keymode) break;
 			if (g->config.play.random[0] != g->config.play.random[1]) {
 				if (9 < g->sSelect.bmsList[g->sSelect.cur_song].keymode) {
-					level = g->gameplay.playerstatus.trial;
+					level = g->gameplay.playerstat.trial;
 					break;
 				}
-				level = g->gameplay.playerstatus.trial;
+				level = g->gameplay.playerstat.trial;
 			}
 			if (g->config.play.random[0] == 2 && g->config.play.m_HIDSUD1 == 3 && g->gameplay.player[0].totalnotes >= 1000) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 27:
 			if (g->audio.param.pitch_on != 1 || (g->audio.param.pitch_type != 0 && g->audio.param.pitch_type != 2) || g->audio.param.pitch_amount < 6) break;
 			if (g->gameplay.player[0].totalnotes >= 1000) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 28:
 			if (g->gameplay.isSpeedChanged == false && g->config.play.hsfix == 4 && g->config.play.hiSpeed[0] == 600 && g->gameplay.player[0].totalnotes >= 300) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 29:
 			if ((g->gameplay.player[0].exscore == g->gameplay.player[0].totalnotes *2 *8 / 9) && g->gameplay.player[0].totalnotes >= 1000) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 30:
 			if (g->gameplay.player[0].totalnotes == 9 && g->gameplay.player[0].judgetime[5] == 8 && g->gameplay.player[0].judgecount[5] == 9) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 31:
 			if (g->gameplay.player[0].totalnotes >= 1000 && g->gameplay.song_runtime < 150000.0 && gauge == 4) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 32:
 			if (g->gameplay.player[0].totalnotes >= 1000 && g->gameplay.song_runtime < 150000.0 && gauge == 5) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 33:
 			if (g->gameplay.player[0].totalnotes >= 1000 && g->gameplay.song_runtime < 150000.0 && g->gameplay.player[0].max_combo < 40) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 34:
 			if (g->gameplay.isSpeedChanged == false && g->gameplay.player[0].totalnotes >= 1200 && g->config.play.hsfix == 4 && g->gameplay.song_runtime < 150000.0 && g->config.play.hiSpeed[0] == 30) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 35:
 			if (g->gameplay.player[0].totalnotes >= 1200 && g->gameplay.song_runtime < 150000.0 && gauge == 1 && g->config.play.random[0] == 5) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 36:
 			if (gauge == 2 && 998 <= g->gameplay.player[0].exscore && 1002 <= g->gameplay.player[0].exscore) { //TOFIX g->gameplay.player[0].exscore <= 1002
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 37:
 			if (g->audio.param.pitch_on == 1 && (g->audio.param.pitch_type == 0 || g->audio.param.pitch_type == 2) &&
 				g->audio.param.pitch_amount == 12 && g->gameplay.player[0].totalnotes >= 1000 && g->gameplay.song_runtime < 150000.0) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 38:
 			if (g->gameplay.player[0].totalnotes >= 1500 && g->gameplay.song_runtime < 150000.0 && gauge == 2) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 39:
 			if (g->gameplay.isSpeedChanged == false && (g->config.play.m_HIDSUD1 == g->config.play.m_HIDSUD2 || g->sSelect.bmsList[g->sSelect.cur_song].keymode < 10)
 				&& g->gameplay.player[0].totalnotes >= 1500 && g->gameplay.song_runtime < 150000.0 && g->config.play.hiSpeed[0] == 100
 				&& g->config.play.m_HIDSUD1 == 1 && g->config.play.hsfix == 4) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 			break;
 		case 40:
 			if (g->gameplay.player[0].totalnotes >= 1500 && g->gameplay.song_runtime < 150000.0 && g->config.play.random[0] == 5 && 0 < g->config.play.rand[0]) {
-				g->gameplay.playerstatus.trial = level + 1;
+				g->gameplay.playerstat.trial = level + 1;
 			}
 	}
 	SetObjectStrings_SongSelect(g);
-	g->gameplay.trialClear = level < g->gameplay.playerstatus.trial;
+	g->gameplay.trialClear = level < g->gameplay.playerstat.trial;
 	return 0;
 }
 
@@ -9052,7 +9052,7 @@ int SaveResult(game *g, sqlite3* sql) {
 		GetSongData(g->sSelect.bmsList[g->sSelect.cur_song].courseHash[g->gameplay.courseStageNow], &bms, sql, &g->sSelect);
 		memcpy(&g->sSelect.old, &bms.mybest, sizeof(STATUS));
 
-		g->gameplay.playerstatus.playtime += (int)GetTimeLapse(41, &g->timer1) / 1000;
+		g->gameplay.playerstat.playtime += (int)GetTimeLapse(41, &g->timer1) / 1000;
 		if (bms.mybest.total_notes == 0) {
 			bms.mybest.total_notes = g->gameplay.player[0].totalnotes;
 			if (bms.mybest.total_notes > 0) {
@@ -9128,7 +9128,7 @@ int SaveResult(game *g, sqlite3* sql) {
 			WriteGhostInDatabase(sql, bms.hash, &g->gameplay.p1Score);
 		}
 
-		UpdatePlayerStatus(&g->gameplay.playerstatus, sql);
+		UpdatePlayerStat(&g->gameplay.playerstat, sql);
 		g->sSelect.oldIRrank = bms.mybest.IRranking;
 
 		if (g->net.isOnline == 1 && g->is_starter == 0) {
@@ -9234,11 +9234,11 @@ int SaveResult(game *g, sqlite3* sql) {
 			if ((g->gameplay.freqSpeedMultiplier < 1.0 || g->config.play.m_lunaris == 1) && g->is_starter == 0) {
 				if (g->gameplay.replay.status == 2) return -1;
 
-				g->gameplay.playerstatus.playcount++;
-				if (g->gameplay.player[0].clearType < 2) g->gameplay.playerstatus.fail++;
-				else g->gameplay.playerstatus.clear++;
+				g->gameplay.playerstat.playcount++;
+				if (g->gameplay.player[0].clearType < 2) g->gameplay.playerstat.fail++;
+				else g->gameplay.playerstat.clear++;
 
-				g->gameplay.playerstatus.playtime += (int)GetTimeLapse(41, &g->timer1) / 1000;
+				g->gameplay.playerstat.playtime += (int)GetTimeLapse(41, &g->timer1) / 1000;
 
 				g->sSelect.bmsList[g->sSelect.cur_song].mybest.playcount++;
 				if (g->gameplay.player[0].clearType >= 2)
@@ -9247,7 +9247,7 @@ int SaveResult(game *g, sqlite3* sql) {
 					g->sSelect.bmsList[g->sSelect.cur_song].mybest.failcount++;
 
 				UpdateScoreDB(g->sSelect.bmsList[g->sSelect.cur_song].hash, &g->sSelect.bmsList[g->sSelect.cur_song].mybest, sql, &g->sSelect.playerPassMD5);
-				UpdatePlayerStatus(&g->gameplay.playerstatus, sql);
+				UpdatePlayerStat(&g->gameplay.playerstat, sql);
 				return 0;
 			}
 
@@ -9258,14 +9258,14 @@ int SaveResult(game *g, sqlite3* sql) {
 					g->sSelect.bmsList[g->sSelect.cur_song].mybest.clear_db = g->gameplay.player[0].clearType;
 				}
 
-				g->gameplay.playerstatus.playcount++;
-				if (g->gameplay.player[0].clearType < 2) g->gameplay.playerstatus.fail++;
+				g->gameplay.playerstat.playcount++;
+				if (g->gameplay.player[0].clearType < 2) g->gameplay.playerstat.fail++;
 				else {
-					g->gameplay.playerstatus.clear++;
+					g->gameplay.playerstat.clear++;
 					if (g->gameplay.player[0].clearType > 2) g->sSelect.bmsList[g->sSelect.cur_song].mybest.op_history |= 0x4000000;
 				}
 
-				g->gameplay.playerstatus.playtime += (int)GetTimeLapse(41, &g->timer1) / 1000;
+				g->gameplay.playerstat.playtime += (int)GetTimeLapse(41, &g->timer1) / 1000;
 
 				g->sSelect.bmsList[g->sSelect.cur_song].mybest.playcount++;
 				if (g->gameplay.player[0].clearType >= 2)
@@ -9274,7 +9274,7 @@ int SaveResult(game *g, sqlite3* sql) {
 					g->sSelect.bmsList[g->sSelect.cur_song].mybest.failcount++;
 
 				UpdateScoreDB(g->sSelect.bmsList[g->sSelect.cur_song].hash, &g->sSelect.bmsList[g->sSelect.cur_song].mybest, sql, &g->sSelect.playerPassMD5);
-				UpdatePlayerStatus(&g->gameplay.playerstatus, sql);
+				UpdatePlayerStat(&g->gameplay.playerstat, sql);
 				g->gameplay.isNosave = 1;
 				return 0;
 			}
@@ -9286,14 +9286,14 @@ int SaveResult(game *g, sqlite3* sql) {
 					g->sSelect.bmsList[g->sSelect.cur_song].mybest.clear_sd = g->gameplay.player[0].clearType;
 				}
 
-				g->gameplay.playerstatus.playcount++;
-				if (g->gameplay.player[0].clearType < 2) g->gameplay.playerstatus.fail++;
+				g->gameplay.playerstat.playcount++;
+				if (g->gameplay.player[0].clearType < 2) g->gameplay.playerstat.fail++;
 				else {
-					g->gameplay.playerstatus.clear++;
+					g->gameplay.playerstat.clear++;
 					if (g->gameplay.player[0].clearType > 2) g->sSelect.bmsList[g->sSelect.cur_song].mybest.op_history |= 0x8000000;
 				}
 
-				g->gameplay.playerstatus.playtime += (int)GetTimeLapse(41, &g->timer1) / 1000;
+				g->gameplay.playerstat.playtime += (int)GetTimeLapse(41, &g->timer1) / 1000;
 
 				g->sSelect.bmsList[g->sSelect.cur_song].mybest.playcount++;
 				if (g->gameplay.player[0].clearType >= 2)
@@ -9302,7 +9302,7 @@ int SaveResult(game *g, sqlite3* sql) {
 					g->sSelect.bmsList[g->sSelect.cur_song].mybest.failcount++;
 
 				UpdateScoreDB(g->sSelect.bmsList[g->sSelect.cur_song].hash, &g->sSelect.bmsList[g->sSelect.cur_song].mybest, sql, &g->sSelect.playerPassMD5);
-				UpdatePlayerStatus(&g->gameplay.playerstatus, sql);
+				UpdatePlayerStat(&g->gameplay.playerstat, sql);
 				g->gameplay.isNosave = 1;
 				return 0;
 			}
@@ -9314,14 +9314,14 @@ int SaveResult(game *g, sqlite3* sql) {
 					g->sSelect.bmsList[g->sSelect.cur_song].mybest.clear_ex = g->gameplay.player[0].clearType;
 				}
 
-				g->gameplay.playerstatus.playcount++;
-				if (g->gameplay.player[0].clearType < 2) g->gameplay.playerstatus.fail++;
+				g->gameplay.playerstat.playcount++;
+				if (g->gameplay.player[0].clearType < 2) g->gameplay.playerstat.fail++;
 				else {
-					g->gameplay.playerstatus.clear++;
+					g->gameplay.playerstat.clear++;
 					if (g->gameplay.player[0].clearType > 2) g->sSelect.bmsList[g->sSelect.cur_song].mybest.op_history |= 0x2000000;
 				}
 
-				g->gameplay.playerstatus.playtime += (int)GetTimeLapse(41, &g->timer1) / 1000;
+				g->gameplay.playerstat.playtime += (int)GetTimeLapse(41, &g->timer1) / 1000;
 				
 				g->sSelect.bmsList[g->sSelect.cur_song].mybest.playcount++;
 				if (g->gameplay.player[0].clearType >= 2)
@@ -9330,7 +9330,7 @@ int SaveResult(game *g, sqlite3* sql) {
 					g->sSelect.bmsList[g->sSelect.cur_song].mybest.failcount++;
 
 				UpdateScoreDB(g->sSelect.bmsList[g->sSelect.cur_song].hash, &g->sSelect.bmsList[g->sSelect.cur_song].mybest, sql, &g->sSelect.playerPassMD5);
-				UpdatePlayerStatus(&g->gameplay.playerstatus, sql);
+				UpdatePlayerStat(&g->gameplay.playerstat, sql);
 				g->gameplay.isNosave = 1;
 				return 0;
 			}
@@ -9340,11 +9340,11 @@ int SaveResult(game *g, sqlite3* sql) {
 
 				if (g->gameplay.player[0].clearType > 2) g->gameplay.player[0].clearType = 2;
 
-				g->gameplay.playerstatus.playcount++;
-				if (g->gameplay.player[0].clearType < 2) g->gameplay.playerstatus.fail++;
-				else g->gameplay.playerstatus.clear++;
+				g->gameplay.playerstat.playcount++;
+				if (g->gameplay.player[0].clearType < 2) g->gameplay.playerstat.fail++;
+				else g->gameplay.playerstat.clear++;
 
-				g->gameplay.playerstatus.playtime += (int)GetTimeLapse(41, &g->timer1) / 1000;
+				g->gameplay.playerstat.playtime += (int)GetTimeLapse(41, &g->timer1) / 1000;
 
 				if (g->sSelect.bmsList[g->sSelect.cur_song].mybest.clear < g->gameplay.player[0].clearType) {
 					g->sSelect.bmsList[g->sSelect.cur_song].mybest.clear = g->gameplay.player[0].clearType;
@@ -9364,7 +9364,7 @@ int SaveResult(game *g, sqlite3* sql) {
 				CheckMission(g);
 
 				UpdateScoreDB(g->sSelect.bmsList[g->sSelect.cur_song].hash, &g->sSelect.bmsList[g->sSelect.cur_song].mybest, sql, &g->sSelect.playerPassMD5);
-				UpdatePlayerStatus(&g->gameplay.playerstatus, sql);
+				UpdatePlayerStat(&g->gameplay.playerstat, sql);
 				g->gameplay.isNosave = 1;
 				return 0;
 			}
@@ -9372,11 +9372,11 @@ int SaveResult(game *g, sqlite3* sql) {
 			else {
 				if (g->gameplay.replay.status == 2) return -1;
 
-				g->gameplay.playerstatus.playcount++;
-				if (g->gameplay.player[0].clearType < 2) g->gameplay.playerstatus.fail++;
-				else g->gameplay.playerstatus.clear++;
+				g->gameplay.playerstat.playcount++;
+				if (g->gameplay.player[0].clearType < 2) g->gameplay.playerstat.fail++;
+				else g->gameplay.playerstat.clear++;
 
-				g->gameplay.playerstatus.playtime += (int)GetTimeLapse(41, &g->timer1) / 1000;
+				g->gameplay.playerstat.playtime += (int)GetTimeLapse(41, &g->timer1) / 1000;
 
 				if (g->sSelect.bmsList[g->sSelect.cur_song].mybest.total_notes == 0) {
 					g->sSelect.bmsList[g->sSelect.cur_song].mybest.total_notes = g->gameplay.player[0].totalnotes;
@@ -9458,7 +9458,7 @@ int SaveResult(game *g, sqlite3* sql) {
 					WriteGhostInDatabase(sql, g->sSelect.bmsList[g->sSelect.cur_song].hash, &g->gameplay.p1Score);
 				}
 
-				UpdatePlayerStatus(&g->gameplay.playerstatus, sql);
+				UpdatePlayerStat(&g->gameplay.playerstat, sql);
 				g->sSelect.oldIRrank = g->sSelect.bmsList[g->sSelect.cur_song].mybest.IRranking;
 
 				if (g->net.isOnline == 1 && g->is_starter == 0) {
@@ -9576,15 +9576,15 @@ int SaveResult(game *g, sqlite3* sql) {
 		if (g->gameplay.player[1].clearType > g->gameplay.player[0].clearType) g->gameplay.player[0].clearType = g->gameplay.player[1].clearType;
 		
 		if (g->gameplay.replay.status != 2) {
-			g->gameplay.playerstatus.playcount++;
+			g->gameplay.playerstat.playcount++;
 
 			if (g->gameplay.player[0].clearType >= 2)
-				g->gameplay.playerstatus.clear++; 
+				g->gameplay.playerstat.clear++; 
 			else 
-				g->gameplay.playerstatus.fail++;
+				g->gameplay.playerstat.fail++;
 
-			g->gameplay.playerstatus.playtime += GetTimeLapse(41, &g->timer1) / 1000;
-			UpdatePlayerStatus(&g->gameplay.playerstatus, sql);
+			g->gameplay.playerstat.playtime += GetTimeLapse(41, &g->timer1) / 1000;
+			UpdatePlayerStat(&g->gameplay.playerstat, sql);
 			return 0;
 		}
 	}
@@ -9604,11 +9604,11 @@ int ProcS_subCourseResult(game *g, sqlite3 *sql) {
 
 	memcpy(&g->sSelect.old, &g->sSelect.bmsList[g->sSelect.cur_song].mybest, sizeof(STATUS));
 	
-	g->gameplay.playerstatus.playcount++;
-	if (g->gameplay.player[0].clearType >= 2) g->gameplay.playerstatus.clear++;
-	else g->gameplay.playerstatus.fail++;
+	g->gameplay.playerstat.playcount++;
+	if (g->gameplay.player[0].clearType >= 2) g->gameplay.playerstat.clear++;
+	else g->gameplay.playerstat.fail++;
 
-	g->gameplay.playerstatus.playtime += GetTimeLapse(41, &g->timer1);
+	g->gameplay.playerstat.playtime += GetTimeLapse(41, &g->timer1);
 
 	if (g->sSelect.bmsList[g->sSelect.cur_song].mybest.total_notes == 0) {
 		g->sSelect.bmsList[g->sSelect.cur_song].mybest.total_notes = g->gameplay.player[0].totalnotes;
@@ -9684,7 +9684,7 @@ int ProcS_subCourseResult(game *g, sqlite3 *sql) {
 	CheckMission(g);
 
 	UpdateScoreDB(g->sSelect.bmsList[g->sSelect.cur_song].hash, &g->sSelect.bmsList[g->sSelect.cur_song].mybest, sql, &g->sSelect.playerPassMD5);
-	UpdatePlayerStatus(&g->gameplay.playerstatus, sql);
+	UpdatePlayerStat(&g->gameplay.playerstat, sql);
 
 	g->sSelect.oldIRrank = g->sSelect.bmsList[g->sSelect.cur_song].mybest.IRranking;
 	if (g->sSelect.bmsList[g->sSelect.cur_song].courseIR == 0 && g->net.isOnline == 1) {
@@ -15393,7 +15393,7 @@ int UpdateSongDataTag(SONGDATA *song, sqlite3 *sql){
 }
 
 //445fa0
-CSTR MakePlayerStatusHash(PlayerStatus *ps) {
+CSTR MakePlayerStatHash(PLAYERSTATISTIC *ps) {
 	CSTR tmp;
 	cstrSprintf(&tmp, "%d%d%d%d%d%d%d%d%d%d%d%s%d%d%d%d%d%d%d%d%d%d%d", ps->bad, ps->clear, ps->combo, ps->fail, ps->good, ps->great, ps->maxcombo, ps->perfect, ps->playcount, ps->playtime, ps->poor, ps->passMD5,
 		ps->grade9, ps->grade10, ps->grade14, ps->grade5, ps->grade7, ps->gradeversion, ps->trial, ps->trialversion, ps->systemversion, ps->option, 1);
@@ -15401,9 +15401,9 @@ CSTR MakePlayerStatusHash(PlayerStatus *ps) {
 }
 
 //4460a0
-int UpdatePlayerStatus(PlayerStatus *ps, sqlite3 *sql) {
+int UpdatePlayerStat(PLAYERSTATISTIC *ps, sqlite3 *sql) {
 	char query[1024];
-	CSTR hash = MakePlayerStatusHash(ps);
+	CSTR hash = MakePlayerStatHash(ps);
 	sqlite3_snprintf(1024, query, "UPDATE player SET playcount= %d , clear = %d , fail = %d , perfect = %d , great = %d , good = %d , bad = %d , poor = %d , playtime = %d , combo = %d , maxcombo = %d,scorehash=\'%q\' ,grade_7=%d,grade_5=%d,grade_14=%d,grade_10=%d,grade_9=%d,trial = %d , option=%d,systemversion=%d,gradeversion=%d,trialversion=%d",
 		ps->playcount, ps->clear, ps->fail, ps->perfect, ps->great, ps->good, ps->bad, ps->poor, ps->playtime, ps->combo, ps->maxcombo, hash,
 		ps->grade7, ps->grade5, ps->grade14, ps->grade10, ps->grade9, ps->trial, ps->option, ps->systemversion, ps->gradeversion, ps->trialversion);
@@ -16687,7 +16687,7 @@ int LoadBmsListFromDB(CSTR query, sqlite3 *sql, SONGSELECT *ss, int *difficulty,
 }
 
 //44b380
-int ReadPlayerScore(CSTR id, CSTR pass, PlayerStatus *pstat) {
+int ReadPlayerScore(CSTR id, CSTR pass, PLAYERSTATISTIC *pstat) {
 
 	CSTR dbPath, passMD5, query, MD5inDB;
 	char str[256];
@@ -16753,7 +16753,7 @@ int ReadPlayerScore(CSTR id, CSTR pass, PlayerStatus *pstat) {
 		return 0;
 	}
 
-	if (MakePlayerStatusHash(pstat).isDiff(&MD5inDB)) {
+	if (MakePlayerStatHash(pstat).isDiff(&MD5inDB)) {
 		pstat->playcount = 0;
 		pstat->clear = 0;
 		pstat->fail = 0;

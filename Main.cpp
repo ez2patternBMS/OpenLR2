@@ -166,7 +166,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 			if (gs.is_starter == '\0') {
 				
-				if (ReadPlayerScore(gs.config.player.id, gs.config.player.pass, &gs.gameplay.playerstatus) == 0) {
+				if (ReadPlayerScore(gs.config.player.id, gs.config.player.pass, &gs.gameplay.playerstat) == 0) {
 					return -1;
 				}
 			}
@@ -276,7 +276,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				gs.net.IR_name = gs.config.player.id;
 				gs.net.IR_passMD5 = MD5str(gs.config.player.pass);
 				gs.net.getrival = gs.config.network.getrival;
-				gs.net.IR_ID = gs.gameplay.playerstatus.irid;
+				gs.net.IR_ID = gs.gameplay.playerstat.irid;
 				if (gs.net.Login(gs.cmd_directplay) == 1) {
 					SaveIRID(gs.net.rankingData.myID, gs.config.player.id);
 				}

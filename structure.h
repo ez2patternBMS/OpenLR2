@@ -604,7 +604,7 @@ typedef struct GRAPHDATA GRAPHDATA, *PGRAPHDATA;
 
 typedef struct GRAPHDATAB GRAPHDATAB, *PGRAPHDATAB;
 
-typedef struct PlayerStatus PlayerStatus, *PPlayerStatus;
+typedef struct PLAYERSTATISTIC PLAYERSTATISTIC, *PPLAYERSTATISTIC;
 
 typedef struct REPLAY REPLAY, *PREPLAY;
 
@@ -1345,7 +1345,7 @@ struct GRAPHDATA {
 	int cursor;
 };
 
-struct PlayerStatus {
+struct PLAYERSTATISTIC {
 	int perfect;
 	int great;
 	int good;
@@ -1457,7 +1457,7 @@ struct gameplay {
 	int flag_retry;
 	struct GRAPHDATA statgraph[2];
 	struct GRAPHDATAB rategraph[2]; /* 0:high 1:target? */
-	struct PlayerStatus playerstatus;
+	struct PLAYERSTATISTIC playerstat;
 	int randomseed;
 	undefined field80_0x7bb74;
 	undefined field81_0x7bb75;
