@@ -695,7 +695,7 @@ struct LaneStruct {
     int size;
     int count;
     int note_count;
-    int measure;
+    int draw_count; //count of no need for draw(passed/processed)
     int noteVal;
     int autoplay;
 };

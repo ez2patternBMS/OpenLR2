@@ -2192,7 +2192,7 @@ int DrawNotes(game *g, skstruct *sk, Timer *T, CONFIG_PLAY *cfg) {
 	}
 
 	int lineCount = 0;
-	for (int i = g->gameplay.bmsobj_line.measure; i < g->gameplay.bmsobj_line.size; i++) {
+	for (int i = g->gameplay.bmsobj_line.draw_count; i < g->gameplay.bmsobj_line.size; i++) {
 		
 		if (lineCount == 300) break;
 		lineCount++;
@@ -2219,7 +2219,7 @@ int DrawNotes(game *g, skstruct *sk, Timer *T, CONFIG_PLAY *cfg) {
 			AddDrawingBuffer_PlayArea(&sk->drBuf, &sk->src_LINE[1], &sk->dst_LINE[1], T, g->gameplay.nabeatsu_x + sk->adjust.note_2p_x, p2_y, 255, sk->adjust.size_x, 0.0, 1);
 
 			if (g->gameplay.bmsobj_line.notes[i].bmsTiming < songtimer) {
-				g->gameplay.bmsobj_line.measure++;
+				g->gameplay.bmsobj_line.draw_count++;
 			}
 		}
 	}
@@ -2231,7 +2231,7 @@ int DrawNotes(game *g, skstruct *sk, Timer *T, CONFIG_PLAY *cfg) {
 
 		bool isDpGbattle = (key > 9 && g->gameplay.ghostBattle);
 
-		for (int i = g->gameplay.bmsobj_note[key].measure; i < g->gameplay.bmsobj_note[key].size; i++) {
+		for (int i = g->gameplay.bmsobj_note[key].draw_count; i < g->gameplay.bmsobj_note[key].size; i++) {
 			if (sk->dst_NOTE[key].dstCount > 0) {
 				if (sk->horizontal != 0 || sk->dst_NOTE[key].draw->y + cfg->basespeed / 100.0 * g->gameplay.speedmultiplier * speed * (songtimer - g->gameplay.bmsobj_note[key].notes[i].bmsTiming) / 600.0 <= drawStartHeight) {
 					if (sk->horizontal != 1 || (g->gameplay.bmsobj_note[key].notes[i].bmsTiming - songtimer) * g->gameplay.speedmultiplier * speed * (cfg->basespeed / 100.0) / 600.0 >= 640.0) {
@@ -2349,7 +2349,7 @@ int DrawNotes(game *g, skstruct *sk, Timer *T, CONFIG_PLAY *cfg) {
 					}
 
 					if ((g->gameplay.bmsobj_note[key].notes[i].active == -1 || (g->gameplay.player[0].totalnotes <= g->gameplay.player[0].note_current && g->gameplay.replay.status == 2)) && g->gameplay.bmsobj_note[key].notes[i].bmsTiming <= songtimer && g->gameplay.bmsobj_note[key].notes[i].bmsTiming_ln <= songtimer) {
-						g->gameplay.bmsobj_note[key].measure++;
+						g->gameplay.bmsobj_note[key].draw_count++;
 					}
 				}
 				else {
@@ -2374,7 +2374,7 @@ int DrawNotes(game *g, skstruct *sk, Timer *T, CONFIG_PLAY *cfg) {
 								g->gameplay.player[p].note_current++;
 								g->gameplay.player[p].note_current2++;
 							}
-							g->gameplay.bmsobj_note[key].measure++;
+							g->gameplay.bmsobj_note[key].draw_count++;
 						}
 					}
 					else {
@@ -2425,35 +2425,35 @@ int DrawNotes(game *g, skstruct *sk, Timer *T, CONFIG_PLAY *cfg) {
 									do {
 										ApplyJudgeToScore(g->gameplay.targetScore.GetJudgeFromQueue(), g, 1, key, T, 0);
 									} while (g->gameplay.targetScore.DealJudgeFromQueue() == 0);
-									g->gameplay.bmsobj_note[key].measure++;
+									g->gameplay.bmsobj_note[key].draw_count++;
 								}
 								else if (cfg->battle == 1 || (g->skinData.select > 11 && g->procSelecter == 7)) {
 									if (g->net.rankingData.target_ID <= 0 || g->gameplay.targetScore.ghostReadCount <= 0) {
 										ApplyJudgeToScore(5, g, key / 10, key, T, 0);
-										g->gameplay.bmsobj_note[key].measure++;
+										g->gameplay.bmsobj_note[key].draw_count++;
 									}
 									else {
 										do {
 											ApplyJudgeToScore(g->gameplay.targetScore.GetJudgeFromQueue(), g, key/10, key, T, 0);
 										} while (g->gameplay.targetScore.DealJudgeFromQueue() == 0);
-										g->gameplay.bmsobj_note[key].measure++;
+										g->gameplay.bmsobj_note[key].draw_count++;
 									}
 								}
 								else {
 									if (g->net.rankingData.target_ID <= 0 || g->gameplay.targetScore.ghostReadCount <= 0) {
 										ApplyJudgeToScore(5, g, 0, key, T, 0);
-										g->gameplay.bmsobj_note[key].measure++;
+										g->gameplay.bmsobj_note[key].draw_count++;
 									}
 									else {
 										do {
 											ApplyJudgeToScore(g->gameplay.targetScore.GetJudgeFromQueue(), g, 0, key, T, 0);
 										} while (g->gameplay.targetScore.DealJudgeFromQueue() == 0);
-										g->gameplay.bmsobj_note[key].measure++;
+										g->gameplay.bmsobj_note[key].draw_count++;
 									}
 								}
 							}
 							else {
-								g->gameplay.bmsobj_note[key].measure++;
+								g->gameplay.bmsobj_note[key].draw_count++;
 							}
 						}
 					}
@@ -22513,7 +22513,7 @@ int InitGameplay(gameplay *gp, CONFIG_PLAY *cfg) {
 		gp->bmsobj.notes[i].stage = 0;
 	}
 	gp->bmsobj.size = 0;
-	gp->bmsobj.measure = 0;
+	gp->bmsobj.draw_count = 0;
 	gp->bmsobj.note_count = 0;
 	gp->bmsobj.autoplay = 0;
 	gp->bmsobj.noteVal = -1;
@@ -22532,7 +22532,7 @@ int InitGameplay(gameplay *gp, CONFIG_PLAY *cfg) {
 			gp->bmsobj_note[lane].notes[i].stage = 0;
 		}
 		gp->bmsobj_note[lane].size = 0;
-		gp->bmsobj_note[lane].measure = 0;
+		gp->bmsobj_note[lane].draw_count = 0;
 		gp->bmsobj_note[lane].note_count = 0;
 		gp->bmsobj_note[lane].autoplay = 0;
 		gp->bmsobj_note[lane].noteVal = -1;
@@ -22551,7 +22551,7 @@ int InitGameplay(gameplay *gp, CONFIG_PLAY *cfg) {
 		gp->bmsobj_line.notes[i].stage = 0;
 	}
 	gp->bmsobj_line.size = 0;
-	gp->bmsobj_line.measure = 1;
+	gp->bmsobj_line.draw_count = 1;
 	gp->bmsobj_line.note_count = 0;
 	gp->bmsobj_line.autoplay = 0;
 	gp->bmsobj_line.noteVal = -1;
@@ -22931,7 +22931,7 @@ int InitGameplay_retry(gameplay *gp, AUDIO *snd, game *g) {
 	for (int i = 0; i < gp->bmsobj.count; i++) {
 		gp->bmsobj.notes[i].active = 0;
 	}
-	gp->bmsobj.measure = 0;
+	gp->bmsobj.draw_count = 0;
 	gp->bmsobj.note_count = 0;
 	gp->bmsobj.noteVal = -1;
 
@@ -22939,7 +22939,7 @@ int InitGameplay_retry(gameplay *gp, AUDIO *snd, game *g) {
 		for (int i = 0; i < gp->bmsobj_note[lane].count; i++) {
 			gp->bmsobj_note[lane].notes[i].active = 0;
 		}
-		gp->bmsobj_note[lane].measure = 0;
+		gp->bmsobj_note[lane].draw_count = 0;
 		gp->bmsobj_note[lane].note_count = 0;
 		gp->bmsobj_note[lane].noteVal = -1;
 	}
@@ -22947,7 +22947,7 @@ int InitGameplay_retry(gameplay *gp, AUDIO *snd, game *g) {
 	for (int i = 0; i < gp->bmsobj_line.count; i++) {
 		gp->bmsobj_line.notes[i].active = 0;
 	}
-	gp->bmsobj_line.measure = 1;
+	gp->bmsobj_line.draw_count = 1;
 	gp->bmsobj_line.note_count = 0;
 	gp->bmsobj_line.noteVal = -1;
 	gp->delayDetectedCount = 0;

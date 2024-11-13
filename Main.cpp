@@ -397,7 +397,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			gs.gameplay.bmsobj.size = 0;
 			gs.gameplay.bmsobj.count = 0;
 			gs.gameplay.bmsobj.note_count = 0;
-			gs.gameplay.bmsobj.measure = 0;
+			gs.gameplay.bmsobj.draw_count = 0;
 			gs.gameplay.bmsobj.noteVal = 0;
 			gs.gameplay.bmsobj.autoplay = 0;
 			gs.gameplay.player[0].flag_active = 1;
@@ -407,7 +407,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			gs.gameplay.bmsobj_line.size = 0;
 			gs.gameplay.bmsobj_line.count = 0;
 			gs.gameplay.bmsobj_line.note_count = 0;
-			gs.gameplay.bmsobj_line.measure = 0;
+			gs.gameplay.bmsobj_line.draw_count = 0;
 			gs.gameplay.bmsobj_line.noteVal = 0;
 			gs.gameplay.bmsobj_line.autoplay = 0;
 			gs.gameplay.bpmt_buffersize = 0;
