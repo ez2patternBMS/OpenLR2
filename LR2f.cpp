@@ -2093,7 +2093,7 @@ int ApplyJudge(int judge, game *g, int player, int lane, int damage) {
 	return 1;
 }
 
-//406710
+//406710 //TODO skin adjust test
 int DrawNotes(game *g, skstruct *sk, Timer *T, CONFIG_PLAY *cfg) {
 	//TODO : refactor, test maniac mode
 	DSTdraw tDdraw;
@@ -17828,7 +17828,7 @@ double ChangeValueByTime(double val1, double val2, double time1, double time2, d
 	double dVar1;
 
 	if (val1 != val2) {
-		if ( (time2 < timenow) || (time1 < timenow == (time1 == timenow)) || (time2 <= time1) ) {
+		if ( (time2 < timenow) || (time1 > timenow) || (time2 <= time1) ) {
 			if (time1 < timenow) {
 				return val2;
 			}
@@ -17867,12 +17867,8 @@ DSTdraw SetDSTdrawByTime(DSTstruct dst, double time) {
 		tStart = dst.draw[0].time;
 		tEnd = dst.draw[dst.dstCount -1].time;
 
-		if (dst.loop < 0 && t > tEnd) {
-			oBuf.time = -1;
-			return oBuf;
-		}
 		t2 = tEnd;
-		if (tStart <= tEnd && t >= tStart) {
+		if (tStart <= tEnd && tStart <= t && (0 <= dst.loop || t <= tEnd)) {
 			if (tStart == tEnd || dst.loop == tEnd) {
 				if (t < t2) {
 					t2 = t;
@@ -17890,7 +17886,7 @@ DSTdraw SetDSTdrawByTime(DSTstruct dst, double time) {
 
 			select = 0;
 			for (int i = 0; i < dst.dstCount; i++) {
-				if (t2 >= dst.draw[i].time) {
+				if (dst.draw[i].time <= t2) {
 					select = i;
 				}
 			}
@@ -17939,7 +17935,7 @@ int GetSRCcycleNow(SRCstruct src, double time){
 	int ret;
 
 	if (time < 0.0) return 0;
-	if (src.graphcount < 1) return 0;
+	if (src.graphcount <= 0) return 0;
 	
 	if (src.cycle < 0) ret = 0;
 	else if (src.cycle == 0) ret = 0;
@@ -17989,7 +17985,7 @@ int LRDrawImg(int *grHandle, DSTdraw *dstD) {
 			ry = y2;
 			break;
 		case 2:
-			rx = (x1 + x2) / 2;
+			rx = (x1 + x2) * 0.5;
 			ry = y2;
 			break;
 		case 3:
@@ -17998,22 +17994,22 @@ int LRDrawImg(int *grHandle, DSTdraw *dstD) {
 			break;
 		case 4:
 			rx = x1;
-			ry = (y1 + y2) / 2;
+			ry = (y1 + y2) * 0.5;
 			break;
 		default:
-			rx = (x1 + x2) / 2;
-			ry = (y1 + y2) / 2;
+			rx = (x1 + x2) * 0.5;
+			ry = (y1 + y2) * 0.5;
 			break;
 		case 6:
 			rx = x2;
-			ry = (y1 + y2) / 2;
+			ry = (y1 + y2) * 0.5;
 			break;
 		case 7:
 			rx = x1;
 			ry = y1;
 			break;
 		case 8:
-			rx = (x1 + x2) / 2;
+			rx = (x1 + x2) * 0.5;
 			ry = y1;
 			break;
 		case 9:
@@ -18033,7 +18029,7 @@ int LRDrawImg(int *grHandle, DSTdraw *dstD) {
 		vec4.x = x1 - rx;
 		vec4.y = y2 - ry;
 		VectorRotationZ(&vec4, &vec4, rad);
-		if (dstD->h != 0.0 && dstD->w != 0.0 && dstD->time > -1) {
+		if (dstD->h != 0.0 && dstD->w != 0.0 && dstD->time >= 0) {
 			DrawModiGraphF((vec1.x + rx)  * skinsizeX, (vec1.y + ry)  * skinsizeY, (vec2.x + rx)  * skinsizeX, (vec2.y + ry)  * skinsizeY,
 				(vec3.x + rx)  * skinsizeX, (vec3.y + ry)  * skinsizeY, (vec4.x + rx)  * skinsizeX, (vec4.y + ry)  * skinsizeY, *grHandle, 1);
 		}
@@ -18286,11 +18282,11 @@ int LRDraw(DrawingBuf *drBuf, TextStruct *txt, SONGSELECT *sSel, skstruct *sks, 
 	draw.y += sks->adjust.shift_y + y;
 	if (draw.fontHandle == -1) {
 		if (draw.grHandle != -1) {
-			if (draw.subHandle > -1 && draw.subHandle < 20 && drBuf->isHidSud[draw.subHandle] > 0) {
+			if (0 <= draw.subHandle && draw.subHandle < 20 && drBuf->isHidSud[draw.subHandle] > 0) {
 				SetDrawArea(0, drBuf->top[draw.subHandle], 640, drBuf->bottom[draw.subHandle]);
 			}
 			LRDrawImg(&draw.grHandle, &draw);
-			if (draw.subHandle > -1 && draw.subHandle < 20 && drBuf->isHidSud[draw.subHandle] > 0) {
+			if (0 <= draw.subHandle && draw.subHandle < 20 && drBuf->isHidSud[draw.subHandle] > 0) {
 				SetDrawArea(0, 0, 640, 480);
 			}
 			return 1;
@@ -18299,22 +18295,7 @@ int LRDraw(DrawingBuf *drBuf, TextStruct *txt, SONGSELECT *sSel, skstruct *sks, 
 	else if (draw.grHandle != -1) return 1;
 	//if (draw.subHandle == -1) return 1; //DEBUG : this line is not in original
 	if (draw.fontHandle != -1) {
-		if (draw.subHandle < 10000) {
-			if (draw.subHandle < 1000) {
-				if (txt->st_text_num == draw.subHandle) {
-					LRDrawTextInput(&draw.fontHandle, &draw, &txt->hKeyInput, &sks->ImageFonts[(int)draw.angle]);
-				}
-				else {
-					CSTR a = GetStringFromArray(draw.subHandle, txt->objectStr);
-					LRDrawText(&draw.fontHandle, &draw, &a, &sks->ImageFonts[(int)draw.angle]);
-				}
-			}
-			else {
-				LRDrawText(&draw.fontHandle, &draw, &txt->readme.body[draw.subHandle - 1000], &sks->ImageFonts[(int)draw.angle]);
-			}
-		}
-		else {
-			draw.angle;
+		if (draw.subHandle >= 10000) {
 			if (sSel->filter.disablesubtitle == 1) {
 				LRDrawText(&draw.fontHandle, &draw, &sSel->bmsList[draw.subHandle - 10000].title, &sks->ImageFonts[(int)draw.angle]);
 			}
@@ -18322,7 +18303,16 @@ int LRDraw(DrawingBuf *drBuf, TextStruct *txt, SONGSELECT *sSel, skstruct *sks, 
 				LRDrawText(&draw.fontHandle, &draw, &sSel->bmsList[draw.subHandle - 10000].fulltitle, &sks->ImageFonts[(int)draw.angle]);
 			}
 		}
-		
+		else if (draw.subHandle >= 1000) {
+			LRDrawText(&draw.fontHandle, &draw, &txt->readme.body[draw.subHandle - 1000], &sks->ImageFonts[(int)draw.angle]);
+		}
+		else if (txt->st_text_num == draw.subHandle) {
+			LRDrawTextInput(&draw.fontHandle, &draw, &txt->hKeyInput, &sks->ImageFonts[(int)draw.angle]);
+		}
+		else {
+			CSTR a = GetStringFromArray(draw.subHandle, txt->objectStr);
+			LRDrawText(&draw.fontHandle, &draw, &a, &sks->ImageFonts[(int)draw.angle]);
+		}
 	}
 
 	return 1;
@@ -18816,7 +18806,7 @@ int AddDrawingBuffer_PlayArea(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, T
 	tDstd.y += shiftY;
 	tDstd.filter = 0;
 	tDstd.blend = 1;
-	if (alpha > -1) tDstd.a = alpha;
+	if (alpha >= 0) tDstd.a = alpha;
 	tDstd.subHandle = (flag == 0) ? -1 : dst->n;
 	if (tDstd.time != -1 && grh != -1) AddDrawingBuffer(drb, grh, &tDstd);
 
@@ -19009,7 +18999,7 @@ int AddDrawingBuffer_EventLoading(DrawingBuf *drb, int grHandle, DSTstruct *dst,
 int AddDrawingBuffer_Lunaris(DrawingBuf *drb, SRCstruct *src, DSTdraw *dstd, Timer *T) {
 	int grh;
 
-	if (src->graphcount < 1) return 0;
+	if (src->graphcount <= 0) return 0;
 
 	grh = GetSRCcycleNow(*src, GetTimeLapse(src->timer, T));
 	if (dstd->time != -1 && src->grHandles[grh] != -1) AddDrawingBuffer(drb, src->grHandles[grh], dstd);
@@ -19256,20 +19246,17 @@ int InitDSTdraw(DSTdraw *dstd){
 
 //49e8e0
 int ReadDST(DSTstruct *dst, CSVbuf *csv, int order){
-	int iVar1;
-	DSTdraw *pDVar2;
-	int iVar3;
 
 	//parameters only for first line
 	if (dst->dstCount == 0) {
 		dst->n = csv->val[1];
-		dst->loop = csv->val[0x10];
-		dst->timer = csv->val[0x11];
-		dst->opt1 = csv->val[0x12];
-		dst->opt2 = csv->val[0x13];
-		dst->opt3 = csv->val[0x14];
-		dst->opt4 = csv->val[0x15];
-		dst->opt5 = csv->val[0x16];
+		dst->loop = csv->val[16];
+		dst->timer = csv->val[17];
+		dst->opt1 = csv->val[18];
+		dst->opt2 = csv->val[19];
+		dst->opt3 = csv->val[20];
+		dst->opt4 = csv->val[21];
+		dst->opt5 = csv->val[22];
 	}
 
 	//memory allocation if needed
@@ -19291,14 +19278,14 @@ int ReadDST(DSTstruct *dst, CSVbuf *csv, int order){
 	dst->draw[dst->dstCount].a = csv->val[8];
 	dst->draw[dst->dstCount].r = csv->val[9];
 	dst->draw[dst->dstCount].g = csv->val[10];
-	dst->draw[dst->dstCount].b = csv->val[0xb];
-	dst->draw[dst->dstCount].blend = csv->val[0xc];
-	dst->draw[dst->dstCount].filter = csv->val[0xd];
-	dst->draw[dst->dstCount].angle = (float)csv->val[0xe];
-	dst->draw[dst->dstCount].center = csv->val[0xf];
+	dst->draw[dst->dstCount].b = csv->val[11];
+	dst->draw[dst->dstCount].blend = csv->val[12];
+	dst->draw[dst->dstCount].filter = csv->val[13];
+	dst->draw[dst->dstCount].angle = (float)csv->val[14];
+	dst->draw[dst->dstCount].center = csv->val[15];
 	dst->draw[dst->dstCount].sortID = order;
 	dst->draw[dst->dstCount].subHandle = -1;
-	dst->dstCount = dst->dstCount + 1;
+	dst->dstCount++;
 	return 1;
 }
 
