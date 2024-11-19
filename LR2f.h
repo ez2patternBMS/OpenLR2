@@ -282,7 +282,7 @@ int InitSkin(skstruct * sk, int p5, char font);
 int InitImageFont(ImageFont * imgfont);
 int ReadImageFont(CSTR filename, ImageFont * imgfont);
 int LoadFontGraph(ImageFont * imgfont, int * fontNum);
-int LoadFontCharGraph(ImageFont * imgfont, uint vChar);
+int LoadFontCharGraph(ImageFont * imgfont, ushort vChar);
 int LoadFontForText(ImageFont * imgfont, CSTR * str);
 int FlipSide_Timer(int * n);
 int ApplyFlipside(skstruct * sk);

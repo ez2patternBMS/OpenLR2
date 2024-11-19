@@ -18072,11 +18072,11 @@ int GetTextGraphLength(CSTR *str, ImageFont *imF) {
 		else {
 			vCh = (*str->atPos(pos) << 8) + (uchar)*str->atPos(pos + 1);
 			if (vCh > 0xFF) {
-				if (vCh > 0x9ffd) vCh += 0xbfbf;
+				if (vCh >= 0x9ffe) vCh += 0xbfbf;
 				vCh += 0x7fc0;
 			}
 		}
-		if (vCh > 0x3bcd) vCh = 0x3f;
+		if (vCh >= 0x3bce) vCh = 0x3f;
 		
 		if (imF->chars[vCh].grHandle == -1) LoadFontCharGraph(imF, vCh);
 		GetGraphSize(imF->chars[vCh].grHandle, &x, &y);
@@ -18085,7 +18085,7 @@ int GetTextGraphLength(CSTR *str, ImageFont *imF) {
 		if (!IsMultibyte(ch)) pos += 1;
 		else pos += 2;
 		ret += imF->kerning + x;
-		if (ch == 0 || pos >= str->length()) ret -= imF->kerning;
+		if (*str->atPos(pos) == 0 || pos >= str->length()) ret -= imF->kerning;
 	} while (*str->atPos(pos) != '\0');
 	return ret;
 }
@@ -18154,17 +18154,17 @@ void LRDrawText(int* grHandle, DSTdraw *dstd, CSTR *str, ImageFont *imF) {
 				// 'ch < 0x81 || (0x9f < ch && (ch < 0xe0 || 0xfd < ch))' is replaced with !IsMultiByte()
 				if (IsMultibyte(ch)) {
 					vCh = (*str->atPos(i) << 8) + (uchar)*str->atPos(i + 1);
-					if (vCh > 0xFF) {
-						if (vCh > 0x9ffd) vCh += 0xbfbf;
-						vCh += 0x7fc0;
-					}
+
+					if (vCh > 0x9ffe) vCh += 0xbfbf;
+					vCh += 0x7fc0;
 				}
 				else {
 					vCh = *str->atPos(i);
 				}
-				if (vCh > 0x3bcd) vCh = 0x3f;
+				if (vCh >= 0x3bce) vCh = 0x3f;
 
 				if (imF->chars[vCh].grHandle == -1) LoadFontCharGraph(imF, vCh);
+
 				GetGraphSize(imF->chars[vCh].grHandle, &x, &y);
 				xf = x;
 				yf = y;
@@ -18175,7 +18175,7 @@ void LRDrawText(int* grHandle, DSTdraw *dstd, CSTR *str, ImageFont *imF) {
 					yf = y;
 				}
 				xf *= wl;
-				if (vCh != 0x20 && vCh != 0xa0 && imF->chars[vCh].grHandle != -1) {
+				if (vCh != 0x20 && vCh != 0x0A && imF->chars[vCh].grHandle != -1) {
 					DrawExtendGraphF(dstd->x + wSum, dstd->y, dstd->x + wSum + xf, dstd->y + hl*yf, imF->chars[vCh].grHandle, 1);
 				}
 				ch = *str->atPos(i);
@@ -19757,7 +19757,7 @@ int ReadImageFont(CSTR filename, ImageFont *imgfont) {
 
 		int f = FileRead_open(filename);
 		if (f == 0) {
-			ErrorLogFmtAdd("画像フォントファイル%sの読み込みに失敗しました\n");
+			ErrorLogFmtAdd("画像フォントファイル%sの読み込みに失敗しました\n",filename);
 			return -1;
 		}
 		
@@ -19792,32 +19792,27 @@ int ReadImageFont(CSTR filename, ImageFont *imgfont) {
 
 		FileRead_close(f);
 	}
+
+	return 1;
 }
 
 //4a0870
 int LoadFontGraph(ImageFont *imgfont, int *fontNum){
 	int fnum;
-	char *filepath;
-	int v_grHandle;
-	int v_flag;
-	CSTR str = CSTR(imgfont->filepath,0);
-
+	
 	fnum = *fontNum;
-	if ( (-1 < fnum && fnum < 1000) && (imgfont->images[fnum].grHandle == -1) ) {
+	if ( 0 <= fnum && fnum < 1000 && imgfont->images[fnum].grHandle == -1 ) {
+		CSTR str(imgfont->filepath, 0);
 		str.add(imgfont->images[fnum].filename);
 		DeleteGraph(imgfont->images[fnum].grHandle);
-		v_flag = 0;
-		filepath = str.outstr();
-		v_grHandle = LoadGraph(filepath, v_flag);
-		imgfont->images[fnum].grHandle = v_grHandle;
+		imgfont->images[fnum].grHandle = LoadGraph(str, 0);
 		return 1;
 	}
 	return 0;
 }
 
 //4a0970
-int LoadFontCharGraph(ImageFont *imgfont, uint vChar){
-	int gr;
+int LoadFontCharGraph(ImageFont *imgfont, ushort vChar){
 	FontImage *fb;
 	int fNum;
 	FontChar *fc;
@@ -19827,8 +19822,7 @@ int LoadFontCharGraph(ImageFont *imgfont, uint vChar){
 	}
 	fc = imgfont->chars;
 	fNum = fc[vChar].ImageNum;
-	if ((((-1 < fNum) && (fNum < 1000)) && (fc[vChar].grHandle == -1)) &&
-		((0 < fc[vChar].height && (0 < fc[vChar].width)))) {
+	if (0 <= fNum && fNum < 1000 && fc[vChar].grHandle == -1 && 0 < fc[vChar].height && 0 < fc[vChar].width) {
 		fb = imgfont->images;
 		if (fb[fNum].grHandle == -1) {
 			LoadFontGraph(imgfont, &fc[vChar].ImageNum);
@@ -19839,8 +19833,7 @@ int LoadFontCharGraph(ImageFont *imgfont, uint vChar){
 			}
 		}
 		fc = imgfont->chars + vChar;
-		gr = DerivationGraph(fc->srcX, fc->srcY, fc->width, fc->height, fb[fc->ImageNum].grHandle);
-		imgfont->chars[vChar].grHandle = gr;
+		imgfont->chars[vChar].grHandle = DerivationGraph(fc->srcX, fc->srcY, fc->width, fc->height, fb[fc->ImageNum].grHandle);
 		return 1;
 	}
 	return 0;
@@ -19848,22 +19841,14 @@ int LoadFontCharGraph(ImageFont *imgfont, uint vChar){
 
 //4a0a40
 int LoadFontForText(ImageFont *imgfont, CSTR *str){
-	char cVar1;
-	bool bVar2;
-	int iVar3;
-	char *pcVar4;
-	int iVar5;
-	byte *pbVar6;
-	ushort local_4;
-
 	ushort twochar;
 
 	if (str->length() <= 0) return 0;
 
-	for (int i = 0; *str->atPos(i) && i < str->length(); 0) {
+	for (int i = 0; *str->atPos(i) && i < str->length(); ) {
 		if ( IsMultibyte(*str->atPos(i)) ) {
 			twochar = (*str->atPos(i) << 8) + (uchar)*str->atPos(i + 1);
-			if (twochar > 0x9ffd) {
+			if (twochar >= 0x9ffe) {
 				twochar += 0xbfbf;
 			}
 			twochar += 0x7fc0;

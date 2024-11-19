@@ -77,9 +77,9 @@
       <Optimization>Custom</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <AdditionalOptions>/source-charset:shift-JIS /execution-charset:shift-JIS</AdditionalOptions>
+      <AdditionalOptions>/execution-charset:shift-JIS</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>.\DXlib;D:\User Data\Works\프로그래밍\OpenLR2\OpenLR2\OpenLR2\FMODex;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -108,9 +108,9 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <AdditionalOptions>/source-charset:shift-JIS /execution-charset:shift-JIS</AdditionalOptions>
+      <AdditionalOptions>/execution-charset:shift-JIS</AdditionalOptions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
