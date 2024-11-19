@@ -19,6 +19,7 @@ sending score to LR2IR is disabled to avoid accidents.
  - behavior mismatch on NONSTOP MIX
  - readme left click scroll is faster than original (not important)
  - banner load fails
+ - "here we go!(TM edit)" banner kills the game
 
 # libraries
 *DxLib 3.01a -> 3.12a
