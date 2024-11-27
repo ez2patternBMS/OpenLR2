@@ -19,12 +19,13 @@ sending score to LR2IR is disabled to avoid accidents.
  - behavior mismatch on NONSTOP MIX
  - readme left click scroll is faster than original (not important)
  - banner load fails
- - "here we go!(TM edit)" banner kills the game
+
+# build
+use visual studio 2008, with japanese locale (locale emulator works).
 
 # libraries
-*DxLib 3.01a -> 3.12a
+*DxLib 3.01a -> 3.02
 	orginal library is dxlib 3.01a, not available. we can get 3.01 or 3.02.
-	but, to avoid LoadJpegImage() crash error I used dxlib3.12a (2014/4/19)
 
 *FMODex 4.13.4(080401)
  
