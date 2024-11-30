@@ -18086,16 +18086,16 @@ void LRDrawText(int* grHandle, DSTdraw *dstd, CSTR *str, ImageFont *imF) {
 	int iDum;
 	char ch;
 	ushort vCh;
-	int x, y;
+	int x, y, size;
 	float xf, yf, wSum;
 
-	if (imF->size < 1 || dstd->h == 0.0 || dstd->w == 0.0 || str->length() < 1) {		
+	if (imF->size <= 0 || dstd->h == 0.0 || dstd->w == 0.0 || str->length() < 1) {		
 		if (dstd->h != 0.0 && dstd->w != 0.0 && str->length() > 0 && *grHandle != -1) {
 			SetDrawMode(dstd->filter);
 			SetDrawBlendMode(dstd->blend, dstd->a);
 			SetDrawBright(dstd->r, dstd->g, dstd->b);
-			GetFontStateToHandle(0, &imF->size, &iDum, *grHandle);
-			hl = dstd->h / (float)imF->size;
+			GetFontStateToHandle(0, &size, &iDum, *grHandle);
+			hl = dstd->h / (float)size;
 			width = GetDrawStringWidthToHandle(str->outstr(), str->length(), *grHandle, 0);
 			if (width != 0.0) {
 				if (width > dstd->w) wl = dstd->w / width;
