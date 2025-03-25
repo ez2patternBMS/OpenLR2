@@ -1228,25 +1228,25 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 							gs.gameplay.flag_retry = 0;
 							break;
 						case 3:
-							gs.config.play.assist[0] = 0;
-							gs.config.play.assist[1] = 0;
-							gs.config.play.rand[0] = 0;
-							gs.config.play.rand[1] = 0;
+							gs.config.play.randSC[0] = 0;
+							gs.config.play.randSC[1] = 0;
+							gs.config.play.randFix[0] = 0;
+							gs.config.play.randFix[1] = 0;
 							InitInputStructure2(&gs.KeyInput);
 							InputToButton(&gs.KeyInput, &gs.config.input, (int)(uint)(gs.sSelect.metaSelected.keymode < 10), 0);
 							if (gs.KeyInput.p1_buttonInput[12] == 1 && gs.KeyInput.p1_buttonInput[13] == 1) {
-								gs.config.play.assist[0] = 1;
+								gs.config.play.randSC[0] = 1;
 							}
 							else if (gs.KeyInput.p2_buttonInput[12] == 1 && gs.KeyInput.p2_buttonInput[13] == 1) {
-								gs.config.play.assist[1] = 1;
+								gs.config.play.randSC[1] = 1;
 							}
 							else if (gs.KeyInput.p1_buttonInput[12] == 1 || gs.KeyInput.p1_buttonInput[13] == 1 || gs.KeyInput.p2_buttonInput[12] == 1 || gs.KeyInput.p2_buttonInput[13] == 1) {
 								for (int i = 1; i <= 9; i++) {
 									if (gs.KeyInput.p1_buttonInput[i] == 1) {
-										gs.config.play.rand[0] = i;
+										gs.config.play.randFix[0] = i;
 									}
 									if (gs.KeyInput.p2_buttonInput[i] == 1) {
-										gs.config.play.rand[1] = i;
+										gs.config.play.randFix[1] = i;
 									}
 								}
 							}

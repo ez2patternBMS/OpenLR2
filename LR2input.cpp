@@ -2219,7 +2219,7 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 
 			if (130 <= gp->bmsobj.notes[i].op && gp->bmsobj.notes[i].op < 150) {//mine
 				gp->bmsobj.notes[i].op -= 120;
-				gp->bmsobj.notes[i].channel = gp->bmsobj.notes[i].val;
+				gp->bmsobj.notes[i].mine = gp->bmsobj.notes[i].val;
 				gp->bmsobj.notes[i].val = 0.0;
 			}
 
@@ -2734,7 +2734,7 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 	for (int p = 0; p < 2; p++) {
 		if (cfg->play.random[p] == 1) { //mirror
 			if (meta->keymode == 7 || meta->keymode == 14) {
-				if (cfg->play.assist[p] == 0) {
+				if (cfg->play.randSC[p] == 0) {
 					noteRandomTable[p][1] = 7 + p * 10;
 					noteRandomTable[p][2] = 6 + p * 10;
 					noteRandomTable[p][3] = 5 + p * 10;
@@ -2755,7 +2755,7 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 				}
 			}
 			else if (meta->keymode == 5 || meta->keymode == 10) {
-				if (cfg->play.assist[p] == 0) {
+				if (cfg->play.randSC[p] == 0) {
 					noteRandomTable[p][1] = 5 + p * 10;
 					noteRandomTable[p][2] = 4 + p * 10;
 					noteRandomTable[p][3] = 3 + p * 10;
@@ -2793,7 +2793,7 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 				}
 			}
 			else if (meta->keymode == 7 || meta->keymode == 14) {
-				if (cfg->play.assist[p] == 0) {
+				if (cfg->play.randSC[p] == 0) {
 					for (int c = 1; c < 7; c++) {
 						int a = c + GetRand(7 - c);
 						int tmp = noteRandomTable[p][c];
@@ -2801,11 +2801,11 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 						noteRandomTable[p][a] = tmp;
 					}
 
-					if (0 < cfg->play.rand[p] && cfg->play.rand[p] < 8) {
+					if (0 < cfg->play.randFix[p] && cfg->play.randFix[p] < 8) {
 						for (int c = 1; c <= 7; c++) {
-							if (noteRandomTable[p][c] == cfg->play.rand[p]) {
+							if (noteRandomTable[p][c] == cfg->play.randFix[p]) {
 								noteRandomTable[p][c] = noteRandomTable[p][1];
-								noteRandomTable[p][1] = cfg->play.rand[p];
+								noteRandomTable[p][1] = cfg->play.randFix[p];
 							}
 						}
 					}
@@ -2818,18 +2818,18 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 						noteRandomTable[p][a] = tmp;
 					}
 
-					if (0 < cfg->play.rand[p] && cfg->play.rand[p] < 8) {
+					if (0 < cfg->play.randFix[p] && cfg->play.randFix[p] < 8) {
 						for (int c = 1; c <= 7; c++) {
 							if (noteRandomTable[p][c] == 0) {
-								noteRandomTable[p][c] = noteRandomTable[p][cfg->play.rand[p]];
-								noteRandomTable[p][cfg->play.rand[p]] = 0;
+								noteRandomTable[p][c] = noteRandomTable[p][cfg->play.randFix[p]];
+								noteRandomTable[p][cfg->play.randFix[p]] = 0;
 							}
 						}
 					}
 				}
 			}
 			else if (meta->keymode == 5 || meta->keymode == 10) {
-				if (cfg->play.assist[p] == 0) {
+				if (cfg->play.randSC[p] == 0) {
 					for (int c = 1; c < 5; c++) {
 						int a = c + GetRand(5 - c);
 						int tmp = noteRandomTable[p][c];
@@ -2837,11 +2837,11 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 						noteRandomTable[p][a] = tmp;
 					}
 
-					if (0 < cfg->play.rand[p] && cfg->play.rand[p] < 6) {
+					if (0 < cfg->play.randFix[p] && cfg->play.randFix[p] < 6) {
 						for (int c = 1; c <= 5; c++) {
-							if (noteRandomTable[p][c] == cfg->play.rand[p]) {
+							if (noteRandomTable[p][c] == cfg->play.randFix[p]) {
 								noteRandomTable[p][c] = noteRandomTable[p][1];
-								noteRandomTable[p][1] = cfg->play.rand[p];
+								noteRandomTable[p][1] = cfg->play.randFix[p];
 							}
 						}
 					}
@@ -2854,11 +2854,11 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 						noteRandomTable[p][a] = tmp;
 					}
 
-					if (0 < cfg->play.rand[p] && cfg->play.rand[p] < 6) {
+					if (0 < cfg->play.randFix[p] && cfg->play.randFix[p] < 6) {
 						for (int c = 1; c <= 5; c++) {
 							if (noteRandomTable[p][c] == 0) {
-								noteRandomTable[p][c] = noteRandomTable[p][cfg->play.rand[p]];
-								noteRandomTable[p][cfg->play.rand[p]] = 0;
+								noteRandomTable[p][c] = noteRandomTable[p][cfg->play.randFix[p]];
+								noteRandomTable[p][cfg->play.randFix[p]] = 0;
 							}
 						}
 					}
@@ -2954,21 +2954,21 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 
 			if ( (cfg->play.random[0] >= 3 && gp->bmsobj.notes[i].op < 20) || (cfg->play.random[1] >= 3 && gp->bmsobj.notes[i].op >= 20) ) {
 				if (meta->keymode == 5 || meta->keymode == 10) {
-					if (cfg->play.rand[0] >= 6) cfg->play.rand[0] = 0;
-					if (cfg->play.rand[1] >= 6) cfg->play.rand[1] = 0;
+					if (cfg->play.randFix[0] >= 6) cfg->play.randFix[0] = 0;
+					if (cfg->play.randFix[1] >= 6) cfg->play.randFix[1] = 0;
 				}
 				else if (meta->keymode == 7 || meta->keymode == 14) {
-					if (cfg->play.rand[0] >= 8) cfg->play.rand[0] = 0;
-					if (cfg->play.rand[1] >= 8) cfg->play.rand[1] = 0;
+					if (cfg->play.randFix[0] >= 8) cfg->play.randFix[0] = 0;
+					if (cfg->play.randFix[1] >= 8) cfg->play.randFix[1] = 0;
 				}
 				else if (meta->keymode == 9) {
-					if (cfg->play.rand[0] == 0) cfg->play.rand[0] = 5;
-					if (cfg->play.rand[1] == 0) cfg->play.rand[1] = 5;
+					if (cfg->play.randFix[0] == 0) cfg->play.randFix[0] = 5;
+					if (cfg->play.randFix[1] == 0) cfg->play.randFix[1] = 5;
 				}
 
 				int assist = 0;
-				if (cfg->play.random[0] >= 3 && gp->bmsobj.notes[i].op < 20) assist = (cfg->play.assist[0] != 0);
-				else if (cfg->play.random[1] >= 3 && gp->bmsobj.notes[i].op >= 20) assist = (cfg->play.assist[1] != 0);
+				if (cfg->play.random[0] >= 3 && gp->bmsobj.notes[i].op < 20) assist = (cfg->play.randSC[0] != 0);
+				else if (cfg->play.random[1] >= 3 && gp->bmsobj.notes[i].op >= 20) assist = (cfg->play.randSC[1] != 0);
 
 				int randLanes;
 				switch (meta->keymode) {
@@ -3002,11 +3002,11 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 						lane = startlane + GetRand(randLanes);
 						if (pass) {
 							if (gp->bmsobj.notes[i].op < 20 && cfg->play.random[0] == 5) {
-								lane = cfg->play.rand[0];
+								lane = cfg->play.randFix[0];
 								pass = 0;
 							}
 							if (gp->bmsobj.notes[i].op >= 20 && cfg->play.random[1] == 5) {
-								lane = cfg->play.rand[1] + startlane;
+								lane = cfg->play.randFix[1] + startlane;
 								pass = 0;
 							}
 						}
@@ -3052,7 +3052,7 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 					mapAdded[1][4] = 1;
 				}
 			}
-			bool chnValid = (gp->bmsobj.notes[i].channel > 0);//
+			bool chnValid = (gp->bmsobj.notes[i].mine > 0);//
 			if (gp->bmsobj.notes[i].realTiming_ln + 2000.0 > endtime) {
 				endtime = gp->bmsobj.notes[i].realTiming_ln + 2000.0;
 			}
@@ -3061,10 +3061,10 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 			}
 
 			int lane = noteRandomTable[0][gp->bmsobj.notes[i].op - 10];
-			if (cfg->play.battle == 2 && cfg->play.assist[0] == 0 && cfg->play.assist[1] == 0 && gp->bmsobj.notes[i].op == 10) {
+			if (cfg->play.battle == 2 && cfg->play.randSC[0] == 0 && cfg->play.randSC[1] == 0 && gp->bmsobj.notes[i].op == 10) {
 				gp->bmsobj.notes[i].op = 1;
 			}
-			else if (cfg->play.battle == 2 && cfg->play.assist[0] == 0 && cfg->play.assist[1] == 0 && gp->bmsobj.notes[i].op == 20) {
+			else if (cfg->play.battle == 2 && cfg->play.randSC[0] == 0 && cfg->play.randSC[1] == 0 && gp->bmsobj.notes[i].op == 20) {
 				gp->bmsobj.notes[i].op = 1;
 			}
 			else {
@@ -3114,7 +3114,7 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 				gp->bmsobj_note[10 + i].notes[j].bmsTiming_ln = gp->bmsobj_note[0 + i].notes[j].bmsTiming_ln;
 				gp->bmsobj_note[10 + i].notes[j].realTiming_ln = gp->bmsobj_note[0 + i].notes[j].realTiming_ln;
 				gp->bmsobj_note[10 + i].notes[j].active = gp->bmsobj_note[0 + i].notes[j].active;
-				gp->bmsobj_note[10 + i].notes[j].channel = gp->bmsobj_note[0 + i].notes[j].channel;
+				gp->bmsobj_note[10 + i].notes[j].mine = gp->bmsobj_note[0 + i].notes[j].mine;
 				gp->bmsobj_note[10 + i].notes[j].val = gp->bmsobj_note[0 + i].notes[j].val;
 				gp->bmsobj_note[10 + i].notes[j].bmsTiming = gp->bmsobj_note[0 + i].notes[j].bmsTiming;
 				gp->bmsobj_note[10 + i].notes[j].realTiming = gp->bmsobj_note[0 + i].notes[j].realTiming;
@@ -3481,7 +3481,7 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 								gp->bmsobj_note[i].notes[gp->bmsobj_note[i].size].realTiming = (gp->bmsobj_note[i].notes[j + 1].realTiming + gp->bmsobj_note[i].notes[j].realTiming_ln) * 0.5;
 								gp->bmsobj_note[i].notes[gp->bmsobj_note[i].size].bmsTiming = RealTimeToBMSTime(gp, gp->bmsobj_note[i].notes[gp->bmsobj_note[i].size].realTiming);
 								gp->bmsobj_note[i].notes[gp->bmsobj_note[i].size].val = 0.0;
-								gp->bmsobj_note[i].notes[gp->bmsobj_note[i].size].channel = 4;
+								gp->bmsobj_note[i].notes[gp->bmsobj_note[i].size].mine = 4;
 								gp->bmsobj_note[i].notes[gp->bmsobj_note[i].size].op = gp->bmsobj_note[i].notes[j + 1].op;
 								gp->bmsobj_note[i].size++;
 							}
@@ -3490,7 +3490,7 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 							gp->bmsobj_note[i].notes[gp->bmsobj_note[i].size].realTiming = (gp->bmsobj_note[i].notes[j + 1].realTiming + gp->bmsobj_note[i].notes[j].realTiming) * 0.5;
 							gp->bmsobj_note[i].notes[gp->bmsobj_note[i].size].bmsTiming = RealTimeToBMSTime(gp, gp->bmsobj_note[i].notes[gp->bmsobj_note[i].size].realTiming);
 							gp->bmsobj_note[i].notes[gp->bmsobj_note[i].size].val = 0.0;
-							gp->bmsobj_note[i].notes[gp->bmsobj_note[i].size].channel = 4;
+							gp->bmsobj_note[i].notes[gp->bmsobj_note[i].size].mine = 4;
 							gp->bmsobj_note[i].notes[gp->bmsobj_note[i].size].op = gp->bmsobj_note[i].notes[j + 1].op;
 							gp->bmsobj_note[i].size++;
 						}

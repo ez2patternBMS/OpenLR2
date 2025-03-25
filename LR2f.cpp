@@ -2339,7 +2339,7 @@ int DrawNotes(game *g, skstruct *sk, Timer *T, CONFIG_PLAY *cfg) {
 				}
 
 				if (g->gameplay.isAutoplay == 0 && g->gameplay.bmsobj_note[key].autoplay == 0 && isDpGbattle == 0) {
-					if (g->gameplay.bmsobj_note[key].notes[i].channel > 0) {
+					if (g->gameplay.bmsobj_note[key].notes[i].mine > 0) {
 						AddDrawingBuffer_PlayArea(&sk->drBuf, &sk->src_MINE[key], &sk->dst_NOTE[key], T, note_x, note_y, 255, notesize_x, notesize_y, 1);
 					}
 					else if (g->gameplay.bmsobj_note[key].notes[i].realTiming_ln <= g->gameplay.bmsobj_note[key].notes[i].realTiming || g->gameplay.bmsobj_note[key].notes[i].realTiming_ln < 0.0) {
@@ -2357,7 +2357,7 @@ int DrawNotes(game *g, skstruct *sk, Timer *T, CONFIG_PLAY *cfg) {
 					bool isAuto = g->gameplay.bmsobj_note[key].autoplay;
 
 					if (isAuto && !isDpGbattle) {
-						if (g->gameplay.bmsobj_note[key].notes[i].channel > 0) {
+						if (g->gameplay.bmsobj_note[key].notes[i].mine > 0) {
 							AddDrawingBuffer_PlayArea(&sk->drBuf, &sk->src_AUTO_MINE[key], &sk->dst_NOTE[key], T, note_x, note_y, 255, notesize_x, notesize_y, 1);
 						}
 						else if ((g->gameplay.bmsobj_note[key].notes[i].realTiming_ln <= g->gameplay.bmsobj_note[key].notes[i].realTiming || g->gameplay.bmsobj_note[key].notes[i].bmsTiming_ln <= g->gameplay.bmsobj_note[key].notes[i].bmsTiming || g->gameplay.bmsobj_note[key].notes[i].realTiming_ln < 0.0)) {
@@ -2368,7 +2368,7 @@ int DrawNotes(game *g, skstruct *sk, Timer *T, CONFIG_PLAY *cfg) {
 						}
 
 						if (g->gameplay.bmsobj_note[key].notes[i].bmsTiming <= songtimer && g->gameplay.bmsobj_note[key].notes[i].bmsTiming_ln <= songtimer) {
-							if (g->gameplay.bmsobj_note[key].notes[i].channel <= 0) {
+							if (g->gameplay.bmsobj_note[key].notes[i].mine <= 0) {
 								int p = 0;
 								if (cfg->battle == 1) p = key / 10;
 
@@ -2379,7 +2379,7 @@ int DrawNotes(game *g, skstruct *sk, Timer *T, CONFIG_PLAY *cfg) {
 						}
 					}
 					else {
-						if (g->gameplay.bmsobj_note[key].notes[i].channel > 0){
+						if (g->gameplay.bmsobj_note[key].notes[i].mine > 0){
 							if (isAuto) {
 								AddDrawingBuffer_PlayArea(&sk->drBuf, &sk->src_AUTO_MINE[key], &sk->dst_NOTE[key], T, note_x, note_y, 255, notesize_x, notesize_y, 1);
 							}
@@ -2413,7 +2413,7 @@ int DrawNotes(game *g, skstruct *sk, Timer *T, CONFIG_PLAY *cfg) {
 						
 
 						if (g->gameplay.bmsobj_note[key].notes[i].bmsTiming <= songtimer && g->gameplay.bmsobj_note[key].notes[i].bmsTiming_ln <= songtimer) {
-							if (g->gameplay.bmsobj_note[key].notes[i].channel <= 0) {
+							if (g->gameplay.bmsobj_note[key].notes[i].mine <= 0) {
 								SetTimeLapse(50 + key, T);
 								ResetTimeLapse(70 + key, T);
 
@@ -7436,9 +7436,9 @@ int JudgeToScore(int judge, game *g, int player, int lane, char isReplay) {
 int ProcSinglenote(game *g, int lane, int keypress, int timing, int player) {
 	NoteStruct &note = g->gameplay.bmsobj_note[lane].notes[g->gameplay.bmsobj_note[lane].note_count];
 
-	if (note.channel > 0) {
+	if (note.mine > 0) {
 		if (keypress == 1 && note.realTiming - (double)timing < (double)g->gameplay.player[player].judgetime[4]) {
-			ApplyJudge(0, g, player, lane, note.channel);
+			ApplyJudge(0, g, player, lane, note.mine);
 
 			if (g->gameplay.keysound[0].load)
 				PlaySound(&g->audio, &g->gameplay.keysound[0], g->audio.chnKey, -1);
@@ -7448,7 +7448,7 @@ int ProcSinglenote(game *g, int lane, int keypress, int timing, int player) {
 		else if ((double)timing <= note.realTiming)
 			return 0;
 		else if (keypress == 1 || keypress == 2) {
-			ApplyJudge(0, g, player, lane, note.channel);
+			ApplyJudge(0, g, player, lane, note.mine);
 
 			if (g->gameplay.keysound[0].load)
 				PlaySound(&g->audio, &g->gameplay.keysound[0], g->audio.chnKey, -1);
@@ -8321,7 +8321,7 @@ int CheckMission(game *g){
 			}
 			break;
 		case 40:
-			if (g->gameplay.player[0].totalnotes >= 1500 && g->gameplay.song_runtime < 150000.0 && g->config.play.random[0] == 5 && 0 < g->config.play.rand[0]) {
+			if (g->gameplay.player[0].totalnotes >= 1500 && g->gameplay.song_runtime < 150000.0 && g->config.play.random[0] == 5 && 0 < g->config.play.randFix[0]) {
 				g->gameplay.playerstat.trial = level + 1;
 			}
 	}
@@ -22360,7 +22360,7 @@ int InitNoteBuffer(LaneStruct *lane, int count){
 		lane->notes[i].bmsTiming = -1.0;
 		lane->notes[i].realTiming = -1.0;
 		lane->notes[i].op = -1;
-		lane->notes[i].channel = -1;
+		lane->notes[i].mine = -1;
 	}
 	return 1;
 }
@@ -22383,7 +22383,7 @@ int ExpandNoteBuffer(LaneStruct *lane, int addsize){
 		lane->notes[i].bmsTiming = -1.0;
 		lane->notes[i].realTiming = -1.0;
 		lane->notes[i].op = -1;
-		lane->notes[i].channel = -1;
+		lane->notes[i].mine = -1;
 	}
 	return 1;
 }
@@ -22477,7 +22477,7 @@ int InitGameplay(gameplay *gp, CONFIG_PLAY *cfg) {
 		gp->bmsobj.notes[i].bmsTiming = -1.0;
 		gp->bmsobj.notes[i].realTiming = -1.0;
 		gp->bmsobj.notes[i].op = -1;
-		gp->bmsobj.notes[i].channel = -1;
+		gp->bmsobj.notes[i].mine = -1;
 		gp->bmsobj.notes[i].stage = 0;
 	}
 	gp->bmsobj.size = 0;
@@ -22496,7 +22496,7 @@ int InitGameplay(gameplay *gp, CONFIG_PLAY *cfg) {
 			gp->bmsobj_note[lane].notes[i].bmsTiming = -1.0;
 			gp->bmsobj_note[lane].notes[i].realTiming = -1.0;
 			gp->bmsobj_note[lane].notes[i].op = -1;
-			gp->bmsobj_note[lane].notes[i].channel = -1;
+			gp->bmsobj_note[lane].notes[i].mine = -1;
 			gp->bmsobj_note[lane].notes[i].stage = 0;
 		}
 		gp->bmsobj_note[lane].size = 0;
@@ -22515,7 +22515,7 @@ int InitGameplay(gameplay *gp, CONFIG_PLAY *cfg) {
 		gp->bmsobj_line.notes[i].bmsTiming = -1.0;
 		gp->bmsobj_line.notes[i].realTiming = -1.0;
 		gp->bmsobj_line.notes[i].op = -1;
-		gp->bmsobj_line.notes[i].channel = -1;
+		gp->bmsobj_line.notes[i].mine = -1;
 		gp->bmsobj_line.notes[i].stage = 0;
 	}
 	gp->bmsobj_line.size = 0;
@@ -23823,7 +23823,7 @@ void PMStoSP(gameplay *gp) { //test&fix completed
 						}
 
 						if (gp->bmsobj.notes[j].op == 18 || gp->bmsobj.notes[j].op == 19) {
-							gp->bmsobj.notes[j].op = (gp->bmsobj.notes[j].channel <= 0) ? 1 : -1;
+							gp->bmsobj.notes[j].op = (gp->bmsobj.notes[j].mine <= 0) ? 1 : -1;
 							ErrorLogFmtAdd("しまっちゃうノート\n");
 						}
 					}
@@ -27382,10 +27382,10 @@ int AddReplayDataHeader(CONFIG_PLAY *cfg, REPLAY *rp, AUDIO *snd, gameplay *gp){
 	AddReplayData(rp, 0, 0x98, *(short *)&cfg->p2_lanecoverv);
 	AddReplayData(rp, 0, 0x6b, *(short *)&cfg->p1_assist);
 	AddReplayData(rp, 0, 0x9d, *(short *)&cfg->p2_assist);
-	AddReplayData(rp, 0, 0x6a, *(short *)&cfg->assist[0]);
-	AddReplayData(rp, 0, 0x9c, *(short *)&cfg->assist[1]);
-	AddReplayData(rp, 0, 0x69, *(short *)&cfg->rand[0]);
-	AddReplayData(rp, 0, 0x9b, *(short *)&cfg->rand[1]);
+	AddReplayData(rp, 0, 0x6a, *(short *)&cfg->randSC[0]);
+	AddReplayData(rp, 0, 0x9c, *(short *)&cfg->randSC[1]);
+	AddReplayData(rp, 0, 0x69, *(short *)&cfg->randFix[0]);
+	AddReplayData(rp, 0, 0x9b, *(short *)&cfg->randFix[1]);
 	AddReplayData(rp, 0, 0xc9, *(short *)&cfg->battle);
 	AddReplayData(rp, 0, 0xca, *(short *)&gp->isAutoplay);
 	AddReplayData(rp, 0, 0xcb, *(short *)&cfg->hsfix);
@@ -27812,10 +27812,10 @@ int ReplayDataToInput(ReplayData *data, game *g, AUDIO *aud, gameplay *gp, input
 			g->config.play.m_HIDSUD1 = data->value;
 			break;
 		case 0x69:
-			g->config.play.rand[0] = data->value;
+			g->config.play.randFix[0] = data->value;
 			break;
 		case 0x6a:
-			g->config.play.assist[0] = data->value;
+			g->config.play.randSC[0] = data->value;
 			break;
 		case 0x6b:
 			g->config.play.p1_assist = data->value;
@@ -27836,10 +27836,10 @@ int ReplayDataToInput(ReplayData *data, game *g, AUDIO *aud, gameplay *gp, input
 			g->config.play.m_HIDSUD2 = data->value;
 			break;
 		case 0x9b:
-			g->config.play.rand[1] = data->value;
+			g->config.play.randFix[1] = data->value;
 			break;
 		case 0x9c:
-			g->config.play.assist[1] = data->value;
+			g->config.play.randSC[1] = data->value;
 			break;
 		case 0x9d:
 			g->config.play.p2_assist = data->value;

@@ -166,8 +166,8 @@ struct CONFIG_PLAY {
 	int play_ghost;
 	int target_percent;
 	int p1_target;
-	int assist[2];
-	int rand[2];
+	int randSC[2]; // include scratch to random by impossible command
+	int randFix[2]; // fix a lane by impossible command
 	int replay;
 	int hsmargin; /* Created by retype action */
 	int hsmax; /* Created by retype action */
@@ -229,7 +229,7 @@ struct CONFIG_SELECT {
 	int control; /* Created by retype action */
 	int buttonselect; /* Created by retype action */
 	int folderlamp;
-	undefined4 field10_0x28;
+	undefined4 unused_28;
 	int difficultychangetype;
 	int ignorekeyall; /* Created by retype action */
 	int ignorekeysingle; /* Created by retype action */
@@ -1089,7 +1089,7 @@ struct NoteStruct {
 	double bmsTiming_ln;
 	double realTiming_ln;
 	int op; /* channel */
-	int channel; /* soundchannel/mine */
+	int mine; /* soundchannel/mine */
 	int stage;
 	undefined4 unk3c;
 };
