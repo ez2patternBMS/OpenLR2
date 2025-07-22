@@ -509,6 +509,7 @@ int WriteConfigXml(game *g, const char *filename){
 	WriteXML_Tab2Str(pFile, "play_7_b", (g->config).skin.skinFilePath[12]);
 	WriteXML_Tab2Str(pFile, "play_5_b", (g->config).skin.skinFilePath[13]);
 	WriteXML_Tab2Str(pFile, "play_9_b", (g->config).skin.skinFilePath[14]);
+	//TOFIX : courseresult is omitted (mat found it)
 	WriteXML_Tab2Str(pFile, "fontname", (g->config).skin.fontname);
 	sprintf(buf, "\t\t<%s>%d</%s>\n", "disableimagefont", (g->config).skin.disableimagefont, "disableimagefont");
 	fputs(buf, pFile);

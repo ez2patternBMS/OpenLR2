@@ -108,7 +108,7 @@ int SetFirstSkins(game *g){
 		ErrorLogAdd("7keysスキンが有りません。\n");
 	}
 	if (SetFirstSkin_5k(sm, SKINTYPE_5KEYS, &g->config.skin.skinFilePath[1]) == -1) {
-		ErrorLogAdd("7keysスキンが有りません。\n"); //it has to be 5key but error??
+		ErrorLogAdd("7keysスキンが有りません。\n"); //TOFIX : it has to be 5key but error??
 	}
 	if (SetFirstSkin(sm, SKINTYPE_14KEYS, &g->config.skin.skinFilePath[2]) == -1) {
 		ErrorLogAdd("14keysスキンが有りません。\n");
@@ -140,31 +140,31 @@ int SetFirstSkins(game *g){
 	if (SetFirstSkin(sm, SKINTYPE_THEME, &g->config.skin.skinFilePath[11]) == -1) {
 		ErrorLogAdd("themeが有りません。\n");
 	}
-	if (SetFirstSkin(sm, (SKINTYPE)12, &g->config.skin.skinFilePath[12]) == -1) { //QUESTION : 12 is really 5keys battle???
+	if (SetFirstSkin(sm, SKINTYPE_7KEYSBATTLE, &g->config.skin.skinFilePath[12]) == -1) {
 		ErrorLogAdd("7keysバトルスキンが有りません。\n");
 	}
-	if (SetFirstSkin_5kb(sm, (SKINTYPE)13, &g->config.skin.skinFilePath[13]) == -1) { //QUESTION : 13 is really 7keys battle???
+	if (SetFirstSkin_5kb(sm, SKINTYPE_5KEYSBATTLE, &g->config.skin.skinFilePath[13]) == -1) {
 		ErrorLogAdd("5keysバトルスキンが有りません。\n");
 	}
-	if (SetFirstSkin(sm, (SKINTYPE)14, &g->config.skin.skinFilePath[14]) == -1) { //QUESTION : 14 is really course edit???
+	if (SetFirstSkin(sm, SKINTYPE_9KEYSBATTLE, &g->config.skin.skinFilePath[14]) == -1) {
 		ErrorLogAdd("9keysバトルスキンが有りません。\n");
 	}
 	if (SetFirstSkin(sm, SKINTYPE_COURSERESULT, &g->config.skin.skinFilePath[15]) == -1) {
 		ErrorLogAdd("コースリザルトスキンが有りません。\n");
 	}
-	if (SetFirstSkin(sm, (SKINTYPE)16, &g->config.skin.skinFilePath[16]) == -1) { //QUESTION : 16 is really 9keys battle???
+	if (SetFirstSkin(sm, SKINTYPE_OPENING, &g->config.skin.skinFilePath[16]) == -1) { 
 		ErrorLogAdd("オープニングスキンが有りません。\n"); //opening skin
 	}
-	if (SetFirstSkin(sm, (SKINTYPE)17, &g->config.skin.skinFilePath[17]) == -1) { //QUESTION : 17 is really opening?
+	if (SetFirstSkin(sm, SKINTYPE_MODESELECT, &g->config.skin.skinFilePath[17]) == -1) {
 		ErrorLogAdd("モードセレクトスキンが有りません。\n"); //mode select skin
 	}
-	if (SetFirstSkin(sm, (SKINTYPE)18, &g->config.skin.skinFilePath[18]) == -1) { //QUESTION : 18 is really mode select?
+	if (SetFirstSkin(sm, SKINTYPE_MODEDECIDE, &g->config.skin.skinFilePath[18]) == -1) {
 		ErrorLogAdd("モード決定スキンが有りません。\n"); //mode decide
 	}
-	if (SetFirstSkin(sm, (SKINTYPE)19, &g->config.skin.skinFilePath[19]) == -1) { //QUESTION : 19 is really mode decide?
+	if (SetFirstSkin(sm, SKINTYPE_COURSESELECT, &g->config.skin.skinFilePath[19]) == -1) {
 		ErrorLogAdd("コースセレクトスキンが有りません。\n"); //course select
 	}
-	if (SetFirstSkin(sm, (SKINTYPE)20, &g->config.skin.skinFilePath[20]) == -1) { //QUESTION : 18 is really course select?
+	if (SetFirstSkin(sm, SKINTYPE_COURSEEDIT, &g->config.skin.skinFilePath[20]) == -1) {
 		ErrorLogAdd("コース編集スキンが有りません。\n"); //course edit
 	}
 	//15:course result was here, but I moved it on the correct order
