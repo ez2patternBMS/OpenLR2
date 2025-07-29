@@ -209,6 +209,7 @@ int LoadBMSMETAFromDB(BMSMETA *meta, sqlite3 *sql) {
 		meta->exlevel = sqlite3_column_int(pStmt, 10);
 		return 1;
 	}
+	sqlite3_finalize(pStmt);
 	return 0;
 }
 
