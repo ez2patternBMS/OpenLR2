@@ -1,2 +1,4 @@
 
 project/*.user
+project/.vs
+project/Skineditor/.vs
