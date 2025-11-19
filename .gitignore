@@ -1,4 +1,4 @@
 
 project/*.user
-project/.vs
-project/Skineditor/.vs
+project/.vs/*
+project/Skineditor/.vs/*
