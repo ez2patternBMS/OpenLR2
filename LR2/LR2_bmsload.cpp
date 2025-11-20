@@ -3385,10 +3385,9 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 		}
 		else {
 			if (optemp < 20) {
-				//below memo to here //TOFIX : p1 notes counted as p2 notes so p1 ends early (250923 mat report)
+				isBattle = 0;
 				if (p1LastTiming < gp->bmsobj.notes[i].realTiming) {
 					p1LastTiming = gp->bmsobj.notes[i].realTiming;
-					isBattle = 0; //TOFIX : p1 notes counted as p2 notes so p1 ends early (250923 mat report)
 					for (int lane = 0; lane < 10; lane++) {
 						if (cfg->play.random[0] == 4) {
 							mapAdded[0][lane] = chArr[lane];
