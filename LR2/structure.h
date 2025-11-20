@@ -2,7 +2,7 @@
 #include <winsock2.h>
 #include <Windows.h>
 #include <vfw.h>
-#include "FMODex/fmod.h"
+#include "FMOD/fmod.h"
 #include "strclass.h"
 typedef unsigned char   undefined;
 typedef unsigned int    ImageBaseOffset32;
@@ -1533,12 +1533,12 @@ struct gameplay {
 
 struct SkinManage {
 	struct SkinHeader * Data; /* 453d0=b14*64 */
-	int Count;
-	int Max;
-	int skinID[100];
-	int select;
-	int previewID;
-	int previewCustomID;
+	int Count = 0;
+	int Max = 0;
+	int skinID[100] = {};
+	int select = 0;
+	int previewID = 0;
+	int previewCustomID = 0;
 };
 
 struct SkinCustom {

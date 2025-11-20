@@ -345,8 +345,5 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="SDL3.lib" />
-    <Library Include="..\lib\FMODex\fmodex_vc.lib">
-      <Filter>LR2</Filter>
-    </Library>
   </ItemGroup>
 </Project>

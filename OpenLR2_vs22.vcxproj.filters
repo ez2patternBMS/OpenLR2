@@ -279,9 +279,4 @@
       <Filter>소스 파일\lib</Filter>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <Library Include="lib\FMODex\fmodex_vc.lib">
-      <Filter>libs</Filter>
-    </Library>
-  </ItemGroup>
 </Project>

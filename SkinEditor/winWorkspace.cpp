@@ -13,7 +13,7 @@
 
 #include "skin.h"
 
-char* SKINTYPESTR[]= {
+const char* SKINTYPESTR[]= {
     "7KEYS",
     "5KEYS",
     "14KEYS",
@@ -378,7 +378,7 @@ int WORKSPACE::drawTextEdit() {
                 for (int column = 0; column < 22; column++)
                 {
                     ImGui::TableSetColumnIndex(column);
-                    if(read.csv.str[column].atPos(0) == '\0')
+                    if(read.csv.str[column].atPos(0) == nullptr)
                         ImGui::TextDisabled("%s", read.csv.str[column]);
                     else
                         ImGui::Text("%s", read.csv.str[column]);

@@ -297,7 +297,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			memcpy(gs.config.jukebox.rival, gs.net.rivals, 4 * 20);
 			sqlite3_open(gs.is_starter ? "LR2files\\Database.db" : "LR2files\\Database\\song.db", &sql3);
 			LoadLR2CustomFolder(sql3, &gs.config.jukebox, pathScoreDB, gs.is_starter, gs.cmd_directplay);
-			if ( gs.cmd_directplay == false && gs.config.network.lr2ir == 1 && (((byte)gs.config.jukebox.customfolder & 0x80) != 0)) {
+			if ( gs.cmd_directplay == false && gs.config.network.lr2ir == 1 && (((unsigned char)gs.config.jukebox.customfolder & 0x80) != 0)) {
 				gs.net.GetInsaneList();
 			}
 			if (gs.is_starter == false) {

@@ -1,5 +1,5 @@
 #include "structure.h"
-#include "FMODex/fmod.h"
+#include "FMOD/fmod.h"
 
 const char * GetFMODerror(int errCode);
 
