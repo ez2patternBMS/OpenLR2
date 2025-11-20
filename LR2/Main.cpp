@@ -188,6 +188,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		cstrSprintf(&newPath, "LR2files/Ghost/%s", gs.config.player.id);
 		CreateDirectoryA(newPath, NULL);
 		CreateDirectoryA("LR2files/SkinCustomize", NULL);
+		CreateDirectoryA("screenshot", NULL);
 		ReadKeyConfig(&gs, "LR2files\\Config\\keyconfig.xml");
 		gs.is_clicked_screenModeChange = 0;
 		gs.flag_Screenshot = 0;
@@ -1866,7 +1867,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					if (gs.flag_Screenshot == 1) {
 						CSTR captureFilename;
 						GetDateTime(&date);
-						cstrSprintf(&captureFilename, "LR2 %04d-%02d-%02d %02d-%02d-%02d.png", date.Year, date.Mon, date.Day, date.Hour, date.Min, date.Sec);
+						cstrSprintf(&captureFilename, "screenshot/LR2 %04d-%02d-%02d %02d-%02d-%02d.png", date.Year, date.Mon, date.Day, date.Hour, date.Min, date.Sec);
 						SaveDrawScreenToPNG(0, 0, 640, 480, captureFilename, -1);
 						gs.flag_Screenshot = 0;
 						PlaySound(&gs.audio, &gs.audio.sysSound.screenshot, gs.audio.chnKey, -1);
@@ -1879,7 +1880,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 						SetDrawBlendMode(0, 255);
 						DrawExtendGraph(0, 0, 320, 240, scrdraw, 0);
 						GetDateTime(&date);
-						cstrSprintf(&captureFilename, "LR2 %04d-%02d-%02d %02d-%02d-%02d.png", date.Year, date.Mon, date.Day, date.Hour, date.Min, date.Sec);
+						cstrSprintf(&captureFilename, "screenshot/LR2 %04d-%02d-%02d %02d-%02d-%02d.png", date.Year, date.Mon, date.Day, date.Hour, date.Min, date.Sec);
 						SaveDrawScreenToPNG(0, 0, 320, 240, captureFilename, -1);
 						DrawGraph(0, 0, scrdraw, 0);
 						DeleteGraph(scrdraw);
