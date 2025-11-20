@@ -1631,7 +1631,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					AddDrawingBuffer_Object(&gs.skstruct.drBuf, &gs.skstruct.src_MOUSECURSOR, &gs.skstruct.dst_MOUSECURSOR, &gs.timer1, gs.KeyInput.mouse_oldX,	gs.KeyInput.mouse_oldY);
 				else if(GetTimeWrap() < gs.KeyInput.mouse_recentMoveTime + 10500)
 					AddDrawingBuffer_ObjectAlpha(&gs.skstruct.drBuf, &gs.skstruct.src_MOUSECURSOR, &gs.skstruct.dst_MOUSECURSOR, &gs.timer1, gs.KeyInput.mouse_oldX, gs.KeyInput.mouse_oldY,
-						(((gs.KeyInput.mouse_recentMoveTime - GetTimeWrap()) + 6000) * 255) / 500); //TOFIX : mouse disappear time not matching
+						(((gs.KeyInput.mouse_recentMoveTime - GetTimeWrap()) + 10500) * 255) / 500);
 
 				if (gs.procSelecter == 2) {
 					int h = gs.txtStruct.readme.h;

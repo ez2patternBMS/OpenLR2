@@ -186,7 +186,7 @@ int LR2SEDrawLoop(game* g, int gHandle) {
 		AddDrawingBuffer_Object(&g->skstruct.drBuf, &g->skstruct.src_MOUSECURSOR, &g->skstruct.dst_MOUSECURSOR, &g->timer1, g->KeyInput.mouse_oldX, g->KeyInput.mouse_oldY);
 	else if (GetTimeWrap() < g->KeyInput.mouse_recentMoveTime + 10500)
 		AddDrawingBuffer_ObjectAlpha(&g->skstruct.drBuf, &g->skstruct.src_MOUSECURSOR, &g->skstruct.dst_MOUSECURSOR, &g->timer1, g->KeyInput.mouse_oldX, g->KeyInput.mouse_oldY,
-			(((g->KeyInput.mouse_recentMoveTime - GetTimeWrap()) + 6000) * 255) / 500); //TOFIX : mouse disappear time not matching
+			(g->KeyInput.mouse_recentMoveTime - GetTimeWrap() + 10500) * 255 / 500);
 
 	if (g->procSelecter == 2) {
 		int h = g->txtStruct.readme.h;

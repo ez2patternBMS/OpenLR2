@@ -156,7 +156,7 @@ int ProcI_SkinSelect(game *g) {
 		AddDrawingBuffer_Object(&g->skstruct2.drBuf, &g->skstruct2.src_MOUSECURSOR, &(g->skstruct2).dst_MOUSECURSOR, &g->timer2, g->KeyInput.mouse_oldX, g->KeyInput.mouse_oldY); 
 	}
 	else if (GetTimeWrap() < g->KeyInput.mouse_recentMoveTime + 5500) {
-		AddDrawingBuffer_ObjectAlpha(&g->skstruct2.drBuf, &g->skstruct2.src_MOUSECURSOR, &g->skstruct2.dst_MOUSECURSOR, &g->timer2, g->KeyInput.mouse_oldX, g->KeyInput.mouse_oldY, (g->KeyInput.mouse_recentMoveTime - GetTimeWrap() + 6000) * 0xff / 500); //ff:alpha 255 TOFIX:fadeout doesn't working, change 6000 to 5500
+		AddDrawingBuffer_ObjectAlpha(&g->skstruct2.drBuf, &g->skstruct2.src_MOUSECURSOR, &g->skstruct2.dst_MOUSECURSOR, &g->timer2, g->KeyInput.mouse_oldX, g->KeyInput.mouse_oldY, (g->KeyInput.mouse_recentMoveTime - GetTimeWrap() + 5500) * 255 / 500);
 	}
 
 	if (g->skinData.select <= 4 || g->skinData.select == 12 || g->skinData.select == 13) {
