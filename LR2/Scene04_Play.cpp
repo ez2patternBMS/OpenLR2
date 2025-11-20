@@ -958,6 +958,15 @@ int ProcGame(game *g) {
 	bool fx = false;
 	double t142 = GetTimeLapse(142, &g->timer1);
 	double t41 = GetTimeLapse(41, &g->timer1);
+
+	//TEST:
+	g->timer1.GAPtick++;
+	if (t41 - g->timer1.GAPclock > 2) g->timer1.GAPcount++;
+	g->timer1.maxGAP = (t41 - g->timer1.GAPclock > g->timer1.maxGAP) ? (t41 - g->timer1.GAPclock) : g->timer1.maxGAP;
+	if (t41 > 0) g->timer1.avgGAP = t41 / (double)g->timer1.GAPtick;
+	g->timer1.GAPclock = t41;
+	//TEST END
+
 	for (int i = 0; i < 5; i++) {
 		if (g->gameplay.fadeinSOUNDstart[i] > 0) {
 			if (g->gameplay.fadeinSOUNDend[i] > 0 && g->gameplay.fadeinSOUNDstart[i] - 100 <= t41 && t41 <= g->gameplay.fadeinSOUNDend[i] + 100) {
@@ -1467,6 +1476,15 @@ void ProcGameThread(game *g) {
 
 	SetTimeLapse(41, &g->timer1);
 	SetTimeLapse(142, &g->timer1);
+
+	//TEST:
+	g->timer1.GAPtick = 0;
+	g->timer1.GAPclock = 0;
+	g->timer1.maxGAP = 0;
+	g->timer1.avgGAP = 0;
+	g->timer1.GAPcount = 0;
+	//TEST END
+
 	if (g->is_recordmode) {
 		g->rec.RefreshCurFrame();
 	}

@@ -1570,12 +1570,12 @@ struct Timer {
 	double movieTimer;
 	double movieFramerate;
 
-	////TEST: input process performance
-	//double maxGAP;
-	//double minGAP;
-	//double avgGAP;
-	//double GAPclock;
-	//int GAPcount;
+	//TEST: input process performance
+	double maxGAP;
+	double avgGAP;
+	double GAPclock;
+	int GAPtick;
+	int GAPcount;
 };
 
 struct NETWORK {

@@ -1696,6 +1696,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				}
 				if (gs.flag_showFPS) {
 					printfDx("FPS %d\n", (int)gs.timer1.FPS);
+					//TEST
+					printfDx("avgGAP %f\n", gs.timer1.avgGAP);
+					printfDx("maxGAP %f\n", gs.timer1.maxGAP);
+					printfDx("occured %d\n", gs.timer1.GAPcount);
+					//TEST END
 				}
 				gs.sSelect.flag_maniacPanel = 0;
 				gs.sSelect.unk4f74 = '\0';
