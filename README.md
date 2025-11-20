@@ -1,12 +1,13 @@
 # OpenLR2
 Rewritten source code of bms player Lunatic Rave 2
-Project started Jan, 2021. And now it's about to release.
+Project started Jan, 2021.(and aged about 1 year) And now it's about to release.
 
 if there is any different behavior with LR2beta3100201, plaese let me know.
-current progress is refactoring, original codes remain at LR2Beta3-v100201 branch
+current progress is refactoring at LR2Beta4 branch
+original codes remain at LR2Beta3-v100201 branch
 
 # is it really open source?
-I didn't decide, I asked stakeholders(IR) but there was no reply
+I didn't decide yet, I asked stakeholders(IR manager) but there was no reply
 
 # installation
 get original LR2 beta3 100201
@@ -30,7 +31,7 @@ use visual studio 2022, right click on OpenLR2_vs22, build. x86 release build on
 *DxLib 3.01a => 3.24f(custom old dxa)
 	orginal library is dxlib 3.01a, not available. we can get 3.01 or 3.02.
 
-*FMODex 4.13.4(080401)
+*FMODex 4.13.4(080401) => FMOD 2.3.10
  
 *SQLite 3.6.7
 
