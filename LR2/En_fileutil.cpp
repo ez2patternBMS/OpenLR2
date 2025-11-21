@@ -42,14 +42,13 @@ int makeFileHash(LPCSTR filepath, LPCSTR oBuf) {
 	return 1;
 }
 
-//TODO : using own local time.. GMT
 //TODO : posix 2038y problem
 //437de0
 time_t GetNowUnixtime(void){
 	SYSTEMTIME systime;
 	_FILETIME filetime;
 
-	GetLocalTime((LPSYSTEMTIME)&systime);
+	GetSystemTime((LPSYSTEMTIME)&systime);
 	SystemTimeToFileTime(&systime, &filetime);
 		
 	return GetUnixtimeFromFiletime(filetime);
