@@ -220,9 +220,6 @@ int CheckClear(PLAYERSTATUS *pstat, int gaugeType, char isCourse){
 			}
 		}
 		if (pstat->note_current == pstat->totalnotes && pstat->HP >= 80.0) {
-			if (pstat->judgecount[2] + pstat->judgecount[1] < 10) { // TOFIX?? : when bp < 10, consider it as hard clear. but it never works.
-				pstat->clearType = 4;
-			}
 			pstat->clearType = (gaugeType != 3) + 2;
 			return pstat->clearType;
 		}
