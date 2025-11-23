@@ -42,6 +42,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	game gs;
 	char curDir[260];
 
+	const bool use_dx9 = getenv("OPENLR2_NO_DX9") == nullptr; // chown2: crashes on DxLib_Init with DX9 for me
+
 	int tmp;
 	
 	//start of code
@@ -252,8 +254,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			SetUseDirectDrawDeviceIndex(gs.config.system.maindisplay);
 		}
 
-		CSTR title;
-		cstrSprintf(&title, LR2TITLE);
+		CSTR title = LR2TITLE;
 		SetMainWindowText(title);
 		title.fillzero();
 		SetOutApplicationLogValidFlag(gs.config.system.outputlog);
@@ -268,7 +269,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		SetMultiThreadFlag(1);
 		SetUseFPUPreserveFlag(1);
 		SetUseDirectInputFlag(1); //DXLIBVER: not in original, but we need it to make same reaction.
-		SetUseDirect3DVersion(DX_DIRECT3D_9); //DXLIBVER: if not set, it's DX11 (over 3.13e)
+		if (use_dx9) {
+			SetUseDirect3DVersion(DX_DIRECT3D_9); //DXLIBVER: if not set, it's DX11 (over 3.13e)
+		}
 		if (DxLib_Init() != -1) {
 			ChangeFont("", 0);
 			SetLogFontSize(14); //DXLIBVER: change this for further dxlib version
