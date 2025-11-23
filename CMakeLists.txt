@@ -35,6 +35,17 @@ if(WIN32)
     #         IMPORTED_LOCATION ${CMAKE_CURRENT_LIST_DIR}/lib/FMOD/bin64/fmod.dll
     #         IMPORTED_IMPLIB ${CMAKE_CURRENT_LIST_DIR}/lib/FMOD/bin64/fmod_vc.lib
     # )
+elseif(LINUX)
+    add_library(FMOD SHARED IMPORTED GLOBAL)
+    target_include_directories(FMOD INTERFACE lib)
+    set_target_properties(
+        FMOD
+        PROPERTIES
+            IMPORTED_LOCATION
+                ${CMAKE_CURRENT_LIST_DIR}/lib/FMOD/bin64/libfmod.so.14
+            IMPORTED_LOCATION_DEBUG
+                ${CMAKE_CURRENT_LIST_DIR}/lib/FMOD/bin64/libfmodL.so.14
+    )
 else()
     message(FATAL_ERROR "No FMOD for this platform")
 endif()
@@ -43,6 +54,43 @@ if(WIN32)
     add_library(DxLib INTERFACE IMPORTED GLOBAL)
     target_include_directories(DxLib INTERFACE lib/DxLib)
     target_link_directories(DxLib INTERFACE lib/DxLib/DxLib)
+elseif(LINUX)
+    add_library(DxLib STATIC IMPORTED GLOBAL)
+    set_target_properties(
+        DxLib
+        PROPERTIES
+            IMPORTED_LOCATION
+                ${CMAKE_CURRENT_LIST_DIR}/lib/dxlib-for-linux/DxLib/DxLibMake/libDxLib.a
+    )
+
+    target_include_directories(DxLib INTERFACE lib/dxlib-for-linux/DxLib)
+
+    target_link_libraries(
+        DxLib
+        INTERFACE
+            # Missing in there
+            jpeg
+            # lib/dxlib-for-linux/DxLib/Makefile DEP_LIBS
+            EGL
+            GL
+            X11
+            ogg
+            openal
+            opus
+            opusfile
+            opusurl
+            png
+            pthread
+            theora
+            theoradec
+            theoraenc
+            tiff
+            tiffxx
+            vorbis
+            vorbisenc
+            vorbisfile
+            z
+    )
 else()
     message(FATAL_ERROR "No DxLib for this platform")
 endif()

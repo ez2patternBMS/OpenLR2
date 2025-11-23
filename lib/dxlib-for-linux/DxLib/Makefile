@@ -1,13 +1,13 @@
-SHELL := /bin/bash
+SHELL := /usr/bin/env bash
 
 DXLIB_VER := 3_24f
 
 # 環境によっては変更してください
-UNZIP := unzip
+UNZIP := unar -e cp932
 CXX := g++
 
 # 環境、要不要に応じて変更してください
-CXXFLAGS := -g -O0 \
+CXXFLAGS += -g -O2 \
 -DDX_NON_BULLET_PHYSICS \
 -DDX_NON_LIVE2D_CUBISM4 \
 -I insufficient_include \
@@ -244,7 +244,7 @@ DxLibMake/.patched: DxLibMake/.extracted
 extract-source: DxLibMake/.extracted
 
 DxLibMake/.extracted: DxLibMake$(DXLIB_VER).zip
-	$(UNZIP) -O cp932 DxLibMake$(DXLIB_VER).zip
+	$(UNZIP) DxLibMake$(DXLIB_VER).zip
 	find DxLibMake -type f | while read f; do cat "$$f" | tr -d '\r' > tmp; \
     (iconv -f utf-8 -t utf-8 tmp -o "$$f" 2>/dev/null) \
     || (iconv -f cp932 -t utf-8 tmp -o "$$f"); rm -f tmp; done
@@ -255,7 +255,7 @@ get-source: DxLibMake$(DXLIB_VER).zip
 
 DxLibMake$(DXLIB_VER).zip:
 	[ -f "DxLibMake$(DXLIB_VER).zip" ] || \
-    wget -nc https://dxlib.xsrv.jp/DxLib/DxLibMake$(DXLIB_VER).zip
+    curl -LO https://dxlib.xsrv.jp/DxLib/DxLibMake$(DXLIB_VER).zip
 
 .PHONY: clean_objs
 clean_objs:
