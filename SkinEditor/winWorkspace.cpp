@@ -132,7 +132,7 @@ int WORKSPACE::drawSkinList() {
         isPreview = LoadTextureFromFile(g.skinData.Data[m].thumbnail.outstr(), renderer, &preview_tex, &preview_size_x, &preview_size_y);
         oldSelected = m;
     }
-    ImGui::Image(isPreview ? preview_tex : NULL, { 400, 300 }, { 0, 0 }, { 1, 1 });
+    ImGui::Image(isPreview ? preview_tex : NULL, { 320, 240 }, { 0, 0 }, { 1, 1 });
     ImGui::Text("%s", g.skinData.Data[m].skinFile.outstr());
     ImGui::Text("%s", g.skinData.Data[m].title.outstr());
     ImGui::Text("%s", g.skinData.Data[m].maker.outstr());
@@ -165,6 +165,13 @@ int WORKSPACE::LoadSkin2(char* path) {
     pFile = fopen(path, "rb");
     if (pFile) {
         int c = 0;
+        
+        SKINFILELINEREAD& readS = ((SKINFILELINEREAD*)skinfileLines.data)[skinfileLines.count];
+        readS.line.resize(1024);
+        sprintf(readS.line, "$FILE %s start", path);
+        readS.isComment = true;
+        skinfileLines.count++;
+
         while (1) {
             int i = skinfileLines.count;
             SKINFILELINEREAD& read = ((SKINFILELINEREAD*)skinfileLines.data)[i];
@@ -173,9 +180,9 @@ int WORKSPACE::LoadSkin2(char* path) {
 
             if (fgets(read.line.outstr(), 1023, pFile) == 0) break;
             DealWhiteSpace(&read.line);
-            read.numTotal = i + 1;
+            read.numTotal = i;
             read.filename.assign(path);
-            read.num = c + 1;
+            read.num = c;
             read.isComment = (*read.line.atPos(0) != '#');
 
             if(!read.isComment) SplitCSV(read.line, &read.csv, ",");
@@ -191,9 +198,14 @@ int WORKSPACE::LoadSkin2(char* path) {
                 }
             }
         }
-
+        SKINFILELINEREAD& readE = ((SKINFILELINEREAD*)skinfileLines.data)[skinfileLines.count];
+        readE.line.resize(1024);
+        sprintf(readE.line, "$FILE %s end", path);
+        readE.isComment = true;
+        skinfileLines.count++;
         fclose(pFile);
     }
+    
 
     return 0;
 }
@@ -307,7 +319,7 @@ int WORKSPACE::drawPreview() {
     
     ImGui::Begin(title, &wPreview);
     LoadTextureFromRawMemory(GetImageAddressSoftImage(previewScreen), renderer, &preview_tex, 640, 480, 4);
-    ImGui::Image(preview_tex, { 400, 300 }, { 0, 0 }, { 1, 1 });
+    ImGui::Image(preview_tex, { 640, 480 }, { 0, 0 }, { 1, 1 });
 
     if (ImGui::Button("Restart")) {
         LR2SESceneInit(&g, meta.type);
