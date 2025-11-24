@@ -345,7 +345,7 @@ int DrawNotes(game *g, skstruct *sk, Timer *T, CONFIG_PLAY *cfg) {
 		}
 		
 		if ((sk->horizontal == 0 && sk->dst_LINE[0].draw->y + (songtimer - g->gameplay.bmsobj_line.notes[i].bmsTiming)* speed * g->gameplay.speedmultiplier * (cfg->basespeed / 100.0) / 600.0 > drawStartHeight)
-			|| (sk->horizontal == 1 && (g->gameplay.bmsobj_line.notes[i].bmsTiming - songtimer)* speed * g->gameplay.speedmultiplier * (cfg->basespeed / 100.0) / 640.0 > drawStartHeight)) {
+			|| (sk->horizontal == 1 && (g->gameplay.bmsobj_line.notes[i].bmsTiming - songtimer)* speed * g->gameplay.speedmultiplier * (cfg->basespeed / 100.0) / 640.0 > drawStartHeight)) { 
 						
 			float p1_y = sk->adjust.note_1p_y + (songtimer - g->gameplay.bmsobj_line.notes[i].bmsTiming)* cfg->hiSpeed[0] * g->gameplay.speedmultiplier * (cfg->basespeed / 100.0) / 600.0;
 			float p2_y = sk->adjust.note_2p_y + (songtimer - g->gameplay.bmsobj_line.notes[i].bmsTiming)* cfg->hiSpeed[0] * g->gameplay.speedmultiplier * (cfg->basespeed / 100.0) / 600.0;
@@ -1124,7 +1124,7 @@ int ProcGame(game *g) {
 
 	double oldt142;
 
-	if (GetTimeWrap() < g->gameplay.timetick + 2) return 1;
+	if (GetTimeWrap() < g->gameplay.timetick + 2) return 1; //TODO : pollrate 500 -> 1000
 	g->gameplay.timetick = GetTimeWrap();
 	if (GetTimeLapse(160, &g->timer1) < 0.0 && g->is_starter == 0 && g->gameplay.isPreviewLoad == 0) {
 		SetTimeLapse(160, &g->timer1);

@@ -49,7 +49,7 @@ void ReactInput(game *g) {
 		if (g->KeyInput.inputID[KEY_INPUT_DOWN] == 2) {
 			g->txtStruct.readme.h += 600.0 * g->timer1.tickTime / -1000.0;
 		}
-
+		//TODO_RESOULUTION
 		if (g->txtStruct.readme.h < 480 - g->txtStruct.readme.y) g->txtStruct.readme.h = 480 - g->txtStruct.readme.y;
 		if (g->txtStruct.readme.w < 640 - g->txtStruct.readme.x) g->txtStruct.readme.w = 640 - g->txtStruct.readme.x;
 		if (g->txtStruct.readme.w > 0) g->txtStruct.readme.w = 0;

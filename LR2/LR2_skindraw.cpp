@@ -1030,7 +1030,7 @@ void LRDrawTextInput(int* hFont, DSTdraw *dstd, int* hInput, ImageFont *imgfont)
 		}
 		else if (dstd->h != 0.0 || dstd->w != 0.0) {
 			pIME = (IMEINPUTDATA*)GetIMEInputData();
-			dstd->w = 640.0;
+			dstd->w = 640.0; //TODO_RESOULUTION
 			LRDrawText(hFont, dstd, &buf, imgfont);
 			grLen = 0;
 			if (GetKeyInputCursorPosition(*hInput)) {
@@ -1062,7 +1062,7 @@ void LRDrawTextInput(int* hFont, DSTdraw *dstd, int* hInput, ImageFont *imgfont)
 			}
 			GetIMEInputModeStr(buf);
 			dstd->y = 480.0 - dstd->h;
-			dstd->x = 640.0;
+			dstd->x = 640.0; //TODO_RESOULUTION
 			dstd->align = 2;
 			LRDrawText(hFont, dstd, &buf, imgfont);
 		}
@@ -1092,7 +1092,7 @@ int LRDraw(DrawingBuf *drBuf, TextStruct *txt, SONGSELECT *sSel, skstruct *sks, 
 	if (draw.fontHandle == -1) {
 		if (draw.grHandle != -1) {
 			if (0 <= draw.subHandle && draw.subHandle < 20 && drBuf->isHidSud[draw.subHandle] > 0) {
-				SetDrawArea(0, drBuf->top[draw.subHandle], 640, drBuf->bottom[draw.subHandle]);
+				SetDrawArea(0, drBuf->top[draw.subHandle], 640, drBuf->bottom[draw.subHandle]); //TODO_RESOULUTION
 			}
 			LRDrawImg(&draw.grHandle, &draw);
 			if (0 <= draw.subHandle && draw.subHandle < 20 && drBuf->isHidSud[draw.subHandle] > 0) {

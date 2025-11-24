@@ -485,7 +485,7 @@ int InitSkin(skstruct *sk, int p5, char font) {
 	sk->customfile_count = 0;
 
 	DeleteGraph(sk->GrHandle[105]);
-	sk->GrHandle[105] = MakeGraph(640, 480);
+	sk->GrHandle[105] = MakeGraph(640, 480); //TODO_RESOULUTION
 	DeleteGraph(sk->GrHandle[104]);
 	sk->GrHandle[104] = MakeGraph(256, 256);
 	if (sk->GrHandle[100] == -1) sk->GrHandle[100] = MakeGraph(640, 480);

@@ -207,7 +207,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		gs.timer1.movieFramerate = (double)gs.config.tools.movie_framerate;
 		gs.timer1.movieTimer = 0.0;
 		
-		SetGraphMode(640, 480, (gs.config.system.highcolor == 0) ? 32 : 16, 60);
+		SetGraphMode(640, 480, (gs.config.system.highcolor == 0) ? 32 : 16, 60); //TODO_RESOULUTION
 		if (gs.rec.recMode == 3) {
 			SetGraphMode(256, 256, 32, 60);
 		}
@@ -228,7 +228,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 		else {
 			if ((gs.is_recordmode == '\0') && (gs.rec.recMode == 0)) {
-				SetWindowSizeExtendRate((double)gs.config.system.windowsize_x / 640.0, (double)gs.config.system.windowsize_y / 480.0);
+				SetWindowSizeExtendRate((double)gs.config.system.windowsize_x / 640.0, (double)gs.config.system.windowsize_y / 480.0); //TODO_RESOULUTION
 				if (gs.is_starter) { //unreachable duplicated code
 					if (MessageBoxA(NULL, "フルスクリーンモードで起動しますか？", "確認", 4) == 6) {
 						gs.config.system.screenmode = 0;
@@ -299,9 +299,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 			loadingGrHandle = LoadGraph("LR2files/Config/loading.bmp", 0);
 
-			int backgroundGrHandle = MakeScreen(640, 480, 0);
+			int backgroundGrHandle = MakeScreen(640, 480, 0); //TODO_RESOULUTION
 			SetDrawScreen(backgroundGrHandle);
-			DrawBox(0, 0, 640, 480, GetColor(0, 0, 0), 1);
+			DrawBox(0, 0, 640, 480, GetColor(0, 0, 0), 1); //TODO_RESOULUTION
 			SetDrawScreen(DX_SCREEN_BACK);
 
 			memcpy(gs.config.jukebox.rival, gs.net.rivals, 4 * 20);
@@ -1666,9 +1666,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					}
 					LRDraw(&gs.skstruct.drBuf, &gs.txtStruct, &gs.sSelect, &gs.skstruct, i, quake_x, quake_y);
 					if (gs.config.system.thread == 0 && gs.gameplay.flag_gameinput != 0) {
-						ProcGame(&gs);
+						//ProcGame(&gs); //why this is here
 					}
 				}
+				//TEST
+				if (gs.config.system.thread == 0 && gs.gameplay.flag_gameinput != 0) {
+					ProcGame(&gs); //why this is here
+				}
+				//TEST END
+
 				InitDrawingBuffer(&gs.skstruct.drBuf);
 				GetTimeWrap();
 
@@ -1730,7 +1736,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 							for (int i = 0; i < 10; i++) {
 								gs.skstruct.ImageFonts[i].filepath[0] = 0;
 							}
-							SetGraphMode(640, 480, (gs.config.system.highcolor == 0 ? 32 : 16), 60);
+							SetGraphMode(640, 480, (gs.config.system.highcolor == 0 ? 32 : 16), 60); //TODO_RESOULUTION
 							SetWaitVSyncFlag(gs.config.system.vsync);
 							ChangeWindowMode(gs.config.system.screenmode);
 							SetWaitVSyncFlag(gs.config.system.vsync);
@@ -1768,7 +1774,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 							for (int i = 0; i < 10; i++) {
 								gs.skstruct.ImageFonts[i].filepath[0] = 0;
 							}
-							SetGraphMode(640, 480, (gs.config.system.highcolor == 0 ? 32 : 16), 60);
+							SetGraphMode(640, 480, (gs.config.system.highcolor == 0 ? 32 : 16), 60); //TODO_RESOULUTION
 							SetWaitVSyncFlag(gs.config.system.vsync);
 							ChangeWindowMode(gs.config.system.screenmode);
 							SetWaitVSyncFlag(gs.config.system.vsync);
@@ -1875,7 +1881,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 						while ( (GetTimeWrap() - gs.timer1.vSyncTick >= 0 - 3) == 0) {
 							if (GetTimeWrap() - gs.timer1.gameTick >= 0 - 4) break;
 							ProcGame(&gs);
-							WaitTimer(1);
+							//WaitTimer(1); //TESTING
 						}
 					}
 					gs.timer1.vSyncTick = GetTimeWrap();
@@ -1883,13 +1889,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 						CSTR captureFilename;
 						GetDateTime(&date);
 						cstrSprintf(&captureFilename, "screenshot/LR2 %04d-%02d-%02d %02d-%02d-%02d.png", date.Year, date.Mon, date.Day, date.Hour, date.Min, date.Sec);
-						SaveDrawScreenToPNG(0, 0, 640, 480, captureFilename, -1);
+						SaveDrawScreenToPNG(0, 0, 640, 480, captureFilename, -1); //TODO_RESOULUTION
 						gs.flag_Screenshot = 0;
 						PlaySound(&gs.audio, &gs.audio.sysSound.screenshot, gs.audio.chnKey, -1);
 					}
 					else if (gs.flag_Screenshot == 2) {
 						CSTR captureFilename;
-						int scrdraw = MakeGraph(640, 480, 0);
+						int scrdraw = MakeGraph(640, 480, 0); //TODO_RESOULUTION
 						GetDrawScreenGraph(0, 0, 640, 480, scrdraw, 1);
 						SetDrawMode(1);
 						SetDrawBlendMode(0, 255);
@@ -1958,7 +1964,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 							}
 						}
 					}
-					ScreenFlip();
+					ScreenFlip(); //DXlib Vsync works on here
 					GetTimeWrap();
 
 					GetTimeWrap();
@@ -2017,7 +2023,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					for (int i = 0; i < 10; i++) {
 						gs.skstruct.ImageFonts[i].filepath[0] = 0;
 					}
-					SetGraphMode(640, 480, (gs.config.system.highcolor == 0 ? 32 : 16), 60);
+					SetGraphMode(640, 480, (gs.config.system.highcolor == 0 ? 32 : 16), 60); //TODO_RESOULUTION
 					SetWaitVSyncFlag(gs.config.system.vsync);
 					ChangeWindowMode(gs.config.system.screenmode);
 					SetWaitVSyncFlag(gs.config.system.vsync);
@@ -2043,7 +2049,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					for (int i = 0; i < 10; i++) {
 						gs.skstruct.ImageFonts[i].filepath[0] = 0;
 					}
-					SetGraphMode(640, 480, (gs.config.system.highcolor == 0 ? 32 : 16), 60);
+					SetGraphMode(640, 480, (gs.config.system.highcolor == 0 ? 32 : 16), 60); //TODO_RESOULUTION
 					SetDrawScreen(DX_SCREEN_BACK);
 					LoadScene(&gs.skstruct, gs.config.skin.skinFilePath[5], gs.skinData.Data[gs.skinData.skinID[5]].informationP5, 0);
 					SetWaitVSyncFlag(gs.config.system.vsync);
@@ -2052,7 +2058,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					gs.config.system.screenmode = GetWindowModeFlag();
 					SetObjectStrings_SongSelect(&gs);
 				}
-				SetMouseDispFlag( (gs.KeyInput.mouse_oldX < 640 && gs.KeyInput.mouse_oldY < 480) ? 0:1  );
+				SetMouseDispFlag( (gs.KeyInput.mouse_oldX < 640 && gs.KeyInput.mouse_oldY < 480) ? 0:1  ); //TODO_RESOULUTION
 				if ( (gs.procSelecter == 2 || gs.procSelecter == 9) && gs.KeyInput.inputID[KEY_INPUT_ESCAPE]
 					 && (GetTimeLapse(4,&gs.timer1) < 0.0 || GetTimeLapse(4, &gs.timer1) > 100.0) 
 					 && gs.txtStruct.st_text_num == -1 

@@ -8,7 +8,7 @@ int ReloadImage(CSTR filename, int *grHandle) {
 
 //49ed30
 int ScreenCapture(uint iGrHandle){
-	GetDrawScreenGraph(0, 0, 640, 480, iGrHandle, 1);
+	GetDrawScreenGraph(0, 0, 640, 480, iGrHandle, 1); //TODO_RESOULUTION
 	return 0;
 }
 

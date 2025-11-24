@@ -1055,7 +1055,7 @@ int ReadConfig(game *g, const char *filepath){
 	ReadXml_Int("config", "system", "autoreload", 2, &g->config.jukebox.autoreload, hXml);
 	ReadXml_Int("config", "system", "customfolder", 0, &g->config.jukebox.customfolder, hXml);
 	ReadXml_Int("config", "system", "mainsleep", 3, &g->config.system.mainsleep, hXml);
-	ReadXml_Int("config", "system", "bmssleep", 3, &g->config.system.bmssleep, hXml);
+	ReadXml_Int("config", "system", "bmssleep", 3, &g->config.system.bmssleep, hXml); //what?? but never used
 	ReadXml_Int("config", "system", "screenexrate", 100, &g->config.system.screenexrate, hXml);
 	ReadXml_Int("config", "system", "inputinterval", 16, &g->config.input.sys_inputinterval, hXml);
 	ReadXml_Int("config", "system", "highcolor", 0, &g->config.system.highcolor, hXml);

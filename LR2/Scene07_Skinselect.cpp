@@ -269,7 +269,7 @@ int MakeSkinPreview(game *g, skstruct *sk, SkinManage *sm) {
 	if (g->config.system.disableskinpreview == 1 || sm->Data[sm->previewID].type == SKINTYPE_SOUNDSET) {
 		int grh = LoadGraph(sm->Data[sm->previewID].thumbnail, 0);
 		if (grh != -1) {
-			DrawExtendGraph(0, 0, 640, 480, grh, 0);
+			DrawExtendGraph(0, 0, 640, 480, grh, 0); //TODO_RESOULUTION
 			ScreenCapture(g->skstruct.GrHandle[105]);
 			DeleteGraph(grh);
 		}
