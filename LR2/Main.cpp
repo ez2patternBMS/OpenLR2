@@ -1,25 +1,34 @@
-﻿#pragma once
-// /source-charset:shift-JIS /execution-charset:shift-JIS not supported in cl.exe on vs08. open your vs08 with locale emulation(cp932)
+﻿// /source-charset:shift-JIS /execution-charset:shift-JIS not supported in cl.exe on vs08. open your vs08 with locale emulation(cp932)
+
 #include "structure.h"
 #include "Engine.h"
 #include "LR2.h"
 #include "Scenes.h"
 
-#include <windows.h>
 #include <filesystem>
 #include <string>
 #include <thread>
 
-#include "DXlib/DxLib.h"
-#include "tinyxml/tinyxml.h"
+#include <DxLib/DxLib.h>
 extern "C" {
-#include "sqlite/sqlite3.h"
+#include <sqlite/sqlite3.h>
 }
 
 #define LR2TITLE "LR2 beta4 version 251121 - testbuild"
 #define LR2VERSIONSTRING "LR2 beta4 version 251121 - testbuild"
 
-int WINAPI WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCmdLine, int _nCmdShow) {
+#ifdef _WIN32
+
+#include <windows.h>
+
+int main(int, char**);
+int WINAPI WinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int /*nCmdShow*/)
+{
+	return main(__argc, __argv);
+}
+#endif // _WIN32
+
+int main(int argc, char** argv) {
 #ifdef _DEBUG
 	while (!IsDebuggerPresent()) std::this_thread::sleep_for(std::chrono::milliseconds(200));
 #endif
@@ -107,9 +116,9 @@ int WINAPI WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCmdL
 		gs.audio.replay2avi = false;
 		gs.skstruct.drBuf.isDisabled = '\0';
 		//commandline
-		for (int i = 1; i < __argc; i++) {
+		for (int i = 1; i < argc; i++) {
 			CSTR tStr1;
-			tStr1.assign(__argv[i]);
+			tStr1.assign(argv[i]);
 			CSTR tStr2(tStr1);
 			tStr2.lower();
 			if (IsBmsFile(tStr2)) {
