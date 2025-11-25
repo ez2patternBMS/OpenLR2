@@ -270,8 +270,7 @@ int ParseLR2SkinCustom(SkinManage *skm, CSTR filepath) {
 			}
 		}
 		else if (buffer.left(11).isSame("#CUSTOMFILE")) {
-			FILE *pFile;
-			HANDLE hFindFile, hFindFileOld;
+			HANDLE hFindFile;
 			_WIN32_FIND_DATAA findFileData;
 			int flag;
 			SkinHeader &rSkin = skm->Data[skm->Count - 1];

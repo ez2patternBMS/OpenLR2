@@ -16,14 +16,10 @@ extern "C" {
 #include "sqlite/sqlite3.h"
 }
 
-
-
 #define LR2TITLE "LR2 beta4 version 251121 - testbuild"
 #define LR2VERSIONSTRING "LR2 beta4 version 251121 - testbuild"
 
-using namespace std;
-
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+int WINAPI WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCmdLine, int _nCmdShow) {
 #ifdef _DEBUG
 	while (!IsDebuggerPresent()) std::this_thread::sleep_for(std::chrono::milliseconds(200));
 #endif

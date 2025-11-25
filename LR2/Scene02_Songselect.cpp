@@ -81,7 +81,7 @@ void ThreadProc_LoadBanner(void *param) { // TODO: take game&
 }
 
 //4021a0
-int SetBmsFilter(game *g, sqlite3 *sql){
+int SetBmsFilter(game *g, sqlite3 */*sql*/){
 
 	g->sSelect.searchType = 0;
 	g->sSelect.searchFocused = 1;
@@ -980,7 +980,6 @@ CSTR GetMissonString(int missionLevel, int line) {
 			else 
 				return "";
 	}
-	return "";
 }
 
 

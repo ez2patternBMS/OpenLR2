@@ -104,8 +104,6 @@ int ReadDST(DSTstruct *dst, CSVbuf *csv, int order){
 
 //49eae0
 int ReadSRC(SRCstruct *src, CSVbuf *csv, skstruct *sk){
-	int div_count;
-
 	src->n = csv->val[1];
 	src->cycle = csv->val[9];
 	src->timer = csv->val[10];
@@ -172,7 +170,7 @@ int ReadSRC_BAR_TITLE(SRCstruct *src, CSVbuf *csv, skstruct *sk){
 
 
 //49ed50 InitSkin
-int InitSkin(skstruct *sk, int p5, char font) {
+int InitSkin(skstruct *sk, int /*unused*/, char font) {
 	SetTransColor(0, 255, 0);
 	sk->startinput_start = 0;
 	sk->startinput_rank = 0;

@@ -34,7 +34,7 @@ void EndMIDIInput(void){
 }
 
 //4bd740
-void GetMidiInput(dword msg, dword timestamp) {
+void GetMidiInput(dword msg, dword /*timestamp*/) {
 	// http://www.gweep.net/~prefect/eng/reference/protocol/midispec.html
 	byte status = (msg & 0xff);
 	byte data1 = LOWORD(msg) >> 8;
@@ -285,7 +285,7 @@ void ProcessInput(inputStructure *is, int interval) {
 }
 
 //4bef60
-void CALLBACK MIDIInProc(HMIDIIN hMidiIn, uint wMsg, dword dwInstance, dword dwParam1, dword dwParam2){
+void CALLBACK MIDIInProc(HMIDIIN /*hMidiIn*/, uint wMsg, dword /*dwInstance*/, dword dwParam1, dword dwParam2){
 	if (wMsg == 0x3c3) { // = 963
 		GetMidiInput(dwParam1, dwParam2);
 	}
@@ -418,9 +418,7 @@ int InputToButton(inputStructure *is, CONFIG_INPUT *cfg_input, int player, int i
 
 //4bf3e0
 void InitMIDIInput(void){
-	int iVar1;
 	UINT numDev;
-	UINT uDeviceID;
 	HMIDIIN phmi;
 
 	for (int i = 0; i < 256; i++) { //TOFIX : unneccessary loop

@@ -18,7 +18,6 @@ class CSTR {
 		//CSTR* add(const char *str, int len);
 		CSTR& add(const char *str, int len);
 		uint checkValidPos(int *pos, int *len);
-		CSTR& replace(int pos, int len1, const char *str2, int len2);
 		CSTR& replace(const char *str1, const char *str2);
 		void resize2(int size);
 		CSTR& fillzero();

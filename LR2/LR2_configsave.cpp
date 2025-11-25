@@ -1023,12 +1023,7 @@ int WriteSkinCustomizeXml(SkinUser *sku, char *filepath) {
 
 //441d30
 int ReadConfig(game* g, const char* filepath) {
-	int* piVar1;
-	bool bVar2;
 	TiXmlDocument* hXml;
-	TiXmlDocument* pTVar7;
-	uint uStack32;
-	int* local_c;
 
 	memset(&g->config.play, 0, sizeof(g->config.play));
 	g->config.play.hiSpeed[0] = 200;

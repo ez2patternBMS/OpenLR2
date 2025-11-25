@@ -474,7 +474,7 @@ int InitGameplay(gameplay *gp, CONFIG_PLAY *cfg) {
 }
 
 //4acc60
-int LoadBmsResource(gameplay *gp, CSTR BMSfilepath, AUDIO *aud, ConfigStruct *cfg, BMSMETA *meta, char bga, char flip, char noVideo){
+int LoadBmsResource(gameplay *gp, CSTR /*BMSfilepath*/, AUDIO *aud, ConfigStruct *cfg, BMSMETA */*meta*/, char /*bga*/, char /*flip*/, char noVideo){
 
 	int Rtmp, Gtmp, Btmp;
 
@@ -1745,14 +1745,14 @@ int SPtoDP(LaneStruct *lane, int baseNoteID, CHARTCONVERTER *cc) {
 				}
 				cc->flagSplitUnknown ^= 1;
 			}
-			else if (0 < 0) {
+			else /*if (0 < 0)*/ {
 				cc->arr1[i].field3_0xc = 1;
 				unkArr[1] += cc->arr1[i].count;
 			}
-			else {
-				cc->arr1[i].field3_0xc = 0;
-				unkArr[0] += cc->arr1[i].count;
-			}
+			//else {
+			//	cc->arr1[i].field3_0xc = 0;
+			//	unkArr[0] += cc->arr1[i].count;
+			//}
 		}
 	}
 	

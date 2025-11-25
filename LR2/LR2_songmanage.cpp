@@ -490,7 +490,7 @@ int EditTag(SONGDATA *song, sqlite3 *sql) {
 }
 
 //446ab0 //TODO : I need to understand this and rename variables
-int LoadFolderDataFromDB(CSTR query, SONGDATA *song, sqlite3 *sql, int difficulty, int key, int sort, int maxCount, CONFIG_SELECT *cfg_select, char flag) {
+int LoadFolderDataFromDB(CSTR query, SONGDATA *song, sqlite3 *sql, int difficulty, int key, int /*sort*/, int maxCount, CONFIG_SELECT *cfg_select, char flag) {
 	sqlite3_stmt *stmt;
 	SONGDATA* slist;
 	SONGDATA sd;
@@ -954,7 +954,7 @@ int GetSongData(CSTR songMD5, SONGDATA *song, sqlite3 *sql, SONGSELECT *ss) {
 }
 
 //448110
-int WriteCourse(sqlite3 *sql, COURSESELECT course, SONGDATA *song, CSTR passmd5, int connection, int gauge) {
+int WriteCourse(sqlite3 *sql, COURSESELECT course, SONGDATA *song, CSTR passmd5, int connection, int /*gauge*/) {
 
 	char t[1024];
 

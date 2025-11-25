@@ -459,7 +459,7 @@ int AddDrawingBuffer_Gauge(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Time
 }
 
 //49d990
-int AddDrawingBuffer_BGA(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Timer *T, int grHandle, char flag) {
+int AddDrawingBuffer_BGA(DrawingBuf *drb, SRCstruct */*src*/, DSTstruct *dst, Timer *T, int grHandle, char flag) {
 	DSTdraw tDstd;
 	int x, y;
 
@@ -732,8 +732,7 @@ int AddDrawingBuffer_Slider(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Tim
 
 //49e550
 int AddDrawingBuffer_JudgeCombo(DrawingBuf *drb, SRCstruct *jSrc, DSTstruct *jDst, SRCstruct *cSrc, DSTstruct *cDst, Timer *T, int combo, int optX, int optY) {
-	DSTdraw tDstd;// , tDstd2;
-	int grh;
+	DSTdraw tDstd;
 	int digit;
 	float pos, posn;
 

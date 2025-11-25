@@ -3,7 +3,7 @@
 #include "LR2.h"
 
 //422210
-int ProcI_PO4Menu(game *g, sqlite3 *sql) { //not tested
+int ProcI_PO4Menu(game *g, sqlite3 */*sql*/) { //not tested
 
 	int selectedBar = g->sSelect.listSelectedBarFromScreenTop;
 

@@ -42,7 +42,7 @@ int RunMP3Encoder(ConfigStruct *cfg, CSTR wavPath, CSTR mp3Path, char deleteWav,
 }
 
 //40d840
-int Proc_Auto2avi(game *g, CSTR directory, CSTR filename) {
+int Proc_Auto2avi(game *g, CSTR /*directory*/, CSTR filename) {
 
 	printfDx("BMSを読み込み中です。しばらくお待ち下さい。");
 	ScreenFlip();

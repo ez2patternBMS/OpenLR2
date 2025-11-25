@@ -2796,7 +2796,6 @@ int Proc_Text(game *g, sqlite3 *sql, char flag) {
 					g->sSelect.is_coursemaking_done = 1;
 					break;
 				case 27:
-					atol(buf);
 					if ((0 <= atol(buf) && atol(buf) < 100) || (g->sSelect.bmsList[g->sSelect.cur_song].keymode == 0)) {
 						SetObjectString(g->txtStruct.st_text_num - 10, buf, g->txtStruct.objectStr);
 						SetObjectString(g->txtStruct.st_text_num, buf, g->txtStruct.objectStr);
@@ -4038,19 +4037,15 @@ int MouseOnDSTD(DSTdraw *dstd, int *x, int *y){ //1 right 2 left
 
 //49c070
 int MouseOnObject(DSTstruct *dst, Timer *T, int *x, int *y){
-	DSTdraw _dstd;
-	DSTdraw local_a0;
-	double time;
+	double time = GetTimeLapse(dst->timer, T);
 	DSTstruct _dst;
-
-	time = GetTimeLapse(dst->timer, T);
 	memcpy(&_dst, dst, sizeof(DSTstruct));
-	_dstd = SetDSTdrawByTime(_dst, time);
+	DSTdraw _dstd = SetDSTdrawByTime(_dst, time);
 	return MouseOnDSTD(&_dstd, x, y);
 }
 
 //49c0e0 maybe done
-int SliderByTime(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Timer *T, int min, int max, int *value, inputStructure *input, int objectID) {
+int SliderByTime(DrawingBuf */*drb*/, SRCstruct *src, DSTstruct *dst, Timer *T, int min, int max, int *value, inputStructure *input, int objectID) {
 	DSTdraw dstdTemp;
 	DSTstruct dstsTemp;
 	int newVal, newX=0, newY=0;
@@ -4151,7 +4146,7 @@ int SliderByTime(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Timer *T, int 
 }
 
 //49c560
-int ButtonByInput(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Timer *T, inputStructure *input, int *target, int min, int max, int panel) { //return 1:just clicked 2:changed 0:not changed
+int ButtonByInput(DrawingBuf */*drb*/, SRCstruct *src, DSTstruct *dst, Timer *T, inputStructure *input, int *target, int min, int max, int panel) { //return 1:just clicked 2:changed 0:not changed
 	DSTdraw dstd;
 	int mouse, ret;
 	

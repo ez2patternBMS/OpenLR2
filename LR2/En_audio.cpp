@@ -344,8 +344,7 @@ int EndSound(AUDIO *aud){
 }
 
 //4b82f0
-//v_chn not used
-int SOUND_dxlibFx(SOUNDDATA sound, int v_master, int v_chn, int pitch, double freq){
+int SOUND_dxlibFx(SOUNDDATA sound, int v_master, int /*v_chn*/, int pitch, double freq) {
 
 	double dMul;
 	
@@ -478,7 +477,7 @@ void WriteSoundFile(AUDIO *aud, CSTR filename, uint size) {
 }
 
 //4b8770
-int SOUND_normalize(AUDIO *aud, SOUNDDATA *sound){
+int SOUND_normalize(AUDIO */*aud*/, SOUNDDATA *sound){
 	uint len;
 	int bitdepth;
 	int channels;
@@ -777,7 +776,7 @@ int SOUND_FmodToDxlib(AUDIO *aud) {
 }
 
 //4b9340
-int ApplySoundFX(AUDIO *aud, int flag, char disable) {
+int ApplySoundFX(AUDIO *aud, int /*flag*/, char /*disable*/) {
 
 	if(aud->cmd_mediaOut) return 0;
 	if (aud->is_fmod_disabled == 1) {
@@ -1107,7 +1106,6 @@ int InitSound(AUDIO *aud, uint bufferLength, int numBuffer, char fDisable, int o
 
 	int numDrivers;
 	char driverName[256];
-	int chn2D, chn3D, chnTotal;
 
 	if (aud->cmd_mediaOut) {
 		FMOD_System_Create(&aud->fmodSys, FMOD_VERSION);

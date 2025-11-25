@@ -47,7 +47,7 @@ bool RECORDING::Release() {
 }
 
 //4bf610
-int REC_CpyAVIStreamToFile(PAVIFILE pfile, PAVISTREAM pavi, int unused) {
+int REC_CpyAVIStreamToFile(PAVIFILE pfile, PAVISTREAM pavi, int /*unused*/) {
 
 	unsigned int lpos;
 	AVISTREAMINFOA si;

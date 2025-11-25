@@ -276,7 +276,6 @@ int ApplyJudgeMine(int judge, game *g, int _player, int lane, int damage) {
 int DrawNotes(game *g, skstruct *sk, Timer *T, CONFIG_PLAY *cfg) {
 	//TODO : refactor, test maniac mode
 	DSTdraw tDdraw;
-	int key;
 
 	SoundGetCurrentTime(&g->audio, &g->gameplay.muon);
 	NONE_004b6770();

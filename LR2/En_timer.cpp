@@ -54,7 +54,6 @@ double GetTime(void){
 	DWORD time;
 	LARGE_INTEGER pfc_time;
 	LARGE_INTEGER pfc_freq;
-	double ret;
 
 	if (flagHighPerformanceTimer){
 		if (QueryPerformanceFrequency(&pfc_freq)) {
@@ -114,8 +113,6 @@ int CalcFPS(Timer *t){
 
 //4b6b10
 double GetTimeLapse(uint timerID, Timer *T) {
-	double ret;
-
 	if (500 < timerID) return -1.0;
 	if (timerID == 140) return T->Rhythm;
 
