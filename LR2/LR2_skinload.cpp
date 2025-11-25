@@ -1687,7 +1687,7 @@ int ReadSkin(skstruct *sk,CSTR FilePath, int unused, int skin_num, SkinUser* sku
 						csv.str[1].replace("\\" ,"/");
 #endif // _WIN32
 						if (sk->num_of_ImageFont == 10) {
-							ErrorLogFmtAdd(	"スキン読み込みエラー %d行目\n%s\nこれ以上の登録はできま せん。\n", line, fBuf);
+							ErrorLogFmtAdd("スキン読み込みエラー %d行目\n%s\nこれ以上の登録はできません。\n", line, fBuf.body);
 						}
 						else if (csv.val[2] == 1 || sk->disableimagefont == 0) {
 							if (csv.str[1].isDiff("CONTINUE")) {
@@ -1844,7 +1844,7 @@ int ReadSkin(skstruct *sk,CSTR FilePath, int unused, int skin_num, SkinUser* sku
 				SetMovieVolumeToGraph(0, sk->GrHandle[i]);
 			}
 		}
-		ErrorLogFmtAdd("スキンの読み込みに成功しました。 %s\n", FilePath);
+		ErrorLogFmtAdd("スキンの読み込みに成功しました。 %s\n", FilePath.body);
 		ErrorLogTabSub();
 		SetTransColor(0, 0xff, 0);
 		if (flipside != '\0') {
@@ -1852,7 +1852,7 @@ int ReadSkin(skstruct *sk,CSTR FilePath, int unused, int skin_num, SkinUser* sku
 		}
 		return 1;
 	}
-	ErrorLogFmtAdd("子スキンの読み込みに成功しました。 %s\n", FilePath);
+	ErrorLogFmtAdd("子スキンの読み込みに成功しました。 %s\n", FilePath.body);
 	ErrorLogTabSub();
 	return tSkin_num;
 }

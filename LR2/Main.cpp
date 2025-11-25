@@ -219,7 +219,7 @@ int main(int argc, char** argv) {
 			}*/
 		}
 		gs.config.system.thread = 0;
-		cstrSprintf(&pathScoreDB, "LR2files/Database/Score/%s.db", gs.config.player.id);
+		cstrSprintf(&pathScoreDB, "LR2files/Database/Score/%s.db", gs.config.player.id.body);
 		if (gs.is_starter == '\0') {
 			if (IsFileExist(pathScoreDB) == false) {
 				MessageBoxA(NULL, "スコアデータベースが見つかりません。\nconfig.exeで作成して下さい。", "エラー", 0);
@@ -417,13 +417,13 @@ int main(int argc, char** argv) {
 			gs.sSelect.unk4f74 = '\0';
 			if (gs.cmd_directplay && !gs.is_starter) { //logic arranged
 				gs.sSelect.cur = 0;
-				cstrSprintf(&gs.sSelect.stack_query[gs.sSelect.cur], "SELECT * FROM folder WHERE parent = \'%s\'", AssignCRC32("ROOT"));
+				cstrSprintf(&gs.sSelect.stack_query[gs.sSelect.cur], "SELECT * FROM folder WHERE parent = \'%s\'", AssignCRC32("ROOT").body);
 				gs.sSelect.stack_isFolder[gs.sSelect.cur] = 1;
 				gs.sSelect.stack_rivalID[gs.sSelect.cur] = 0;
 				gs.sSelect.stack_searchTitle[gs.sSelect.cur] = "検索語句を入力";
 				gs.sSelect.directory = gs.directoryPath.getDirectory();
 				gs.sSelect.bmsListCount = 1;
-					
+
 				tmp = GetSongDataFromPath(gs.directoryPath, gs.sSelect.bmsList, sql3, &gs.sSelect);
 				if (tmp == -1) return -1;
 				if (tmp == 2) gs.cmd_nosave = 1;
@@ -432,7 +432,7 @@ int main(int argc, char** argv) {
 				if (gs.is_starter) {
 					ErrorLogFmtAdd("スターターモードなので最初のジュークボックスのみ使用します。\n");
 					gs.sSelect.cur = 0;
-					cstrSprintf(&gs.sSelect.stack_query[gs.sSelect.cur], "SELECT * FROM song LEFT JOIN score ON song.hash = score.hash WHERE parent = \'%s\'", AssignCRC32(gs.config.jukebox.path[0]));
+					cstrSprintf(&gs.sSelect.stack_query[gs.sSelect.cur], "SELECT * FROM song LEFT JOIN score ON song.hash = score.hash WHERE parent = \'%s\'", AssignCRC32(gs.config.jukebox.path[0]).body);
 					gs.sSelect.stack_isFolder[gs.sSelect.cur] = 0;
 					gs.sSelect.stack_rivalID[gs.sSelect.cur] = 0;
 					gs.sSelect.stack_searchTitle[gs.sSelect.cur] = "検索語句を入力";
@@ -440,7 +440,7 @@ int main(int argc, char** argv) {
 				}
 				else {
 					gs.sSelect.cur = 0;
-					cstrSprintf(&gs.sSelect.stack_query[gs.sSelect.cur], "SELECT * FROM folder WHERE parent = \'%s\'", AssignCRC32("ROOT"));
+					cstrSprintf(&gs.sSelect.stack_query[gs.sSelect.cur], "SELECT * FROM folder WHERE parent = \'%s\'", AssignCRC32("ROOT").body);
 					gs.sSelect.stack_isFolder[gs.sSelect.cur] = 1;
 					gs.sSelect.stack_rivalID[gs.sSelect.cur] = 0;
 					gs.sSelect.stack_searchTitle[gs.sSelect.cur] = "検索語句を入力";
@@ -673,7 +673,7 @@ int main(int argc, char** argv) {
 					ErrorLogFmtAdd("break\n");
 					break;
 				}
-				
+
 				if (GetTimeWrap() >= startTime + 6) {
 					GetTimeWrap();
 					GetTimeWrap();
@@ -754,7 +754,7 @@ int main(int argc, char** argv) {
 								if (gs.sSelect.toRoot) {
 									gs.sSelect.cur = 0;
 									if (gs.is_starter == 0) {
-										cstrSprintf(&gs.sSelect.stack_query[gs.sSelect.cur], "SELECT * FROM folder WHERE parent = \'%s\'", AssignCRC32("ROOT"));
+										cstrSprintf(&gs.sSelect.stack_query[gs.sSelect.cur], "SELECT * FROM folder WHERE parent = \'%s\'", AssignCRC32("ROOT").body);
 										gs.sSelect.stack_isFolder[gs.sSelect.cur] = 1;
 										gs.sSelect.stack_rivalID[gs.sSelect.cur] = 0;
 										gs.sSelect.stack_searchTitle[gs.sSelect.cur] = "検索語句を入力";
@@ -763,7 +763,7 @@ int main(int argc, char** argv) {
 										SwapBmsList(&gs.sSelect);
 									}
 									else {
-										cstrSprintf(&gs.sSelect.stack_query[gs.sSelect.cur], "SELECT * FROM song LEFT JOIN score ON song.hash = score.hash WHERE parent = \'%s\'", AssignCRC32(gs.config.jukebox.path[0]));
+										cstrSprintf(&gs.sSelect.stack_query[gs.sSelect.cur], "SELECT * FROM song LEFT JOIN score ON song.hash = score.hash WHERE parent = \'%s\'", AssignCRC32(gs.config.jukebox.path[0]).body);
 										gs.sSelect.stack_isFolder[gs.sSelect.cur] = 0;
 										gs.sSelect.stack_rivalID[gs.sSelect.cur] = 0;
 										gs.sSelect.stack_searchTitle[gs.sSelect.cur] = "検索語句を入力";
@@ -854,7 +854,7 @@ int main(int argc, char** argv) {
 							}
 							SetTransColor(0, 255, 0);
 							LoadScene(&gs.skstruct, gs.config.skin.skinFilePath[6], gs.skinData.Data[gs.skinData.skinID[6]].informationP5, 0);
-							
+
 							StopSysSound(&gs);
 							if (gs.config.play.is_extra && gs.audio.sysSound.exdecide.load)
 								PlaySound(&gs.audio, &gs.audio.sysSound.exselect, gs.audio.chnBgm, -1);
@@ -1340,7 +1340,7 @@ int main(int argc, char** argv) {
 							break;
 						case 4: {
 							CSTR skinMD5;
-							cstrSprintf(&skinMD5, "LR2files/SkinCustomize/%s.xml", gs.skstruct.skinMD5);
+							cstrSprintf(&skinMD5, "LR2files/SkinCustomize/%s.xml", gs.skstruct.skinMD5.body);
 							SkinUser tmpSk;
 							ReadSkinCustomize(&tmpSk, skinMD5);
 							tmpSk.adjust.shift_x = gs.skstruct.adjust.shift_x;

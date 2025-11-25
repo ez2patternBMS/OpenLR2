@@ -1910,19 +1910,19 @@ void SubProcI_Select(game *g, sqlite3 *sql) {
 		if (g->KeyInput.inputID[KEY_INPUT_F8] == 1) {
 			if (g->sSelect.stack_query[g->sSelect.cur].findStrPos("parent") != -1) {
 				SetBmsFilter(g, sql);
-				g->sSelect.unk4fa4[0] = sqlite3_snprintf(1024, buf, "SELECT path,date FROM song WHERE parent = \'%s\'", g->sSelect.stack_query[g->sSelect.cur].right(9).left(8));
+				g->sSelect.unk4fa4[0] = sqlite3_snprintf(1024, buf, "SELECT path,date FROM song WHERE parent = \'%s\'", g->sSelect.stack_query[g->sSelect.cur].right(9).left(8).body);
 				if (g->sSelect.bmsList[g->sSelect.cur_song].keymode < 1 || g->sSelect.cur < 1) {
 					g->sSelect.reloadType = 3;
-					g->sSelect.unk4fa4[1] = sqlite3_snprintf(1024, buf, "SELECT path,date FROM folder WHERE parent = \'%s\'", g->sSelect.stack_query[g->sSelect.cur].right(9).left(8));
-					g->sSelect.unk4fa4[2] = sqlite3_snprintf(1024, buf, "SELECT path, date FROM song WHERE parent = \'%s\'", AssignCRC32(g->sSelect.bmsList[g->sSelect.cur_song].filepath));
-					g->sSelect.unk4fa4[3] = sqlite3_snprintf(1024, buf, "SELECT path,date FROM folder WHERE parent = \'%s\'", AssignCRC32(g->sSelect.bmsList[g->sSelect.cur_song].filepath));
+					g->sSelect.unk4fa4[1] = sqlite3_snprintf(1024, buf, "SELECT path,date FROM folder WHERE parent = \'%s\'", g->sSelect.stack_query[g->sSelect.cur].right(9).left(8).body);
+					g->sSelect.unk4fa4[2] = sqlite3_snprintf(1024, buf, "SELECT path, date FROM song WHERE parent = \'%s\'", AssignCRC32(g->sSelect.bmsList[g->sSelect.cur_song].filepath).body);
+					g->sSelect.unk4fa4[3] = sqlite3_snprintf(1024, buf, "SELECT path,date FROM folder WHERE parent = \'%s\'", AssignCRC32(g->sSelect.bmsList[g->sSelect.cur_song].filepath).body);
 				}
 				else {
 					g->sSelect.reloadType = 2;
-					g->sSelect.unk4fa4[1] = sqlite3_snprintf(1024, buf, "SELECT path,date FROM folder WHERE parent = \'%s\'", g->sSelect.stack_query[g->sSelect.cur].right(9).left(8));
-					g->sSelect.unk4fa4[2] = sqlite3_snprintf(1024, buf, "SELECT path,date FROM folder WHERE parent = \'%s\'", g->sSelect.stack_query[g->sSelect.cur - 1].right(9).left(8));
+					g->sSelect.unk4fa4[1] = sqlite3_snprintf(1024, buf, "SELECT path,date FROM folder WHERE parent = \'%s\'", g->sSelect.stack_query[g->sSelect.cur].right(9).left(8).body);
+					g->sSelect.unk4fa4[2] = sqlite3_snprintf(1024, buf, "SELECT path,date FROM folder WHERE parent = \'%s\'", g->sSelect.stack_query[g->sSelect.cur - 1].right(9).left(8).body);
 				}
-				g->sSelect.unk4fb4 = sqlite3_snprintf(1024, buf, "SELECT difficulty,folder,mode,path FROM song WHERE parent = \'%s\'", g->sSelect.stack_query[g->sSelect.cur].right(9).left(8));
+				g->sSelect.unk4fb4 = sqlite3_snprintf(1024, buf, "SELECT difficulty,folder,mode,path FROM song WHERE parent = \'%s\'", g->sSelect.stack_query[g->sSelect.cur].right(9).left(8).body);
 				g->sSelect.filter_clicked = 4;
 			}
 
@@ -2331,8 +2331,8 @@ void SubProcI_Select(game *g, sqlite3 *sql) {
 					if (g->sSelect.bmsList[g->sSelect.cur_song].tag.length() > 2 && g->sSelect.bmsList[g->sSelect.cur_song].tag.isDiff("(null)")) {
 						g->sSelect.queryCount = 3;
 						g->sSelect.curQuery[0] = sqlite3_snprintf(1024, buf, "SELECT * FROM song LEFT JOIN score ON song.hash = score.hash WHERE %s", g->sSelect.bmsList[g->sSelect.cur_song].tag);
-						g->sSelect.curQuery[2] = sqlite3_snprintf(1024, buf, "SELECT * FROM folder WHERE parent = \'%s\'", AssignCRC32(g->sSelect.bmsList[g->sSelect.cur_song].filepath));
-						g->sSelect.curQuery[1] = sqlite3_snprintf(1024, buf, "SELECT * FROM song LEFT JOIN score ON song.hash = score.hash WHERE parent = \'%s\'", AssignCRC32(g->sSelect.bmsList[g->sSelect.cur_song].filepath));
+						g->sSelect.curQuery[2] = sqlite3_snprintf(1024, buf, "SELECT * FROM folder WHERE parent = \'%s\'", AssignCRC32(g->sSelect.bmsList[g->sSelect.cur_song].filepath.body).body);
+						g->sSelect.curQuery[1] = sqlite3_snprintf(1024, buf, "SELECT * FROM song LEFT JOIN score ON song.hash = score.hash WHERE parent = \'%s\'", AssignCRC32(g->sSelect.bmsList[g->sSelect.cur_song].filepath).body);
 						(g->sSelect).unk4fb8[0] = 0;
 						(g->sSelect).unk4fc0 = 1;
 						(g->sSelect).unk4fb8[1] = 0;
@@ -2345,11 +2345,11 @@ void SubProcI_Select(game *g, sqlite3 *sql) {
 							g->sSelect.reloadType = 1;
 						}
 						g->sSelect.queryCount = 2;
-						g->sSelect.unk4fa4[1] = sqlite3_snprintf(1024, buf, "SELECT path,date FROM folder WHERE parent = \'%s\'", AssignCRC32(g->sSelect.bmsList[g->sSelect.cur_song].filepath));
-						g->sSelect.unk4fa4[0] = sqlite3_snprintf(1024, buf, "SELECT path,date FROM song WHERE parent = \'%s\'", AssignCRC32(g->sSelect.bmsList[g->sSelect.cur_song].filepath));
-						g->sSelect.unk4fb4 = sqlite3_snprintf(1024, buf, "SELECT difficulty,folder,mode,path FROM song WHERE parent = \'%s\'", AssignCRC32(g->sSelect.bmsList[g->sSelect.cur_song].filepath));
-						g->sSelect.curQuery[1] = sqlite3_snprintf(1024, buf, "SELECT * FROM folder WHERE parent = \'%s\'", AssignCRC32(g->sSelect.bmsList[g->sSelect.cur_song].filepath));
-						g->sSelect.curQuery[0] = sqlite3_snprintf(1024, buf, "SELECT * FROM song LEFT JOIN score ON song.hash = score.hash WHERE parent = \'%s\'", AssignCRC32(g->sSelect.bmsList[g->sSelect.cur_song].filepath));
+						g->sSelect.unk4fa4[1] = sqlite3_snprintf(1024, buf, "SELECT path,date FROM folder WHERE parent = \'%s\'", AssignCRC32(g->sSelect.bmsList[g->sSelect.cur_song].filepath).body);
+						g->sSelect.unk4fa4[0] = sqlite3_snprintf(1024, buf, "SELECT path,date FROM song WHERE parent = \'%s\'", AssignCRC32(g->sSelect.bmsList[g->sSelect.cur_song].filepath).body);
+						g->sSelect.unk4fb4 = sqlite3_snprintf(1024, buf, "SELECT difficulty,folder,mode,path FROM song WHERE parent = \'%s\'", AssignCRC32(g->sSelect.bmsList[g->sSelect.cur_song].filepath).body);
+						g->sSelect.curQuery[1] = sqlite3_snprintf(1024, buf, "SELECT * FROM folder WHERE parent = \'%s\'", AssignCRC32(g->sSelect.bmsList[g->sSelect.cur_song].filepath).body);
+						g->sSelect.curQuery[0] = sqlite3_snprintf(1024, buf, "SELECT * FROM song LEFT JOIN score ON song.hash = score.hash WHERE parent = \'%s\'", AssignCRC32(g->sSelect.bmsList[g->sSelect.cur_song].filepath).body);
 						g->sSelect.unk4fb8[1] = 1;
 						g->sSelect.unk4fb8[0] = 0;
 						g->sSelect.unk4fc4[0] = 0;

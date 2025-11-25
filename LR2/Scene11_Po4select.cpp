@@ -253,7 +253,7 @@ int ProcI_PO4Select(game *g, sqlite3 *sql) { //not tested
 						return 1;
 					}
 
-					cstrSprintf(&g->sSelect.stack_query[g->sSelect.cur], "SELECT * FROM song LEFT JOIN score ON song.hash = score.hash WHERE parent = \'%s\'", AssignCRC32(g->config.jukebox.path[0]));
+					cstrSprintf(&g->sSelect.stack_query[g->sSelect.cur], "SELECT * FROM song LEFT JOIN score ON song.hash = score.hash WHERE parent = \'%s\'", AssignCRC32(g->config.jukebox.path[0]).body);
 					g->sSelect.stack_isFolder[g->sSelect.cur] = 0;
 					g->sSelect.stack_rivalID[g->sSelect.cur] = 0;
 					g->sSelect.stack_searchTitle[g->sSelect.cur] = "検索語句を入力";

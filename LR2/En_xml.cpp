@@ -117,7 +117,7 @@ void WriteXML_Tab2Str(FILE *hFile, const char *tag, CSTR str){
 	str.replace(">", "&gt;");
 	str.replace("\'", "&apos;");
 	str.replace("\"", "&quot;");
-	sprintf(buf, "\t\t<%s>%s</%s>\n", tag, str, tag);
+	sprintf(buf, "\t\t<%s>%s</%s>\n", tag, str.body, tag);
 	fputs(buf, hFile);
 	return;
 }

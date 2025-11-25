@@ -609,7 +609,7 @@ int LoadSound(AUDIO *aud, SOUNDDATA *sound, CSTR filepath, int loop, int disable
 	path.assign(&filepath);
 
 	if (IsFileExist(filepath) == false && IsAltSoundExist(&filepath) == -1) {
-		ErrorLogFmtAdd("音声ファイルが見つかりません。%s...\n",path);
+		ErrorLogFmtAdd("音声ファイルが見つかりません。%s...\n",path.body);
 		if (sound->load == '\0') {
 			sound->filename.fillzero();
 			sound->load = '\0';

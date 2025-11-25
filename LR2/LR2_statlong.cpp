@@ -11,7 +11,7 @@ static void MessageBoxA(const char*,const char* title,const char*desc,const char
 //445fa0
 CSTR MakePlayerStatHash(PLAYERSTATISTIC *ps) {
 	CSTR tmp;
-	cstrSprintf(&tmp, "%d%d%d%d%d%d%d%d%d%d%d%s%d%d%d%d%d%d%d%d%d%d%d", ps->bad, ps->clear, ps->combo, ps->fail, ps->good, ps->great, ps->maxcombo, ps->perfect, ps->playcount, ps->playtime, ps->poor, ps->passMD5,
+	cstrSprintf(&tmp, "%d%d%d%d%d%d%d%d%d%d%d%s%d%d%d%d%d%d%d%d%d%d%d", ps->bad, ps->clear, ps->combo, ps->fail, ps->good, ps->great, ps->maxcombo, ps->perfect, ps->playcount, ps->playtime, ps->poor, ps->passMD5.body,
 		ps->grade9, ps->grade10, ps->grade14, ps->grade5, ps->grade7, ps->gradeversion, ps->trial, ps->trialversion, ps->systemversion, ps->option, 1);
 	return MD5str(tmp);
 }
@@ -21,7 +21,7 @@ int UpdatePlayerStat(PLAYERSTATISTIC *ps, sqlite3 *sql) {
 	char query[1024];
 	CSTR hash = MakePlayerStatHash(ps);
 	sqlite3_snprintf(1024, query, "UPDATE player SET playcount= %d , clear = %d , fail = %d , perfect = %d , great = %d , good = %d , bad = %d , poor = %d , playtime = %d , combo = %d , maxcombo = %d,scorehash=\'%q\' ,grade_7=%d,grade_5=%d,grade_14=%d,grade_10=%d,grade_9=%d,trial = %d , option=%d,systemversion=%d,gradeversion=%d,trialversion=%d",
-		ps->playcount, ps->clear, ps->fail, ps->perfect, ps->great, ps->good, ps->bad, ps->poor, ps->playtime, ps->combo, ps->maxcombo, hash,
+		ps->playcount, ps->clear, ps->fail, ps->perfect, ps->great, ps->good, ps->bad, ps->poor, ps->playtime, ps->combo, ps->maxcombo, hash.body,
 		ps->grade7, ps->grade5, ps->grade14, ps->grade10, ps->grade9, ps->trial, ps->option, ps->systemversion, ps->gradeversion, ps->trialversion);
 	SQL_Run(query, sql);
 	return 1;
@@ -35,13 +35,13 @@ int ReadPlayerScore(CSTR id, CSTR pass, PLAYERSTATISTIC *pstat) {
 	sqlite3 *scoreDB;
 	sqlite3_stmt *stmt;
 
-	cstrSprintf(&dbPath, "LR2files/Database/Score/%s.db", id);
+	cstrSprintf(&dbPath, "LR2files/Database/Score/%s.db", id.body);
 	passMD5 = MD5str(pass);
 	
 	sqlite3_open(dbPath, &scoreDB);
 	ErrorLogFmtAdd("成功\n");
 
-	sqlite3_snprintf(256, str, "SELECT * FROM player WHERE id = \'%s\'", id);
+	sqlite3_snprintf(256, str, "SELECT * FROM player WHERE id = \'%s\'", id.body);
 	query = str;
 
 	SQL_prepare(query, scoreDB, &stmt);
@@ -207,10 +207,10 @@ int UpdateScoreDB(CSTR hash, STATUS *stat, sqlite3 *sql, CSTR *passMD5) {
 	CSTR scoreMD5(MakeScoreHash(stat, passMD5, &hash));
 	sqlite3_exec(sql, "BEGIN", 0, 0, 0);
 	cstrSprintf(&query, "INSERT INTO score (hash,clear ,perfect ,great ,good ,bad ,poor ,totalnotes ,maxcombo ,minbp ,playcount ,clearcount ,failcount ,op_history , rank , rate , clear_db , scorehash , clear_sd , clear_ex , op_best , rseed , complete) VALUES(\'%s\',%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,\'%s\',%d,%d,%d,%d,%d)"
-		, hash, stat->clear, stat->stat_pgreat, stat->stat_great, stat->stat_good, stat->stat_bad, stat->stat_poor, stat->total_notes, stat->stat_maxcombo, stat->minbp, stat->playcount, stat->clearcount, stat->failcount, stat->op_history, stat->rank, stat->rate, stat->clear_db, scoreMD5, stat->clear_sd, stat->clear_ex, stat->op_best, stat->rseed, stat->complete);
+		, hash.body, stat->clear, stat->stat_pgreat, stat->stat_great, stat->stat_good, stat->stat_bad, stat->stat_poor, stat->total_notes, stat->stat_maxcombo, stat->minbp, stat->playcount, stat->clearcount, stat->failcount, stat->op_history, stat->rank, stat->rate, stat->clear_db, scoreMD5.body, stat->clear_sd, stat->clear_ex, stat->op_best, stat->rseed, stat->complete);
 	if (SQL_Run(query, sql)){
 		cstrSprintf(&query, "UPDATE score SET clear=%d ,perfect=%d ,great=%d ,good=%d ,bad=%d ,poor=%d ,totalnotes=%d ,maxcombo=%d ,minbp=%d ,playcount=%d ,clearcount=%d ,failcount=%d ,op_history=%d ,scorehash=\'%s\',rank=%d,rate=%d,clear_db=%d,clear_sd=%d,clear_ex=%d,op_best=%d,rseed=%d,complete=%d WHERE hash = \'%s\'"
-			, stat->clear, stat->stat_pgreat, stat->stat_great, stat->stat_good, stat->stat_bad, stat->stat_poor, stat->total_notes, stat->stat_maxcombo, stat->minbp, stat->playcount, stat->clearcount, stat->failcount, stat->op_history, scoreMD5, stat->rank, stat->rate, stat->clear_db, stat->clear_sd, stat->clear_ex, stat->op_best, stat->rseed, stat->complete, hash);
+			, stat->clear, stat->stat_pgreat, stat->stat_great, stat->stat_good, stat->stat_bad, stat->stat_poor, stat->total_notes, stat->stat_maxcombo, stat->minbp, stat->playcount, stat->clearcount, stat->failcount, stat->op_history, scoreMD5.body, stat->rank, stat->rate, stat->clear_db, stat->clear_sd, stat->clear_ex, stat->op_best, stat->rseed, stat->complete, hash.body);
 		SQL_Run(query, sql);
 	}
 	sqlite3_exec(sql, "COMMIT", 0, 0, 0);

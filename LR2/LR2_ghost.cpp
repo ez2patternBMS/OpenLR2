@@ -811,7 +811,7 @@ int WriteGhostInDatabase(sqlite3 *sql, CSTR songMD5, PLAYSCORE *score) {
 	ErrorLogAdd("データベースにゴーストを書き込みます\n");
 	CSTR ghostdata = score->EncodeGhostData();
 	CSTR query;
-	cstrSprintf(&query, "UPDATE score SET ghost = \'%s\' WHERE hash = \'%s\'", ghostdata, songMD5);
+	cstrSprintf(&query, "UPDATE score SET ghost = \'%s\' WHERE hash = \'%s\'", ghostdata.body, songMD5.body);
 	SQL_Run(query, sql);
 	ErrorLogAdd("ゴーストの書き込みが終了しました\n");
 	return 0;
@@ -826,7 +826,7 @@ int ReadGhostToScore(sqlite3 *sql, CSTR songMD5, PLAYSCORE *score) {
 
 	ErrorLogAdd("データベースからゴーストを読み込みます\n");
 
-	sqlite3_snprintf(0x400, query, "SELECT ghost FROM score WHERE hash = \'%q\'", songMD5);
+	sqlite3_snprintf(0x400, query, "SELECT ghost FROM score WHERE hash = \'%q\'", songMD5.body);
 	SQL_prepare(query, sql, &pStmt);
 
 	if (sqlite3_step(pStmt) == 100) {
@@ -852,7 +852,7 @@ CSTR ReadGhost(sqlite3 *sql, CSTR songMD5) {
 
 	ErrorLogAdd("データベースからゴーストを読み込みます\n");
 
-	sqlite3_snprintf(0x400, query, "SELECT ghost FROM score WHERE hash = \'%q\'", songMD5);
+	sqlite3_snprintf(0x400, query, "SELECT ghost FROM score WHERE hash = \'%q\'", songMD5.body);
 	SQL_prepare(query, sql, &pStmt);
 
 	if (sqlite3_step(pStmt) == 100) {
