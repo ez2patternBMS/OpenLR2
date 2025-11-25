@@ -12,6 +12,9 @@
 #include <algorithm>
 #include <cmath>
 #include <array>
+#include <cstdint>
+
+using std::uintptr_t;
 
 #include "Engine.h"
 
@@ -554,11 +557,11 @@ int RecordSound(AUDIO *aud, SOUNDDATA *sound, double time, double len) {
 				aud->size = aud->size * 2;
 			}
 
-			int newval = *(short*)((int)aud->buffer + (paramlen + i) * 2) + (float)(*(short*)(sound->raw.data + i * 2)) * aud->volume * fade;
+			int newval = *(short*)((uintptr_t)aud->buffer + (paramlen + i) * 2) + (float)(*(short*)(sound->raw.data + i * 2)) * aud->volume * fade;
 
-			if (newval >= 0x7fff) *(short*)((int)aud->buffer + (paramlen + i) * 2) = 0x7fff;
-			else if (newval < -0x7fff) *(short*)((int)aud->buffer + (paramlen + i) * 2) = -0x8000;
-			else *(short*)((int)aud->buffer + (paramlen + i) * 2) = (short)newval;
+			if (newval >= 0x7fff) *(short*)((uintptr_t)aud->buffer + (paramlen + i) * 2) = 0x7fff;
+			else if (newval < -0x7fff) *(short*)((uintptr_t)aud->buffer + (paramlen + i) * 2) = -0x8000;
+			else *(short*)((uintptr_t)aud->buffer + (paramlen + i) * 2) = (short)newval;
 		}
 		return 1;
 	}

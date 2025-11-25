@@ -570,12 +570,12 @@ int LoadFolderDataFromDB(CSTR query, SONGDATA *song, sqlite3 *sql, int difficult
 		if (cfg_select->ignorepms == 1 && mode == 9) continue;
 
 		sd.keymode = mode;
-		
+
 		if( (maxsize - 1001) == slistCount){
 			int newsize = nowsize + sizeof(SONGDATA) * 1000;
 			slist = (SONGDATA*)realloc(slist, newsize);
 			if (maxsize - 1000 < maxsize) {
-				memset((void*)((int)slist + nowsize), 0, sizeof(SONGDATA) * 1000);
+				memset((void*)((uintptr_t)slist + nowsize), 0, sizeof(SONGDATA) * 1000);
 			}
 			maxsize += 1000;
 			keymode_A = keymode_B;
@@ -733,7 +733,7 @@ int LoadFolderDataFromDB(CSTR query, SONGDATA *song, sqlite3 *sql, int difficult
 			nowDifficulty = sd.difficulty;
 			difficultyCount = 1;
 			COPY_SONGDATA(&slist[slistCount], &sd);
-			
+
 			slistCount++;
 			folderSongCount++;
 			nowFolder = sd.folder;
@@ -745,7 +745,7 @@ int LoadFolderDataFromDB(CSTR query, SONGDATA *song, sqlite3 *sql, int difficult
 			nowDifficulty = sd.difficulty;
 			difficultyCount = 1;
 			COPY_SONGDATA(&slist[slistCount], &sd);
-			
+
 			slistCount++;
 			folderSongCount++;
 			nowFolder = sd.folder;
@@ -759,7 +759,7 @@ int LoadFolderDataFromDB(CSTR query, SONGDATA *song, sqlite3 *sql, int difficult
 			nowDifficulty = sd.difficulty;
 			difficultyCount = 1;
 			COPY_SONGDATA(&slist[slistCount], &sd);
-			
+
 			slistCount++;
 			folderSongCount++;
 			nowFolder = sd.folder;
@@ -768,7 +768,7 @@ int LoadFolderDataFromDB(CSTR query, SONGDATA *song, sqlite3 *sql, int difficult
 		}
 		else if (nowDifficulty == sd.difficulty || difficulty == 0) {
 			difficultyCount++;
-			
+
 			slistCount++;
 			folderSongCount++;
 			nowFolder = sd.folder;
