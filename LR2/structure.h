@@ -619,6 +619,7 @@ struct RAWSOUND {
 
 struct SOUNDDATA {
 	char load;
+	bool streaming = false;
 	char loop;
 	CSTR filename;
 	uint length;

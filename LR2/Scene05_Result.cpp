@@ -192,7 +192,21 @@ int Proc_Result(game *g, skstruct *sk, Timer *T) {
 	return 1;
 }
 
-//409300
+static void QuickRestart(game& game, bool newRandom) {
+	game.procSelecter = 4;
+	game.gameplay.flag_retry = newRandom ? 0 : 1;
+	game.gameplay.randomseed = newRandom ? 0 : game.gameplay.randomseed;
+
+	if ((game.gameplay.courseType == 0 || game.gameplay.courseType == 2) && game.gameplay.courseStageNow != 0) {
+		game.gameplay.courseStageNow = 0;
+		game.gameplay.flag_retry = 0;
+	}
+
+	for (int i = 0; i < 6480; i++) {
+		StopSound(&game.audio, &game.gameplay.keysound[i]);
+	}
+}
+
 char fWaitHiScoreUpdateInput = 0;
 int ProcI_Result(game *g) {
 
@@ -285,10 +299,10 @@ int ProcI_Result(game *g) {
 				g->KeyInput.p2_buttonInput[1] == 2 || g->KeyInput.p2_buttonInput[3] == 2 || g->KeyInput.p2_buttonInput[5] == 2 || g->KeyInput.p2_buttonInput[7] == 2) 
 				&& (g->KeyInput.p1_buttonInput[2] == 2 || g->KeyInput.p1_buttonInput[4] == 2 || g->KeyInput.p1_buttonInput[6] == 2 ||
 					g->KeyInput.p2_buttonInput[2] == 2 || g->KeyInput.p2_buttonInput[4] == 2 || g->KeyInput.p2_buttonInput[6] == 2) 
-				&& g->gameplay.replay.status != 2 && g->config.play.m_lunaris == 0 && (g->gameplay.courseType == -1 || g->gameplay.courseType == 1)) {
+				&& g->gameplay.replay.status != 2 && g->config.play.m_lunaris == 0) {
 
-				g->procSelecter = 4;
-				g->gameplay.flag_retry = 1;
+				if (g->KeyInput.p1_buttonInput[2] == 2 || g->KeyInput.p2_buttonInput[2] == 2) QuickRestart(*g, true);
+				else QuickRestart(*g, false);
 
 				if (g->skstruct.flag_flip) {
 					//same as FlipScore();, but no errorlog

@@ -1872,8 +1872,6 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 	ErrorLogFmtAdd("RANDOMSEEDは%dです。\n", gp->randomseed);
 	SRand(gp->randomseed);
 
-	for (int i = 0; i < 1296; i++) gp->keysound[i].load = 0;
-
 	CSTR dir = filename.getDirectory();
 
 	for (int i = 0; i < 1296; i++) BPMslot[i] = -1.0;

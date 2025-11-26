@@ -619,9 +619,11 @@ int LoadSound(AUDIO *aud, SOUNDDATA *sound, CSTR filepath, int loop, int disable
 	}
 
 	if (sound->load == 1) {
-		if (filepath.isSame(&sound->filename)) return 1;
+		if (filepath.isSame(&sound->filename) && previewFlag == sound->streaming) return 1;
 		ReleaseSound(aud, sound);
 	}
+
+	sound->streaming = previewFlag;
 
 	if (aud->is_fmod_disabled != 1) {
 		FMOD_MODE mode = 0;

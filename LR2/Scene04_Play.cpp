@@ -1107,6 +1107,21 @@ int ProcNoteOnTiming(game *g, int lane, int keypress, int timing, int player) {
 	return 1;
 }
 
+static void QuickRestart(game& game, bool newRandom) {
+	game.procPhase = 0;
+	game.procSelecter = 4;
+	game.gameplay.flag_retry = newRandom ? 0 : 1;
+	game.gameplay.randomseed = newRandom ? 0 : game.gameplay.randomseed;
+
+	if ((game.gameplay.courseType == 0 || game.gameplay.courseType == 2) && game.gameplay.courseStageNow != 0) {
+		game.gameplay.courseStageNow = 0;
+		game.gameplay.flag_retry = 0;
+	}
+
+	for (int i = 0; i < 6480; i++) {
+		StopSound(&game.audio, &game.gameplay.keysound[i]);
+	}
+}
 
 //419650
 int ProcI_Play(game *g) {
@@ -1148,15 +1163,23 @@ int ProcI_Play(game *g) {
 		return 1;
 	}
 
+	auto proc_quickrestart = [](game& game) {
+		if (game.gameplay.replay.status == 2 || game.config.play.m_lunaris != 0) return;
+		if (game.KeyInput.p1_buttonInput[12] == 1 || game.KeyInput.p2_buttonInput[12] == 1) return QuickRestart(game, true);
+		if (game.KeyInput.p1_buttonInput[13] == 1 || game.KeyInput.p2_buttonInput[13] == 1) return QuickRestart(game, false);
+	};
+
 	if (g->procPhase == 2) {
 		timeLimit = g->skstruct.fadeout;
 		gameTime = GetTimeLapse(2, &g->timer1);
 		if (timeLimit < gameTime || timeLimit == 0) g->procSelecter = 5;
+		proc_quickrestart(*g);
 	}
 	else if (g->procPhase == 3) {
 		timeLimit = g->skstruct.close;
 		gameTime = GetTimeLapse(3, &g->timer1);
 		if (timeLimit < gameTime || timeLimit == 0) g->procSelecter = 5;
+		proc_quickrestart(*g);
 	}
 	return 1;
 }
