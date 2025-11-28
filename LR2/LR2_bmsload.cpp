@@ -2784,12 +2784,7 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 			}
 
 			if (10 <= gp->bmsobj.notes[i].op && gp->bmsobj.notes[i].op < 29) {
-				if (!notesPerBpm.contains(nowBPM)) {
-					notesPerBpm[nowBPM] = 1;
-				}
-				else {
-					notesPerBpm[nowBPM] = notesPerBpm[nowBPM] + 1;
-				}
+				notesPerBpm[nowBPM] += 1;
 				avgBPM_notes += 1;
 				avgBPM_bpmsum += nowBPM;
 				if (gp->maxBPM < nowBPM) gp->maxBPM = nowBPM;
