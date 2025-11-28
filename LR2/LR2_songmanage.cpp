@@ -2,6 +2,8 @@
 #include "Engine.h"
 #include "LR2_statlong.h"
 
+#include <iterator>
+
 #ifdef _WIN32
 #include <shellapi.h>
 #endif // _WIN32
@@ -2484,6 +2486,7 @@ int LoadLR2CustomFolder(sqlite3 *sql, CONFIG_JUKEBOX *jb, CSTR scoreDBpath, char
 	}
 	else {
 		if (flag_direct == 0) {
+			// FIXME: out of bounds write if jb->numOfPath == jb->path.size(). Make jb->path a vector.
 			//TODO : make define customfolderoption constant
 			if (jb->customfolder & 1) {
 				jb->path[jb->numOfPath] = "LR2files/CustomFolder/RANDOM/";
@@ -2644,7 +2647,7 @@ int LoadLR2CustomFolder(sqlite3 *sql, CONFIG_JUKEBOX *jb, CSTR scoreDBpath, char
 		}
 		sqlite3_exec(sql, "COMMIT", 0, 0, 0);
 		jb->numOfPath -= folderAddCount;
-		for (int i = jb->numOfPath; i < 1000; i++) {
+		for (int i = jb->numOfPath; i < std::size(jb->path); i++) {
 			jb->path[i].fillzero();
 		}
 	}
