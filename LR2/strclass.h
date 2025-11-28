@@ -44,7 +44,6 @@ class CSTR {
 		CSTR();
 		CSTR(const CSTR &copy, int len = 0);
 		CSTR(const char *str, int len = 0);
-		CSTR makeCRCstr();
 		CSTR& assign(const char *str, int len);
 		int icmp(CSTR *param_1);
 		CSTR left (int len);

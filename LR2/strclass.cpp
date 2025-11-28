@@ -534,39 +534,6 @@ CSTR::CSTR(const char *str, int len) {
 	}
 }
 
-//43b730
-CSTR CSTR::makeCRCstr() {
-	char cVar1;
-	char* str;
-	DWORD dVar2;
-	int pcVar3;
-	char* CVar4;
-	char *pstr;
-	char* local_4;
-	char* ret;
-
-	local_4 = (char *)calloc(1, 0x40);
-	dVar2 = CRC32();
-	sprintf(local_4, "%x", dVar2);
-	str = local_4;
-	if (local_4 == NULL) {
-		return (char*)calloc(1, 0x40);
-	}
-	CVar4 = local_4;
-	do {
-		cVar1 = *CVar4;
-		CVar4 = CVar4 + 1;
-	} while (cVar1 != '\0');
-	pcVar3 = CVar4 - (local_4 + 1);
-	pstr = (char *)calloc(1, (size_t)(pcVar3 + 1));
-	ret = pstr;
-	if (pstr != (char *)0x0) {
-		strncpy(pstr, (char *)str, pcVar3);
-	}
-	free((void *)str);
-	return ret;
-}
-
 //43b7e0
 CSTR& CSTR::assign(const char *str, int len) {
 	if (str == NULL) {

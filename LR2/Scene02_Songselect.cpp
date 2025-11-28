@@ -1545,7 +1545,7 @@ static void ThreadProc_RankingAutoUpdate(game* g) {
 	}
 	CSTR path;
 	if (hash.length() < 50) cstrSprintf(&path, "LR2files/Ir/%s.xml", hash.body);
-	else cstrSprintf(&path, "LR2files/Ir/%s.xml", hash.makeCRCstr().body);
+	else cstrSprintf(&path, "LR2files/Ir/%s.xml", AssignCRC32(hash).body);
 	
 	if (path.canOpenFile()) {
 		if (hash.isSame(g->sSelect.bmsList[g->sSelect.cur_song].hash)) {

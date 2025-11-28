@@ -675,7 +675,7 @@ int NETWORK::GetRanking(CSTR hash, char flagInit) {
 		cstrSprintf(&path, "LR2files/Ir/%s.xml", hash.body);
 	}
 	else {
-		cstrSprintf(&path, "LR2files/Ir/%s.xml", hash.makeCRCstr().body);
+		cstrSprintf(&path, "LR2files/Ir/%s.xml", AssignCRC32(hash).body);
 	}
 
 	if (flagInit) this->rankingData.Init();
