@@ -503,6 +503,7 @@ CSTR UrlEncode(CSTR in) {
 
 //4bb820
 RANKING::RANKING() {
+	// FIXME: replace with std::vector. Currently this leaks memory.
 	ranking = (RANKINGPLAYER*)malloc(sizeof(RANKINGPLAYER) * 1000);
 	assert(ranking != nullptr);
 	rankingCount = 0;

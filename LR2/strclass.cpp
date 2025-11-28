@@ -488,9 +488,7 @@ bool CSTR::canOpenFile() {
 
 //43b630
 CSTR::CSTR() {
-	body = NULL;
 	body = (char *)calloc(1, 0x40);
-	return;
 }
 
 //43b650 copy construct

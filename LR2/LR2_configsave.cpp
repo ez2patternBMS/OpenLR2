@@ -92,6 +92,8 @@ int ReadKeyConfig(game *game, const char *FilePath) {
 	ReadXml_Int_Multi("keyconfig", "key32", "id", (game->config).input.buttonMap[0x20], hXml);
 	ReadXml_Int_Multi("keyconfig", "key33", "id", (game->config).input.buttonMap[0x21], hXml);
 
+	delete hXml;
+
 	return 1;
 }
 
@@ -890,9 +892,7 @@ int ReadSkinCustomize(SkinUser *sku, char *FilePath) {
 	////0~39 repeat
 	//ReadXml_Str("skincustomize", "customfile", "filename_0", CSTR(""), &sku->customize_filename[0], hXml);
 
-	if (hXml) {
-		delete(hXml);
-	}
+	delete(hXml);
 
 	return 1;
 }

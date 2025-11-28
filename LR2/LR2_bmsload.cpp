@@ -478,7 +478,7 @@ int LoadBmsResource(gameplay *gp, CSTR /*BMSfilepath*/, AUDIO *aud, ConfigStruct
 
 	int Rtmp, Gtmp, Btmp;
 
-	ErrorLogAdd("BMSの画像とサウンドをロードします");
+	ErrorLogAdd("BMSの画像とサウンドをロードします\n");
 
 	if ((cfg->play).autojudge == 2) { //silent
 		gp->loadObject_loaded = gp->loadObject_total;

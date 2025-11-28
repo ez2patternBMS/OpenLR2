@@ -3028,6 +3028,7 @@ int SwapBmsList(SONGSELECT *ss){
 
 //444650
 int InitBmsList(SONGSELECT *ss) {
+	// FIXME: 1) move to SONGSELECT constructor 2) move to std::vector. This leaks memory.
 	ss->bmsListSize = 1000;
 	ss->cur = 0;
 	ss->bmsList = (SONGDATA*)malloc(sizeof(SONGDATA) * 1000);

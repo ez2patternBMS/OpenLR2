@@ -17,26 +17,6 @@
 //437c90
 //437cf0
 int makeFileHash(LPCSTR filepath, LPCSTR oBuf) {
-	//HANDLE hFile;
-	//hFile = CreateFileA(filepath, GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN | FILE_ATTRIBUTE_NORMAL, NULL);
-	//if (hFile == (HANDLE)-1) return -1;
-
-	////not original code
-	//BY_HANDLE_FILE_INFORMATION FileInformation;
-	//GetFileInformationByHandle(hFile, &FileInformation);
-	//unsigned int size = FileInformation.nFileSizeLow;
-	//char* buffer = (char*)malloc(size);
-	//DWORD readsize;
-	//if (buffer != NULL) {
-	//	ReadFile(hFile, buffer, size, &readsize, 0);
-	//	CloseHandle(hFile);
-	//	
-	//	MD5byte(&buffer, readsize, (char*)oBuf);
-
-	//	free(buffer);
-	//}
-	//return 1;
-
 	FILE* pFile;
 	pFile = fopen(filepath, "rb");
 	if (!pFile)  return -1;
@@ -45,6 +25,9 @@ int makeFileHash(LPCSTR filepath, LPCSTR oBuf) {
 
 	sprintf((char*)oBuf, "%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x", md5buf[0], md5buf[1], md5buf[2], md5buf[3],
 		md5buf[4], md5buf[5], md5buf[6], md5buf[7], md5buf[8], md5buf[9], md5buf[10], md5buf[11], md5buf[12], md5buf[13], md5buf[14], md5buf[15]);
+
+	free(md5buf);
+
 	return 1;
 }
 

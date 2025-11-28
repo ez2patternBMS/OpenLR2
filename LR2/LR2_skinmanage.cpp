@@ -175,6 +175,7 @@ int SetFirstSkins(game *g){
 
 //4a7390
 int InitSkinData(SkinManage *skm){
+	// FIXME: 1) move to SkinManage constructor 2) move to std::vector. This leaks memory.
 	skm->Max = 100;
 	skm->Data = (SkinHeader *)malloc(sizeof(SkinHeader) * 100);
 	assert(skm->Data != nullptr);
