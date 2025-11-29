@@ -79,7 +79,6 @@ int Proc_Auto2avi(game *g, CSTR /*directory*/, CSTR filename) {
 
 	for (int i = 0; i < g->gameplay.bmsobj.count; i++) {
 		double len = 0;
-		g->gameplay.bmsobj.notes[i].op;
 		if (g->gameplay.bmsobj.notes[i].op == 1 || (10 <= g->gameplay.bmsobj.notes[i].op  && g->gameplay.bmsobj.notes[i].op < 30)) {
 			if (i + 1 < g->gameplay.bmsobj.count) {
 				double endtime = g->gameplay.keysound[(int)g->gameplay.bmsobj.notes[i].val].length;
@@ -130,7 +129,6 @@ int RecordBmsSound(game *g, CSTR oPath) {
 	ProcessMessage();
 	if (g->rec.recMode != 2) {
 		g->gameplay.song_runtime += startTime;
-		g->config.tools.mp3_volume;
 		GetSoundBuffer(&g->audio, g->gameplay.song_runtime, g->config.tools.mp3_volume);
 
 		for (int i = 0; i < g->gameplay.bmsobj.count; i++) {
