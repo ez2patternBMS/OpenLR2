@@ -734,6 +734,9 @@ int InitGameplay_retry(gameplay *gp, AUDIO *snd, game *g) {
 
 //4ad7e0
 double RealTimeToBMSTime(gameplay *gp, double time){
+	if (gp->bpmt_count == 0) {
+		return {};
+	}
 
 	if (time <= gp->bpmt_data[0].realtime) {
 		return gp->bpmt_data[0].converted;
