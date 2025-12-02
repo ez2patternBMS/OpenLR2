@@ -1203,7 +1203,10 @@ int ProcGame(game *g) {
 
 	//TEST:
 	g->timer1.GAPtick++;
-	if (t41 - g->timer1.GAPclock > 2) g->timer1.GAPcount++;
+	if (t41 - g->timer1.GAPclock > 2) {
+		g->timer1.GAPcount++;
+		g->timer1.avgOnlyGAP = ((g->timer1.avgOnlyGAP * ((double)g->timer1.GAPcount - 1.0)) + (t41 - g->timer1.GAPclock) * 1.0) / (double)g->timer1.GAPcount;
+	}
 	g->timer1.maxGAP = (t41 - g->timer1.GAPclock > g->timer1.maxGAP) ? (t41 - g->timer1.GAPclock) : g->timer1.maxGAP;
 	if (t41 > 0) g->timer1.avgGAP = t41 / (double)g->timer1.GAPtick;
 	g->timer1.GAPclock = t41;
@@ -1727,6 +1730,7 @@ void ProcGameThread(game *g) {
 	g->timer1.maxGAP = 0;
 	g->timer1.avgGAP = 0;
 	g->timer1.GAPcount = 0;
+	g->timer1.avgOnlyGAP = 0;
 	//TEST END
 
 	if (g->is_recordmode) {

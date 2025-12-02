@@ -1351,6 +1351,7 @@ struct Timer {
 	double GAPclock;
 	int GAPtick;
 	int GAPcount;
+	double avgOnlyGAP;
 };
 
 struct NETWORK {

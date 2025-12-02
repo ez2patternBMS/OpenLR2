@@ -1797,17 +1797,19 @@ int main(int argc, char** argv) {
 				if (gs.flag_showFPS) {
 					printfDx("FPS %d\n", (int)gs.timer1.FPS);
 					//TEST
-					printfDx("avgGAP %f\n", gs.timer1.avgGAP);
-					printfDx("maxGAP %f\n", gs.timer1.maxGAP);
 					printfDx("occured %d\n", gs.timer1.GAPcount);
+					printfDx("maxGAP %.3f\n", gs.timer1.maxGAP);
+					printfDx("avgGAP %.3f\n", gs.timer1.avgOnlyGAP);
+					printfDx("game total tick %d\n", gs.timer1.GAPtick);
 					//TEST END
 					//TEST2
 					int dx, dy;
+					printfDx("is DX9 %d\n", GetUseDirect3DVersion()); //none:0 DX_DIRECT3D_9:1 9EX:2 11:3 default 2? //DEBUG
+					printfDx("screen mode %d\n", gs.config.system.screenmode);
 					GetDrawScreenSize(&dx, &dy);
 					printfDx("skinsize %d %d \n", dx, dy);
 					GetWindowSize(&screenSizeX, &screenSizeY);
 					printfDx("scrnsize %d %d \n", screenSizeX, screenSizeY);
-					printfDx("mode %d\n", gs.config.system.screenmode);
 					//TEST2 END
 				}
 				gs.sSelect.flag_maniacPanel = 0;
