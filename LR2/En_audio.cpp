@@ -680,7 +680,7 @@ int LoadSound(AUDIO *aud, SOUNDDATA *sound, CSTR filepath, int loop, int disable
 					}
 				}
 			}
-			result = FMOD_System_CreateSound(aud->fmodSys, s2utf8(filepath.body, 932).c_str(), mode, NULL, &sound->fmod_sound);
+			result = FMOD_System_CreateSound(aud->fmodSys, s2utf8(filepath.body, CP_ACP).c_str(), mode, NULL, &sound->fmod_sound);
 		}
 
 		sound->flag2c = 0;
