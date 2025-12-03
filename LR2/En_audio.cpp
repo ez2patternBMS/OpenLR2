@@ -13,16 +13,21 @@
 #include <cmath>
 #include <array>
 #include <cstdint>
-#include <codecvt>
 
 using std::uintptr_t;
 
-#ifndef _WIN32
+#ifdef _WIN32
+
+#include <codecvt>
+
+#else
 
 #include <chrono>
 
 #define LOWORD(l) ((WORD)(((DWORD_PTR)(l)) & 0xffff))
 #define HIWORD(l) ((WORD)((((DWORD_PTR)(l)) >> 16) & 0xffff))
+
+enum { CP_ACP };
 
 static DWORD timeGetTime()
 {
@@ -605,11 +610,18 @@ int RecordFadeout(AUDIO *aud, double from, double length) {
 }
 
 static std::string s2utf8(const std::string_view str, unsigned int codepage) {
-	int size_needed = MultiByteToWideChar(codepage, 0, str.data(), (int)str.size(), NULL, 0);
-	std::wstring wstr(size_needed, 0);
-	MultiByteToWideChar(codepage, 0, str.data(), (int)str.size(), wstr.data(), size_needed);
+#ifdef _WIN32
+	int size_needed = MultiByteToWideChar(codepage, 0, str.data(), static_cast<int>(str.size()), nullptr, 0);
+	auto wstr = std::make_unique_for_overwrite<wchar_t[]>(size_needed);
+	MultiByteToWideChar(codepage, 0, str.data(), static_cast<int>(str.size()), wstr.get(), size_needed);
 	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
-	return converter.to_bytes(wstr);
+	return converter.to_bytes(wstr.get(), wstr.get() + size_needed);
+#else
+	if (codepage == CP_ACP) { // Already UTF-8
+		return std::string{str};
+	}
+	return std::string{str}; // unused currently :P
+#endif // _WIN32
 }
 
 //4b8bb0
