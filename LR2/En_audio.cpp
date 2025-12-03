@@ -613,7 +613,7 @@ static std::string s2utf8(const std::string_view str, unsigned int codepage) {
 }
 
 //4b8bb0
-int LoadSound(AUDIO *aud, SOUNDDATA *sound, CSTR filepath, int loop, int disableDSP, int previewFlag) {
+int LoadSound(AUDIO *aud, SOUNDDATA *sound, CSTR filepath, int loop, int /*disableDSP*/, int previewFlag) {
 
 	CSTR path;
 	path.assign(&filepath);
@@ -636,49 +636,16 @@ int LoadSound(AUDIO *aud, SOUNDDATA *sound, CSTR filepath, int loop, int disable
 	sound->streaming = previewFlag;
 
 	if (aud->is_fmod_disabled != 1) {
-		FMOD_MODE mode = 0;
 		FMOD_RESULT result;
 		if (aud->cmd_mediaOut) {
-			mode = FMOD_ACCURATETIME | FMOD_LOOP_OFF;
+			FMOD_MODE mode = FMOD_ACCURATETIME | FMOD_LOOP_OFF;
 			result = FMOD_System_CreateSound(aud->fmodSys, filepath, mode, NULL, &sound->fmod_sound); 
 			SOUND_normalize(aud, sound);
 		}
-		else { //AFTER RELEASE: It can be shortened.
-			if (previewFlag == 0) {
-				if (loop == 0) {
-					if (disableDSP == 0) {
-						mode = FMOD_LOOP_OFF;
-					}
-					else {
-						mode = FMOD_LOOP_OFF;
-					}
-				}
-				else {
-					if (disableDSP == 0) {
-						mode = FMOD_LOOP_NORMAL;
-					}
-					else {
-						mode = FMOD_LOOP_NORMAL;
-					}
-				}
-			}
-			else {
-				if (loop == 0) {
-					if (disableDSP == 0) {
-						mode = FMOD_CREATESTREAM | FMOD_LOOP_OFF;
-					}
-					else {
-						mode = FMOD_CREATESTREAM | FMOD_LOOP_OFF;
-					}
-				}
-				else {
-					if (disableDSP == 0) {
-						mode = FMOD_CREATESTREAM | FMOD_LOOP_NORMAL;
-					}
-					else {
-						mode = FMOD_CREATESTREAM | FMOD_LOOP_NORMAL;
-					}
-				}
+		else {
+			FMOD_MODE mode = loop == 0 ? FMOD_LOOP_OFF : FMOD_LOOP_NORMAL;
+			if (previewFlag != 0) {
+				mode |= FMOD_CREATESTREAM;
 			}
 			result = FMOD_System_CreateSound(aud->fmodSys, s2utf8(filepath.body, CP_ACP).c_str(), mode, NULL, &sound->fmod_sound);
 		}
