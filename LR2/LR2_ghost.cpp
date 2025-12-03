@@ -731,11 +731,21 @@ int WriteGhostInDatabase(sqlite3 *sql, CSTR songMD5, PLAYSCORE *score) {
 	CSTR ghostdata = score->EncodeGhostData();
 
 	sqlite3_stmt *pStmt;
-	sqlite3_prepare_v3(sql, "UPDATE score SET ghost = ? WHERE hash = ?", 0, 0, &pStmt, nullptr);
-	sqlite3_bind_text(pStmt, 1, ghostdata.body, ghostdata.length(), nullptr);
-	sqlite3_bind_text(pStmt, 2, songMD5.body, songMD5.length(), nullptr);
-	sqlite3_step(pStmt);
-	sqlite3_finalize(pStmt);
+	if (sqlite3_prepare_v3(sql, "UPDATE score SET ghost = ? WHERE hash = ?", -1, 0, &pStmt, nullptr) != SQLITE_OK) {
+		ErrorLogAdd("sqlite3_prepare_v3 error\n");
+	}
+	if (sqlite3_bind_text(pStmt, 1, ghostdata.body, ghostdata.length(), nullptr) != SQLITE_OK) {
+		ErrorLogAdd("sqlite3_bind_text error\n");
+	}
+	if (sqlite3_bind_text(pStmt, 2, songMD5.body, songMD5.length(), nullptr) != SQLITE_OK) {
+		ErrorLogAdd("sqlite3_bind_text error\n");
+	}
+	if (sqlite3_step(pStmt) != SQLITE_OK) {
+		ErrorLogAdd("sqlite3_step error\n");
+	}
+	if (sqlite3_finalize(pStmt) != SQLITE_OK) {
+		ErrorLogAdd("sqlite3_finalize error\n");
+	}
 
 	ErrorLogAdd("ゴーストの書き込みが終了しました\n");
 	return 0;
@@ -745,16 +755,22 @@ CSTR ReadGhost(sqlite3 *sql, CSTR songMD5) {
 	ErrorLogAdd("データベースからゴーストを読み込みます\n");
 
 	sqlite3_stmt *pStmt;
-	sqlite3_prepare_v3(sql, "SELECT ghost FROM score WHERE hash = ?", 0, 0, &pStmt, nullptr);
-	sqlite3_bind_text(pStmt, 1, songMD5.body, songMD5.length(), nullptr);
+	if (sqlite3_prepare_v3(sql, "SELECT ghost FROM score WHERE hash = ?", -1, 0, &pStmt, nullptr) != SQLITE_OK) {
+		ErrorLogAdd("sqlite3_prepare_v3 error\n");
+	}
+	if (sqlite3_bind_text(pStmt, 1, songMD5.body, songMD5.length(), nullptr) != SQLITE_OK) {
+		ErrorLogAdd("sqlite3_bind_text error\n");
+	}
 
 	CSTR ghostdata;
 	if (sqlite3_step(pStmt) == SQLITE_ROW) {
-		ghostdata.resize(sqlite3_column_bytes(pStmt, 1));
+		ghostdata.resize(sqlite3_column_bytes(pStmt, 0));
 		// Cast safety: it's safe to cast from unsigned char* to char*
-		ghostdata = reinterpret_cast<const char*>(sqlite3_column_text(pStmt, 1));
+		ghostdata = reinterpret_cast<const char*>(sqlite3_column_text(pStmt, 0));
 	}
-	sqlite3_finalize(pStmt);
+	if (sqlite3_finalize(pStmt) != SQLITE_OK) {
+		ErrorLogAdd("sqlite3_finalize error\n");
+	}
 
 	return ghostdata;
 }
