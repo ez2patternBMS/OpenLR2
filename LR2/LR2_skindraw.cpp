@@ -7,7 +7,6 @@
 #include "En_dxlibstub.h"
 #endif // _WIN32
 
-//49bf60
 int InitDrawingBuffer(DrawingBuf *drb){
 	for (int i = 0; i < drb->count; i++) {
 		InitDSTdraw(&drb->dstd[i]);
@@ -21,7 +20,6 @@ int InitDrawingBuffer(DrawingBuf *drb){
 	return 1;
 }
 
-//49c7d0
 int AllocDrawingBuffer(DrawingBuf *drb){
 	drb->max = 2000;
 	drb->count = 0;
@@ -38,7 +36,6 @@ int AllocDrawingBuffer(DrawingBuf *drb){
 	return 1;
 }
 
-//49c840
 int ReallocDrawingBuffer(DrawingBuf *drb){
 	drb->max = drb->max + 1000;
 	drb->dstd = (DSTdraw *)realloc(drb->dstd, drb->max * 0x50);
@@ -50,7 +47,6 @@ int ReallocDrawingBuffer(DrawingBuf *drb){
 	return 1;
 }
 
-//49e890
 int InitDSTdraw(DSTdraw *dstd){
 	dstd->x = 0;
 	dstd->y = 0;
@@ -75,7 +71,6 @@ int InitDSTdraw(DSTdraw *dstd){
 	return 1;
 }
 
-//49c880
 DSTdraw DSTDbyTime(DSTdraw *dstd1, DSTdraw *dstd2, double t1, double t2, double tO) {
 	DSTdraw ret;
 	
@@ -98,7 +93,6 @@ DSTdraw DSTDbyTime(DSTdraw *dstd1, DSTdraw *dstd2, double t1, double t2, double 
 	return ret;
 }
 
-//49a840
 DSTdraw SetDSTdrawByTime(DSTstruct dst, double time) {
 	int tStart, tEnd;
 	int t = time, t2;
@@ -176,7 +170,6 @@ DSTdraw SetDSTdrawByTime(DSTstruct dst, double time) {
 }
 
 
-//49abf0
 int GetSRCcycleNow(SRCstruct src, double time){
 	int ret;
 
@@ -192,7 +185,6 @@ int GetSRCcycleNow(SRCstruct src, double time){
 	return ret;
 }
 
-//49bbf0
 int AddDrawingBufferT(DrawingBuf *drb, int grHandle, DSTdraw *dstd){
 	if ((drb->isDisabled == '\0') && (grHandle != -1)) {
 		dstd->fontHandle = grHandle;
@@ -207,7 +199,6 @@ int AddDrawingBufferT(DrawingBuf *drb, int grHandle, DSTdraw *dstd){
 	return 0;
 }
 
-//49cd10
 int AddDrawingBuffer_Text(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Timer *T) {
 	DSTdraw tDstd;
 
@@ -223,7 +214,6 @@ int AddDrawingBuffer_Text(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Timer
 	return 1;
 }
 
-//49cdd0
 int AddDrawingBuffer_TextXY(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Timer *T, int handle, int x, int y) {
 	DSTdraw tDstd;
 
@@ -242,7 +232,6 @@ int AddDrawingBuffer_TextXY(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Tim
 }
 
 
-//49ceb0
 int AddDrawingBuffer(DrawingBuf *drb, int grHandle, DSTdraw *dstd){
 	if ((drb->isDisabled == '\0') && (grHandle != -1)) {
 		dstd->grHandle = grHandle;
@@ -257,7 +246,6 @@ int AddDrawingBuffer(DrawingBuf *drb, int grHandle, DSTdraw *dstd){
 	return 0;
 }
 
-//49cf10
 int AddDrawingBuffer_BarGraph(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Timer *T, double min, double max, double val) {
 	DSTdraw tDstd;
 	int grh;
@@ -279,7 +267,6 @@ int AddDrawingBuffer_BarGraph(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, T
 	return 0;
 }
 
-//49d040
 int AddDrawingBuffer_Image(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Timer *T) {
 	DSTdraw tDstd;
 
@@ -294,7 +281,6 @@ int AddDrawingBuffer_Image(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Time
 	return 1;
 }
 
-//49d0f0
 int AddDrawingBuffer_OnMouse(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Timer *T, inputStructure *input, int panel) {
 	DSTdraw tDstd;
 	int grh;
@@ -315,7 +301,6 @@ int AddDrawingBuffer_OnMouse(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Ti
 	return 0;
 }
 
-//49d240
 int AddDrawingBuffer_LN(DrawingBuf *drb, SRCstruct *srcLs, SRCstruct *srcLe, SRCstruct *srcLb, DSTstruct *dst, Timer *T, float shiftX, float shiftY, float longY, float sizeX, float sizeY, int active) {
 	DSTdraw tDstd;
 	int grh;
@@ -396,7 +381,6 @@ int AddDrawingBuffer_LN(DrawingBuf *drb, SRCstruct *srcLs, SRCstruct *srcLe, SRC
 	return 1;
 }
 
-//49d630
 int AddDrawingBuffer_PlayArea(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Timer *T, float shiftX, float shiftY, int alpha, float sizeX, float sizeY, char flag) {
 	DSTdraw tDstd;
 	int grh;
@@ -427,7 +411,6 @@ int AddDrawingBuffer_PlayArea(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, T
 	return 1;
 }
 
-//49d7c0
 int AddDrawingBuffer_Gauge(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Timer *T, int hp, char isSurvival) {
 	DSTdraw tDstd;
 	int grh,tremble,cyc=0;
@@ -473,7 +456,6 @@ int AddDrawingBuffer_Gauge(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Time
 	return 1;
 }
 
-//49d990
 int AddDrawingBuffer_BGA(DrawingBuf *drb, SRCstruct */*src*/, DSTstruct *dst, Timer *T, int grHandle, char flag) {
 	DSTdraw tDstd;
 	int x, y;
@@ -499,7 +481,6 @@ int AddDrawingBuffer_BGA(DrawingBuf *drb, SRCstruct */*src*/, DSTstruct *dst, Ti
 	return 1;
 }
 
-//49dad0
 int AddDrawingBuffer_Scratch(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Timer *T, int angle) {
 	DSTdraw tDstd;
 	int grh;
@@ -522,7 +503,6 @@ int AddDrawingBuffer_Scratch(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Ti
 	return 1;
 }
 
-//49dbe0
 int AddDrawingBuffer_Image2(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Timer *T) {
 	DSTdraw tDstd;
 	int grh;
@@ -544,7 +524,6 @@ int AddDrawingBuffer_Image2(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Tim
 	return 1;
 }
 
-//49dce0
 int AddDrawingBuffer_Object(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Timer *T, int x, int y) {
 	DSTdraw tDstd;
 	int grh;
@@ -568,7 +547,6 @@ int AddDrawingBuffer_Object(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Tim
 	return 1;
 }
 
-//49de00
 int AddDrawingBuffer_ObjectAlpha(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Timer *T, int x, int y, int a) {
 	DSTdraw tDstd;
 	int grh;
@@ -594,7 +572,6 @@ int AddDrawingBuffer_ObjectAlpha(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst
 	return 1;
 }
 
-//49df30
 int AddDrawingBuffer_EventLoading(DrawingBuf *drb, int grHandle, DSTstruct *dst, Timer *T, int x, int y) {
 	DSTdraw tDstd;
 
@@ -609,7 +586,6 @@ int AddDrawingBuffer_EventLoading(DrawingBuf *drb, int grHandle, DSTstruct *dst,
 	return 1;
 }
 
-//49dff0
 int AddDrawingBuffer_Lunaris(DrawingBuf *drb, SRCstruct *src, DSTdraw *dstd, Timer *T) {
 	int grh;
 
@@ -621,7 +597,6 @@ int AddDrawingBuffer_Lunaris(DrawingBuf *drb, SRCstruct *src, DSTdraw *dstd, Tim
 	return 1;
 }
 
-//49e060
 int AddDrawingBuffer_Numbers(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Timer *T, int number, int x, int y) {
 	DSTdraw tDstd;
 	int grh,cyc,grct;
@@ -733,7 +708,6 @@ int AddDrawingBuffer_Numbers(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Ti
 	return 1;
 }
 
-//49e4d0
 int AddDrawingBuffer_Slider(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Timer *T) {
 	DSTdraw tDstd;
 
@@ -745,7 +719,6 @@ int AddDrawingBuffer_Slider(DrawingBuf *drb, SRCstruct *src, DSTstruct *dst, Tim
 	return 1;
 }
 
-//49e550
 int AddDrawingBuffer_JudgeCombo(DrawingBuf *drb, SRCstruct *jSrc, DSTstruct *jDst, SRCstruct *cSrc, DSTstruct *cDst, Timer *T, int combo, int optX, int optY) {
 	DSTdraw tDstd;
 	int digit;
@@ -786,7 +759,6 @@ int AddDrawingBuffer_JudgeCombo(DrawingBuf *drb, SRCstruct *jSrc, DSTstruct *jDs
 
 float skinsizeX, skinsizeY;
 
-//49ac50
 int LRDrawImg(int *grHandle, DSTdraw *dstD) {
 	float x1, y1, x2, y2;
 	float rx, ry, rad;
@@ -883,7 +855,6 @@ int LRDrawImg(int *grHandle, DSTdraw *dstD) {
 	return 1;
 }
 
-//49b110
 int GetTextGraphLength(CSTR *str, ImageFont *imF) {
 	int pos;
 	int ret;
@@ -926,7 +897,6 @@ int GetTextGraphLength(CSTR *str, ImageFont *imF) {
 	return ret;
 }
 
-//49b2a0
 void LRDrawText(int* grHandle, DSTdraw *dstd, CSTR *str, ImageFont *imF) {
 	double hl;
 	float width, wl;
@@ -1025,7 +995,6 @@ void LRDrawText(int* grHandle, DSTdraw *dstd, CSTR *str, ImageFont *imF) {
 	return;
 }
 
-//49b7c0
 void LRDrawTextInput(int* hFont, DSTdraw *dstd, int* hInput, ImageFont *imgfont) {
 	IMEINPUTDATA* pIME;
 	CSTR buf(0x401);
@@ -1084,14 +1053,12 @@ void LRDrawTextInput(int* hFont, DSTdraw *dstd, int* hInput, ImageFont *imgfont)
 	}
 }
 
-//49bc50
 int sortDST(const void *a, const void *b) {
 	DSTdraw &aa = *(DSTdraw*)a;
 	DSTdraw &bb = *(DSTdraw*)b;
 	return aa.sortID - bb.sortID;
 }
 
-//49bc60
 int LRDraw(DrawingBuf *drBuf, TextStruct *txt, SONGSELECT *sSel, skstruct *sks, int targetBufNum, int x, int y) {
 	DSTdraw &draw = drBuf->dstd[targetBufNum];
 
@@ -1142,7 +1109,6 @@ int LRDraw(DrawingBuf *drBuf, TextStruct *txt, SONGSELECT *sSel, skstruct *sks, 
 	return 1;
 }
 
-//49c700
 int DrawBGA(int grHandle){
 	int TransFlag;
 	int grW;

@@ -1,7 +1,6 @@
 ﻿#include "En_xml.h"
 #include "tinyxml/tinyxml.h"
 
-//43c060
 int ReadXml_Int(const char *level1, const char *level2, const char *level3, int initvalue, int *oBuf, TiXmlDocument *xmlData){
 	TiXmlElement *cur;
 
@@ -25,7 +24,6 @@ int ReadXml_Int(const char *level1, const char *level2, const char *level3, int 
 	return -1;
 }
 
-//43c0e0
 int ReadXml_Str(const char *level1, const char *level2, const char *level3, const CSTR initvalue, CSTR* oBuf, TiXmlDocument *xmlData) {
 	TiXmlElement *cur;
 
@@ -54,7 +52,6 @@ int ReadXml_Str(const char *level1, const char *level2, const char *level3, cons
 	return -1;
 }
 
-//43c440
 int ReadXml_Int_Multi(const char *level1, const char *level2, const char *level3, int *oBuf, TiXmlDocument *xmlData){
 	TiXmlElement *cur;
 
@@ -99,7 +96,6 @@ int ReadXml_Int_Multi(const char *level1, const char *level2, const char *level3
 }
 
 
-//43cef0
 void WriteXML_Tab2Int(FILE *hFile, const char *tag, int value){
 	char buf[256];
 
@@ -108,7 +104,6 @@ void WriteXML_Tab2Int(FILE *hFile, const char *tag, int value){
 	return;
 }
 
-//43cf50
 void WriteXML_Tab2Str(FILE *hFile, const char *tag, CSTR str){
 	char buf[256];
 

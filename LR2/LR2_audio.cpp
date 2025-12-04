@@ -6,7 +6,6 @@
 
 #include "filesystem.h"
 
-//4011f0
 int FxByMIDI(game *g) {
 	bool change = false;
 	
@@ -207,7 +206,6 @@ int FxByMIDI(game *g) {
 }
 
 
-//401ef0
 int UpdateSoundFX(game *g, int *value, int objectID, int min, int max){
 	int tmp;
 
@@ -220,7 +218,6 @@ int UpdateSoundFX(game *g, int *value, int objectID, int min, int max){
 	return 0;
 }
 
-//401f80
 int InitFxParam(game *g, int fxNum){
 
 	if (g->audio.param.fxType[fxNum] == 8 || g->audio.param.fxType[fxNum] != 3) {
@@ -240,7 +237,6 @@ int InitFxParam(game *g, int fxNum){
 
 
 
-//4041e0
 int StopSysSound(game *g){
 	AUDIO *aud;
 
@@ -269,7 +265,6 @@ int StopSysSound(game *g){
 
 
 
-//414900
 int ReleaseSysSound(game *g){
 	AUDIO *aud;
 
@@ -303,7 +298,6 @@ static void adjust_input_filepath(CSTR& path)
 #endif // _WIN32
 }
 
-//414a10
 int ReadLR2SoundSet(game *g, CSTR filepath, char reFlag) {
 	SkinUser sku;
 	FILE* hFile;

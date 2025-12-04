@@ -16,7 +16,6 @@ int lun_x;
 int lun_y;
 
 
-//40bf90
 int LUNARIS_GETBLOCKUP(void) {
 	int ret = 3;
 
@@ -31,7 +30,6 @@ int LUNARIS_GETBLOCKUP(void) {
 	return ret;
 }
 
-//40bfd0
 int LUNARIS_GETBLOCKDOWN(void) {
 	int ret = 3;
 
@@ -46,7 +44,6 @@ int LUNARIS_GETBLOCKDOWN(void) {
 	return ret;
 }
 
-//40c010
 int LUNARIS_GETBLOCKLEFT(void) {
 	int ret = 3;
 
@@ -61,7 +58,6 @@ int LUNARIS_GETBLOCKLEFT(void) {
 	return ret;
 }
 
-//40c050
 int LUNARIS_GETBLOCKRIGHT(void) {
 	int ret = 3;
 
@@ -76,7 +72,6 @@ int LUNARIS_GETBLOCKRIGHT(void) {
 	return ret;
 }
 
-//40c090
 void LUNARIS_LAND() {
 	int x, y;
 
@@ -103,7 +98,7 @@ void LUNARIS_LAND() {
 	return;
 }
 
-//40c140 //2left 4right 8down
+// 2left 4right 8down
 int LUNARIS_MOVE(int direction) { 
 
 	//LEFT
@@ -158,7 +153,6 @@ int LUNARIS_MOVE(int direction) {
 	return 0;
 }
 
-//40c400
 int LUNARIS_ROTATE(char direction) {
 
 	int newshape[5][5] = { {0,}, };//DEBUG : there are no init in original code
@@ -196,7 +190,6 @@ int LUNARIS_ROTATE(char direction) {
 	return 1;
 }
 
-//40c510
 int LUNARIS_NEXTRANDOMROTATE(void) {
 	
 	int newshape[5][5];
@@ -219,7 +212,6 @@ int LUNARIS_NEXTRANDOMROTATE(void) {
 	return 1;
 }
 
-//40c5a0
 int LUNARIS_CHECKLINE(void) {
 
 	int ret = 0;
@@ -251,7 +243,6 @@ int LUNARIS_CHECKLINE(void) {
 	return ret;
 }
 
-//40c6a0
 void LUNARIS_NEXT(void) {
 	int thisblock;
 
@@ -312,7 +303,6 @@ void LUNARIS_NEXT(void) {
 	return;
 }
 
-//40c790
 int DrawLunaris(game *g) {
 
 	DSTdraw dstd;
@@ -485,7 +475,6 @@ int DrawLunaris(game *g) {
 	return 1;
 }
 
-//40cff0
 int LUNARIS_START(game *g) {
 
 	memset(lun_field, 0, sizeof(lun_field));
@@ -509,7 +498,6 @@ int LUNARIS_START(game *g) {
 	return 1;
 }
 
-//40d090
 int LUNARIS_JUDGE(game *g) {
 
 	if (LUNARIS_MOVE(8) == 0) {
@@ -626,7 +614,6 @@ int LUNARIS_JUDGE(game *g) {
 }
 
 
-//41bcd0
 int ProcI_Lunaris(game *g) {
 	
 	int interval;

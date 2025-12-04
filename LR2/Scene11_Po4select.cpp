@@ -2,7 +2,6 @@
 #include "Scenes.h"
 #include "LR2.h"
 
-//40d600
 void ThreadProc_PO4parseBMS(game *g) {
 	
 	g->gameplay.bmsResourceLoaded = 0;
@@ -16,7 +15,6 @@ void ThreadProc_PO4parseBMS(game *g) {
 	return;
 }
 
-//42dcc0
 int ProcI_PO4Select(game *g, sqlite3 *sql) { //not tested
 
 	int selectedBar = g->sSelect.listSelectedBarFromScreenTop;

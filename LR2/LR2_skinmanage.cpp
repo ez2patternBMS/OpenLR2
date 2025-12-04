@@ -28,7 +28,6 @@ int SetFirstSkin(SkinManage *sm, SKINTYPE type, CSTR *skinName) {
 	return -1;
 }
 
-//409c80
 int SetFirstSkin_5k(SkinManage *sm, SKINTYPE type, CSTR *skinName){
 	
 	sm->skinID[type] = -1;
@@ -95,7 +94,6 @@ int SetFirstSkin_5kb(SkinManage *sm, SKINTYPE type, CSTR *skinName) {
 	return -1;
 }
 
-//409d80
 int SetFirstSkins(game *g){
 	SkinManage *sm;
 
@@ -174,7 +172,6 @@ int SetFirstSkins(game *g){
 }
 
 
-//4a7390
 int InitSkinData(SkinManage *skm){
 	// FIXME: 1) move to SkinManage constructor 2) move to std::vector. This leaks memory.
 	skm->Max = 100;
@@ -194,7 +191,6 @@ int InitSkinData(SkinManage *skm){
 	return 1;
 }
 
-//4a7450
 int ExpandSkinMax(SkinManage *skm){
 	skm->Data = (SkinHeader *)realloc(skm->Data, (skm->Max + 100) * 0xb14);
 	assert(skm->Data != nullptr);
@@ -214,7 +210,7 @@ int ExpandSkinMax(SkinManage *skm){
 	return 1;
 }
 
-//4a77a0 ParsLR2SkinCustom
+// ParsLR2SkinCustom
 int ParseLR2SkinCustom(SkinManage *skm, CSTR filepath) {
 	CSVbuf csvBuf;
 	SkinUser skCustom;
@@ -381,7 +377,7 @@ int ParseLR2SkinCustom(SkinManage *skm, CSTR filepath) {
 	return 0;
 }
 
-//4a8230 MakeSkinList
+// MakeSkinList
 int MakeSkinList(SkinManage *skm, CSTR dir) {
 	if (dir.right(1).isDiff("\\") && dir.right(1).isDiff("/"))
 		dir.add("\\");

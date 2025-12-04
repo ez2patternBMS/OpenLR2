@@ -6,7 +6,6 @@
 #include <algorithm>
 #include <unordered_map>
 
-//4081d0
 int StopAllKeysound(game *g){
 	for (int i = 0; i < 6480; i++) {
 		StopSound(&g->audio, &g->gameplay.keysound[i]);
@@ -14,7 +13,6 @@ int StopAllKeysound(game *g){
 	return 1;
 }
 
-//408210
 int InitKeysound(game *g){
 	for (int i = 0; i < 6480; i++) {
 		StopSound(&g->audio, &g->gameplay.keysound[i]);
@@ -24,7 +22,6 @@ int InitKeysound(game *g){
 	return 1;
 }
 
-//408260
 int ReleaseBGA(game *g){
 
 	for (int i = 0; i < 6480; i++) {
@@ -34,7 +31,6 @@ int ReleaseBGA(game *g){
 	return 1;
 }
 
-//408430
 void ProcLoadBmsResource(game *g) {
 	g->gameplay.bmsResourceLoaded = 0;
 	g->gameplay.flag_closingPhase = '\0';
@@ -44,7 +40,6 @@ void ProcLoadBmsResource(game *g) {
 }
 
 
-//4a9fd0
 bool isVisibleNote(int ch){
 	if (10 <= ch && ch < 30) {
 		return true;
@@ -52,7 +47,6 @@ bool isVisibleNote(int ch){
 	return (50 <= ch && ch < 70);
 }
 
-//4ac140
 int InitNoteBuffer(LaneStruct *lane, int count){
 
 	lane->size = count;
@@ -75,7 +69,6 @@ int InitNoteBuffer(LaneStruct *lane, int count){
 }
 
 
-//4ac1c0
 int ExpandNoteBuffer(LaneStruct *lane, int addsize){
 
 	int oldCount;
@@ -98,7 +91,6 @@ int ExpandNoteBuffer(LaneStruct *lane, int addsize){
 	return 1;
 }
 
-//4ac240
 int CMP_NotesByBmsTiming(const void *p1, const void *p2){
 	NoteStruct* n1 = (NoteStruct*)p1;
 	NoteStruct* n2 = (NoteStruct*)p2;
@@ -128,7 +120,6 @@ int CMP_NotesByBmsTiming(const void *p1, const void *p2){
 	return p1->bmsTiming * 100000.0 - p2->bmsTiming * 100000.0;*/
 }
 
-//4ac2b0
 int CMP_NotesByRealTiming(const void *p1, const void *p2){
 	NoteStruct* n1 = (NoteStruct*)p1;
 	NoteStruct* n2 = (NoteStruct*)p2;
@@ -136,7 +127,6 @@ int CMP_NotesByRealTiming(const void *p1, const void *p2){
 	return n1->realTiming - n2->realTiming;
 }
 
-//4ac2d0
 int CMP_NotesByRealTimingOp(const void *p1, const void *p2){
 	NoteStruct* n1 = (NoteStruct*)p1;
 	NoteStruct* n2 = (NoteStruct*)p2;
@@ -147,7 +137,6 @@ int CMP_NotesByRealTimingOp(const void *p1, const void *p2){
 	return n1->realTiming - n2->realTiming;
 }
 
-//4ac300
 int PlayerCheckAndSwap(gameplay *gp){
 	PLAYERSTATUS temp_status;
 	GRAPHDATA temp_graph;
@@ -172,7 +161,6 @@ int PlayerCheckAndSwap(gameplay *gp){
 	return 1;
 }
 
-//4ac3e0
 int InitGameplay(gameplay *gp, CONFIG_PLAY *cfg) {
 
 	PlayerCheckAndSwap(gp);
@@ -475,7 +463,6 @@ int InitGameplay(gameplay *gp, CONFIG_PLAY *cfg) {
 	return 1;
 }
 
-//4acc60
 int LoadBmsResource(gameplay *gp, CSTR /*BMSfilepath*/, AUDIO *aud, ConfigStruct *cfg, BMSMETA */*meta*/, char /*bga*/, char /*flip*/, char noVideo){
 
 	int Rtmp, Gtmp, Btmp;
@@ -590,7 +577,6 @@ int LoadBmsResource(gameplay *gp, CSTR /*BMSfilepath*/, AUDIO *aud, ConfigStruct
 	return 0;
 }
 
-//4ad200
 int InitGameplay_retry(gameplay *gp, AUDIO *snd, game *g) {
 	
 	PlayerCheckAndSwap(gp);
@@ -733,7 +719,6 @@ int InitGameplay_retry(gameplay *gp, AUDIO *snd, game *g) {
 }
 
 
-//4ad7e0
 double RealTimeToBMSTime(gameplay *gp, double time){
 	if (gp->bpmt_count == 0) {
 		return {};
@@ -752,7 +737,6 @@ double RealTimeToBMSTime(gameplay *gp, double time){
 	return gp->bpmt_data[gp->bpmt_count - 1].converted;
 }
 
-//4ad8a0
 int CMP_CCARRbyCount(const void *p1, const void *p2) {
 	struct_0x14* s1 = (struct_0x14*)p1;
 	struct_0x14* s2 = (struct_0x14*)p2;
@@ -762,14 +746,12 @@ int CMP_CCARRbyCount(const void *p1, const void *p2) {
 	return s2->count - s1->count;
 }
 
-//4ad8c0
 int CMP_CCARRbyID(const void *p1, const void *p2) {
 	struct_0x14* s1 = (struct_0x14*)p1;
 	struct_0x14* s2 = (struct_0x14*)p2;
 	return s1->ID - s2->ID;
 }
 
-//4ad8d0
 int SplitNotesToDP(LaneStruct *lane, int start, CHARTCONVERTER *cc, int end) {
 
 	for (int i = start; i < lane->count; i++) {
@@ -787,7 +769,6 @@ int SplitNotesToDP(LaneStruct *lane, int start, CHARTCONVERTER *cc, int end) {
 	return 1;
 }
 
-//4ad940
 int RightLaneTo2P(LaneStruct *lane, int start, CHARTCONVERTER *cc) {
 
 	int op = 0;
@@ -809,7 +790,7 @@ int RightLaneTo2P(LaneStruct *lane, int start, CHARTCONVERTER *cc) {
 	return 1;
 }
 
-//4ada00 //move 3rd note lane or 2nd lane(when only 2 lane)
+// move 3rd note lane or 2nd lane(when only 2 lane)
 int Move3rdLaneTo2P(LaneStruct *lane, int start, CHARTCONVERTER *cc) {
 
 	int laneA = 0, laneB = 0, laneC = 0, laneD = 0;
@@ -839,7 +820,6 @@ int Move3rdLaneTo2P(LaneStruct *lane, int start, CHARTCONVERTER *cc) {
 	return 1;
 }
 
-//4adab0
 int DPsplitLane(LaneStruct *lane, int start, CHARTCONVERTER *cc) {
 
 	int laneNoteCount[8] = { 0, };
@@ -882,7 +862,6 @@ int DPsplitLane(LaneStruct *lane, int start, CHARTCONVERTER *cc) {
 	return 1;
 }
 
-//4adbf0
 int DPsplit(LaneStruct *lane, int start, CHARTCONVERTER *cc) {
 
 	int laneNoteCount[8] = { 0, };
@@ -928,7 +907,6 @@ int DPsplit(LaneStruct *lane, int start, CHARTCONVERTER *cc) {
 	return 1;
 }
 
-//4add90
 void MakeExtraChart(gameplay *gp, CHARTCONVERTER *cc) {  //test completed
 
 	int notecount = 0;
@@ -1219,7 +1197,6 @@ void MakeExtraChart(gameplay *gp, CHARTCONVERTER *cc) {  //test completed
 	qsort(gp->bmsobj.notes, gp->bmsobj.count, sizeof(NoteStruct), CMP_NotesByRealTimingOp);
 }
 
-//4ae8d0
 void DPtoSP(gameplay *gp) { //test completed
 
 	int mingap;
@@ -1313,7 +1290,6 @@ void DPtoSP(gameplay *gp) { //test completed
 	return;
 }
 
-//4af080
 void PMStoSP(gameplay *gp) { //test&fix completed
 
 	int mingap;
@@ -1582,7 +1558,6 @@ void PMStoSP(gameplay *gp) { //test&fix completed
 	return;
 }
 
-//4afe40
 int DPsplitLaneScratch(LaneStruct *lane, int start, CHARTCONVERTER *cc) {
 
 	int nNotesP1 = 0;
@@ -1675,7 +1650,6 @@ int DPsplitLaneScratch(LaneStruct *lane, int start, CHARTCONVERTER *cc) {
 	return 1;
 }
 
-//4b0250
 int SPtoDP(LaneStruct *lane, int baseNoteID, CHARTCONVERTER *cc) {
 
 	cc->unused14404 = 0;
@@ -1792,7 +1766,6 @@ int SPtoDP(LaneStruct *lane, int baseNoteID, CHARTCONVERTER *cc) {
 	return 1;
 }
 
-//4b0690
 //TODO : rename variables
 //TOFIX : freq +12 autoplay endtime doesn't match (#STOP?)
 //TOFIX : nonstop mix retry volume issue

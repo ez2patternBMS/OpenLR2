@@ -16,7 +16,7 @@ MIDI midi;
 #define HIWORD(l) ((WORD)((((DWORD_PTR)(l)) >> 16) & 0xffff))
 #endif
 
-//4bd6a0 //TODO structure array rework
+// TODO structure array rework
 int InitInputStructure2(inputStructure *is){
 	
 	is->is_doubleclick = 0;
@@ -30,7 +30,6 @@ int InitInputStructure2(inputStructure *is){
 	return 1;
 }
 
-//4bd6f0
 void EndMIDIInput(void){
 #ifdef _WIN32
 	UINT numDev;
@@ -47,7 +46,6 @@ void EndMIDIInput(void){
 #endif // _WIN32
 }
 
-//4bd740
 void GetMidiInput(dword msg, dword /*timestamp*/) {
 	// http://www.gweep.net/~prefect/eng/reference/protocol/midispec.html
 	byte status = (msg & 0xff);
@@ -92,7 +90,6 @@ void GetMidiInput(dword msg, dword /*timestamp*/) {
 	}
 }
 
-//4be940
 int FindPressedKey(inputStructure *is){
 	
 	for (int i = 1; i < 0x600; i++) {
@@ -103,7 +100,6 @@ int FindPressedKey(inputStructure *is){
 	return 0;
 }
 
-//4be970
 int ResetPressCount(inputStructure *is){
 	is->keyboard_presscount = 0;
 	is->joypad_presscount = 0;
@@ -111,7 +107,6 @@ int ResetPressCount(inputStructure *is){
 	return 1;
 }
 
-//4be990
 int DetermineResultPlayDevice(inputStructure *is){
 	int &joy = is->joypad_presscount;
 	int &key = is->keyboard_presscount;
@@ -123,13 +118,11 @@ int DetermineResultPlayDevice(inputStructure *is){
 	return 0;
 }
 
-//4be9e0
 int CloseMIDI(void){
 	EndMIDIInput();
 	return 1;
 }
 
-//4be9f0
 void ProcessInput(inputStructure *is, int interval) {
 
 	int mouseX, mouseY;
@@ -297,7 +290,6 @@ void ProcessInput(inputStructure *is, int interval) {
 	return;
 }
 
-//4bef60
 void CALLBACK MIDIInProc(HMIDIIN /*hMidiIn*/, uint wMsg, dword /*dwInstance*/, dword dwParam1, dword dwParam2){
 	if (wMsg == 0x3c3) { // = 963
 		GetMidiInput(dwParam1, dwParam2);
@@ -305,7 +297,6 @@ void CALLBACK MIDIInProc(HMIDIIN /*hMidiIn*/, uint wMsg, dword /*dwInstance*/, d
 	return;
 }
 
-//4bef80
 int WaitInput(inputStructure *is){
 	is->is_doubleclick = 0;
 	is->mousewheel = 0;
@@ -322,7 +313,6 @@ int WaitInput(inputStructure *is){
 	return 1;
 }
 
-//4bf020
 int InputToButton(inputStructure *is, CONFIG_INPUT *cfg_input, int player, int isReplay) {
 	
 	ProcessInput(is, cfg_input->sys_inputinterval);
@@ -428,7 +418,6 @@ int InputToButton(inputStructure *is, CONFIG_INPUT *cfg_input, int player, int i
 	return 1;
 }
 
-//4bf3e0
 void InitMIDIInput(void){
 #ifdef _WIN32
 	UINT numDev;
@@ -452,7 +441,6 @@ void InitMIDIInput(void){
 #endif // _WIN32
 }
 
-//4bf480
 int InitInputStructure(inputStructure *is){
 
 	memset(is->inputID, 0, sizeof(char)*0x600);

@@ -2,7 +2,6 @@
 #include "Engine.h"
 #include "LR2_audio.h"
 
-//405870
 int ProcI_Decide(game *g) {
 
 	if (GetTimeLapse(0, &g->timer1) > g->skstruct.scenetime && g->procPhase == 1) {

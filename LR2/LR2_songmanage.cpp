@@ -10,7 +10,7 @@
 #endif // _WIN32
 
 int EnabledInsane;
-//404fe0 thiscall in original code
+// thiscall in original code
 SONGDATA * COPY_SONGDATA(SONGDATA *s1, SONGDATA *s2){
 	s1->title = s2->title;
 	s1->subtitle = s2->subtitle;
@@ -123,7 +123,6 @@ SONGDATA * COPY_SONGDATA(SONGDATA *s1, SONGDATA *s2){
 	return s1;
 }
 
-//444730
 int InitSongData(SONGDATA *song){
 	song->artist.fillzero();
 	song->genre.fillzero();
@@ -197,7 +196,6 @@ int InitSongData(SONGDATA *song){
 	return 1;
 }
 
-//444d00
 int LoadBMSMETAFromDB(BMSMETA *meta, sqlite3 *sql) {
 	char str[1024];
 	sqlite3_stmt *pStmt;
@@ -220,7 +218,6 @@ int LoadBMSMETAFromDB(BMSMETA *meta, sqlite3 *sql) {
 	return 0;
 }
 
-//444f90
 int SetUndefinedDifficulty(sqlite3 *sql) {
 	char str[1024];
 	sqlite3_stmt *pStmt;
@@ -255,7 +252,6 @@ int SetUndefinedDifficulty(sqlite3 *sql) {
 	return 1;
 }
 
-//445220
 int CMP_SongDataByExLevel(const void *p1, const void *p2) {
 	SONGDATA* s1 = (SONGDATA*)p1;
 	SONGDATA* s2 = (SONGDATA*)p2;
@@ -276,7 +272,6 @@ int CMP_SongDataByExLevel(const void *p1, const void *p2) {
 	return 1;//not neccessary
 }
 
-//445270
 int CMP_SongDataByTitle(const void *p1, const void *p2) {
 	SONGDATA* s1 = (SONGDATA*)p1;
 	SONGDATA* s2 = (SONGDATA*)p2;
@@ -302,7 +297,6 @@ int CMP_SongDataByTitle(const void *p1, const void *p2) {
 	return 0;
 }
 
-//445420
 int CMP_SongDataByScore(const void *p1, const void *p2) {
 	SONGDATA* s1 = (SONGDATA*)p1;
 	SONGDATA* s2 = (SONGDATA*)p2;
@@ -315,7 +309,6 @@ int CMP_SongDataByScore(const void *p1, const void *p2) {
 		 - ((s2->mybest.total_notes) ? s2->mybest.stat_exscore * 10000 / s2->mybest.total_notes * 2 : 0);
 }
 
-//445480
 int CMP_SongDataByRivalScore(const void *p1, const void *p2) {
 	SONGDATA* s1 = (SONGDATA*)p1;
 	SONGDATA* s2 = (SONGDATA*)p2;
@@ -327,7 +320,6 @@ int CMP_SongDataByRivalScore(const void *p1, const void *p2) {
 	return (s2->rivalRecord.stat_exscore - s2->mybest.stat_exscore) - (s1->rivalRecord.stat_exscore - s1->mybest.stat_exscore);
 }
 
-//4454c0
 int CMP_SongDataByDirectory(const void *p1, const void *p2) {
 	SONGDATA* s1 = (SONGDATA*)p1;
 	SONGDATA* s2 = (SONGDATA*)p2;
@@ -353,7 +345,6 @@ int CMP_SongDataByDirectory(const void *p1, const void *p2) {
 	return 0;
 }
 
-//445680
 int CMP_SongDataByPath(const void *p1, const void *p2) {
 	SONGDATA* s1 = (SONGDATA*)p1;
 	SONGDATA* s2 = (SONGDATA*)p2;
@@ -373,7 +364,6 @@ int CMP_SongDataByPath(const void *p1, const void *p2) {
 	return 0;
 }
 
-//445d30
 int UpdateSongDataTag(SONGDATA *song, sqlite3 *sql){
 	char query[1024];
 
@@ -400,7 +390,6 @@ int UpdateSongDataTag(SONGDATA *song, sqlite3 *sql){
 	return 1;
 }
 
-//446300
 int EditTag(SONGDATA *song, sqlite3 *sql) {
 	sqlite3_stmt *stmt;
 	CSTR query;
@@ -485,7 +474,7 @@ int EditTag(SONGDATA *song, sqlite3 *sql) {
 	return 1;
 }
 
-//446ab0 //TODO : I need to understand this and rename variables
+// TODO : I need to understand this and rename variables
 int LoadFolderDataFromDB(CSTR query, SONGDATA *song, sqlite3 *sql, int difficulty, int key, int /*sort*/, int maxCount, CONFIG_SELECT *cfg_select, char flag) {
 	sqlite3_stmt *stmt;
 	SONGDATA* slist;
@@ -794,7 +783,6 @@ int LoadFolderDataFromDB(CSTR query, SONGDATA *song, sqlite3 *sql, int difficult
 	return 1;
 }
 
-//4474a0
 int UninstallSong(CSTR path, sqlite3 *sql) {
 	char query[2048];
 
@@ -824,7 +812,6 @@ int UninstallSong(CSTR path, sqlite3 *sql) {
 #endif // _WIN32
 }
 
-//4476b0
 int Rename(CSTR path, sqlite3 *sql) {
 	char query[2048];
 
@@ -849,7 +836,6 @@ int Rename(CSTR path, sqlite3 *sql) {
 #endif // _WIN32
 }
 
-//447820
 int GetSongData(CSTR songMD5, SONGDATA *song, sqlite3 *sql, SONGSELECT *ss) {
 	CSTR query;
 	CSTR replayPath;
@@ -957,7 +943,6 @@ int GetSongData(CSTR songMD5, SONGDATA *song, sqlite3 *sql, SONGSELECT *ss) {
 	return ret;
 }
 
-//448110
 int WriteCourse(sqlite3 *sql, COURSESELECT course, SONGDATA *song, CSTR passmd5, int connection, int /*gauge*/) {
 
 	char t[1024];
@@ -1002,7 +987,6 @@ int WriteCourse(sqlite3 *sql, COURSESELECT course, SONGDATA *song, CSTR passmd5,
 	return 1;
 }
 
-//448560
 int ChangeCourseTitle(sqlite3* sql, CSTR title, int id, int coursetype) {
 
 	char str[1024];
@@ -1023,7 +1007,6 @@ int ChangeCourseTitle(sqlite3* sql, CSTR title, int id, int coursetype) {
 	return 1;
 }
 
-//4486a0
 int DeleteCourse(sqlite3* sql, int id, int courseType) {
 
 	char str[1024];
@@ -1044,7 +1027,6 @@ int DeleteCourse(sqlite3* sql, int id, int courseType) {
 	return 1;
 }
 
-//4487c0
 CSTR GetRandomSongHash(CSTR ioDefault, CSTR folder, int levelStd, int mode, sqlite3 *sql, int levelMax, int levelMin) {
 
 	sqlite3_stmt *pStmt;
@@ -1062,7 +1044,6 @@ CSTR GetRandomSongHash(CSTR ioDefault, CSTR folder, int levelStd, int mode, sqli
 	return ioDefault;
 }
 
-//448950
 int GetSongDataFromPath(CSTR filepath, SONGDATA *song, sqlite3 *sql, SONGSELECT *ss) {
 	BMSMETA meta;
 	CSTR hash;
@@ -1108,7 +1089,6 @@ int GetSongDataFromPath(CSTR filepath, SONGDATA *song, sqlite3 *sql, SONGSELECT 
 	return 2;
 }
 
-//448c10 
 int ChangeCourseID(sqlite3 *sql, int newID, int oldID, int type) {
 
 	char str[1024];
@@ -1143,7 +1123,6 @@ int ChangeCourseID(sqlite3 *sql, int newID, int oldID, int type) {
 }
 
 
-//448ea0
 int SearchSongsFromPath(CSTR root, sqlite3 *sql, CSTR path) {
 #ifdef _WIN32
 	HANDLE hFindFile;
@@ -1237,7 +1216,7 @@ int SearchSongsFromPath(CSTR root, sqlite3 *sql, CSTR path) {
 #endif // _WIN32
 }
 
-//449780 TODO:arrange duplicated code
+// TODO:arrange duplicated code
 int ReloadSongsByQuery(CSTR query, sqlite3 *sql, CONFIG_JUKEBOX *jb) {
 
 	sqlite3_stmt *pStmt;
@@ -1342,7 +1321,6 @@ int ReloadSongsByQuery(CSTR query, sqlite3 *sql, CONFIG_JUKEBOX *jb) {
 	return 2;
 }
 
-//44a140
 int CMP_SongDataByDifficulty(const void *p1, const void *p2) {
 	SONGDATA* s1 = (SONGDATA*)p1;
 	SONGDATA* s2 = (SONGDATA*)p2;
@@ -1365,7 +1343,6 @@ int CMP_SongDataByDifficulty(const void *p1, const void *p2) {
 	return 0;
 }
 
-//44a1a0
 int CMP_SongDataByClear(const void *p1, const void *p2) {
 	SONGDATA* s1 = (SONGDATA*)p1;
 	SONGDATA* s2 = (SONGDATA*)p2;
@@ -1379,7 +1356,6 @@ int CMP_SongDataByClear(const void *p1, const void *p2) {
 	return CMP_SongDataByDifficulty(p1, p2);
 }
 
-//44a1e0
 int SearchCourseFromDB(sqlite3 *sql, SONGSELECT *ss, int keys, int multistagemode) {
 
 	sqlite3_stmt *pStmt;
@@ -1572,7 +1548,6 @@ int SearchCourseFromDB(sqlite3 *sql, SONGSELECT *ss, int keys, int multistagemod
 	return ss->prevListCount;
 }
 
-//44ac10
 int LoadBmsListFromDB(CSTR query, sqlite3 *sql, SONGSELECT *ss, int *difficulty, int *key, int sort, int count) {
 	
 	sqlite3_stmt *stmt;
@@ -1650,7 +1625,6 @@ int LoadBmsListFromDB(CSTR query, sqlite3 *sql, SONGSELECT *ss, int *difficulty,
 	return -1;
 }
 
-//44b910
 int WriteRandomCourse(sqlite3 *sql, COURSESELECT *course, SONGSELECT *ss, CONFIG_COURSE cfg, int key) {
 	
 	sqlite3_stmt *pStmt;
@@ -1740,7 +1714,7 @@ int WriteRandomCourse(sqlite3 *sql, COURSESELECT *course, SONGSELECT *ss, CONFIG
 }
 
 
-//44beb0 //TOFIX: unneccessary codes
+// TOFIX: unneccessary codes
 int GetFolderDataFromPath(CSTR path, sqlite3 *sql) {
 #ifdef _WIN32
 	HANDLE hFindFile;
@@ -1817,7 +1791,7 @@ int GetFolderDataFromPath(CSTR path, sqlite3 *sql) {
 #endif // _WIN32
 }
 
-//44c610 //TODO : rename variables
+// TODO : rename variables
 int LoadFilteredBmsListFromDB(CSTR query, sqlite3 *sql, SONGSELECT *ss, int *diffFilter, int *mode, uint sort, int rivalID, char flag) {
 
 	sqlite3_stmt *pStmt;
@@ -2471,7 +2445,7 @@ int LoadFilteredBmsListFromDB(CSTR query, sqlite3 *sql, SONGSELECT *ss, int *dif
 	return ss->prevListCount;
 }
 
-//44e690 LoadLR2CustomFolder
+// LoadLR2CustomFolder
 int LoadLR2CustomFolder(sqlite3 *sql, CONFIG_JUKEBOX *jb, CSTR scoreDBpath, char flag_starter, char flag_direct) {
 
 	sqlite3 *scoreDB, *tagDB;
@@ -2657,7 +2631,6 @@ int LoadLR2CustomFolder(sqlite3 *sql, CONFIG_JUKEBOX *jb, CSTR scoreDBpath, char
 	return 1;
 }
 
-//4aa000
 int InitBMSMETA(BMSMETA *meta) {
 	meta->title.fillzero();
 	meta->subtitle.fillzero();
@@ -2687,7 +2660,6 @@ int InitBMSMETA(BMSMETA *meta) {
 	return 1;
 }
 
-//4aa0b0
 int ParseBMSMETA(BMSMETA *meta, CSTR filepath, char flag) {
 	FILE *pFile;
 	float notes;

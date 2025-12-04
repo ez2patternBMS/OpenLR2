@@ -13,7 +13,6 @@ struct glb_dbgame {
 	struct game * pGame;
 };
 
-//401be0
 int SetTarget(game *g) {
 
 	if (g->net.rankingData.showRanking == 1 && g->procSelecter == 2) {
@@ -83,7 +82,6 @@ static void ThreadProc_LoadBanner(game* g) {
 	}
 }
 
-//4021a0
 int SetBmsFilter(game *g, sqlite3 */*sql*/){
 
 	g->sSelect.searchType = 0;
@@ -104,7 +102,6 @@ int SetBmsFilter(game *g, sqlite3 */*sql*/){
 }
 
 
-//4042f0
 int Print_ManiacOptions(game *g) {
 	int* pOpVal;
 
@@ -554,7 +551,6 @@ int Print_ManiacOptions(game *g) {
 	return 1;
 }
 
-//404f80
 int GetSongCursor(game *g) {
 	if (g->cmd_directplay) return 0;
 	
@@ -564,7 +560,6 @@ int GetSongCursor(game *g) {
 		% g->sSelect.bmsListCount;
 }
 
-//4055d0
 int LoadFontForSongs(game *gs, char flag) {
 	if (flag == 0) {
 		for (int i = 0; i < gs->skstruct.num_of_ImageFont; i++) {
@@ -605,7 +600,6 @@ int LoadFontForSongs(game *gs, char flag) {
 
 
 
-//40b320
 int ShowReadmes(game *g) {
 #ifdef _WIN32
 	CSTR search;
@@ -694,7 +688,6 @@ int ShowReadmes(game *g) {
 #endif // _WIN32
 }
 
-//40b720
 int ShowReadme(game *g, CSTR path) {
 	
 	FILE *pFile;
@@ -742,7 +735,6 @@ int ShowReadme(game *g, CSTR path) {
 	return 1;
 }
 
-//40b910
 CSTR GetMissonString(int missionLevel, int line) {
 	switch (missionLevel) {
 		case 1:
@@ -993,7 +985,6 @@ CSTR GetMissonString(int missionLevel, int line) {
 	}
 }
 
-//412ae0
 int SetObjectStrings_SongSelect(game *g) {
 
 	SetObjectString(60, g->txtStruct.option_str[0].str[g->config.select.key], g->txtStruct.objectStr);
@@ -1134,7 +1125,6 @@ int SetObjectStrings_SongSelect(game *g) {
 }
 
 
-//413f70
 int CmdSearch(game *g, CSTR *cmd, sqlite3 *sql) {
 
 	cmd->lower();
@@ -1294,7 +1284,6 @@ int CmdSearch(game *g, CSTR *cmd, sqlite3 *sql) {
 }
 
 
-//417080
 int SetPlayOption(game *g, sqlite3 *sql) {
 
 	if (!(g->KeyInput.p1_buttonInput[2] == 2 || g->KeyInput.p2_buttonInput[2] == 2)) g->sSelect.fExtraCmdDone = 0;
@@ -1457,7 +1446,6 @@ int SetPlayOption(game *g, sqlite3 *sql) {
 	return 1;
 }
 
-//417ce0
 void CheckNewSong(glb_dbgame *glb) {
 	CONFIG_JUKEBOX jb;
 	sqlite3_stmt *pStmt;
@@ -1687,7 +1675,6 @@ static void ThreadProc_LoadPreview(game *g) {
 }
 
 
-//41cb80
 int ProcS_Select(game *g) {
 	
 	if (g->sSelect.cur_song >= g->sSelect.bmsListCount) g->sSelect.cur_song = 0;
@@ -2432,7 +2419,7 @@ void SubProcI_Select(game *g, sqlite3 *sql) {
 	}
 }
 
-//4281a0 ProcI_Select
+// ProcI_Select
 int ProcI_Select(game *g, sqlite3 *sql) {
 
 	int l66c = g->sSelect.listSelectedBarFromScreenTop;
@@ -2685,7 +2672,6 @@ int ProcI_Select(game *g, sqlite3 *sql) {
 
 
 
-//41e330
 int CreateRandomCourse(game *g, sqlite3 *sql, char playing) {
 
 	if (g->config.course.maxlevel > 0 && g->config.course.minlevel > 0 && g->config.course.minlevel > g->config.course.maxlevel) {
@@ -2754,8 +2740,7 @@ int CreateRandomCourse(game *g, sqlite3 *sql, char playing) {
 	return 1;
 }
 
-//41e4f0 COURSESELECT_AUTOCOPY
-//41e630
+// COURSESELECT_AUTOCOPY
 int InitSelectBySearchResult(game *g, sqlite3 *sql) {
 
 	if (g->sSelect.searchFocused == 1) {
@@ -3002,7 +2987,6 @@ int InitSelectBySearchResult(game *g, sqlite3 *sql) {
 	return 1;
 }
 
-//444600
 int SwapBmsList(SONGSELECT *ss){
 	int tmp;
 	SONGDATA *tmplist;
@@ -3029,7 +3013,6 @@ int SwapBmsList(SONGSELECT *ss){
 	return 1;
 }
 
-//444650
 int InitBmsList(SONGSELECT *ss) {
 	// FIXME: 1) move to SONGSELECT constructor 2) move to std::vector. This leaks memory.
 	ss->bmsListSize = 1000;

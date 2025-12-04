@@ -8,14 +8,6 @@
 #include <sys/stat.h>
 #endif // _WIN32
 
-//437210
-//437260
-//4372c0
-//437300
-//437a40
-//437bf0
-//437c90
-//437cf0
 int makeFileHash(LPCSTR filepath, LPCSTR oBuf) {
 	FILE* pFile;
 	pFile = fopen(filepath, "rb");
@@ -84,7 +76,6 @@ time_t GetFileUnixtime(CSTR str) {
 #endif
 }
 
-//438040
 CSTR GetRandomFileOnDir(CSTR path, char fOnlyName) {
 #ifdef _WIN32
 	CSTR oBuf;
@@ -147,7 +138,6 @@ CSTR GetRandomFileOnDir(CSTR path, char fOnlyName) {
 #endif // _WIN32
 }
 
-//438540
 bool CheckStringHead(CSTR *bigS, CSTR *head){
 	if (bigS->length() <= head->length()) {
 		return false;
@@ -155,7 +145,6 @@ bool CheckStringHead(CSTR *bigS, CSTR *head){
 	return (bigS->left(head->length()).icmp(head) == 0);
 }
 
-//4385f0
 bool GetStringBodyStr(CSTR *str, CSTR head, CSTR *oBuf){
 	if (CheckStringHead(str, &head)) {
 		oBuf->assign(str->right(str->length() - head.length() - 1) );
@@ -164,7 +153,6 @@ bool GetStringBodyStr(CSTR *str, CSTR head, CSTR *oBuf){
 	return false;
 }
 
-//4386c0
 bool GetStringBodyInt(CSTR *str, CSTR haed, int *oBuf) {
 	if (CheckStringHead(str, &haed)) {
 		*oBuf = atol(str->right(str->length() - haed.length() - 1));
@@ -173,7 +161,6 @@ bool GetStringBodyInt(CSTR *str, CSTR haed, int *oBuf) {
 	return false;
 }
 
-//4387a0
 bool GetDifficultyFromToken(CSTR str, CSTR *oLeft, CSTR *oRight, CSTR tokenL, CSTR tokenR, int *oBuf) {
 	
 	int posL = -1;
@@ -223,7 +210,6 @@ bool GetDifficultyFromToken(CSTR str, CSTR *oLeft, CSTR *oRight, CSTR tokenL, CS
 	return 1;
 }
 
-//438c80
 bool GetDifficulty(CSTR *str, CSTR head, CSTR *oLeft, CSTR *oRight, int *pDifficulty) {
 	
 	if (!CheckStringHead(str, &head)) return false;
@@ -253,7 +239,6 @@ bool GetDifficulty(CSTR *str, CSTR head, CSTR *oLeft, CSTR *oRight, int *pDiffic
 	return true;
 }
 
-//439150
 bool IsBmsFile(CSTR str) {
 	if (str.length() > 4) {
 		str.lastCut(4);
@@ -266,7 +251,6 @@ bool IsBmsFile(CSTR str) {
 	return false;
 }
 
-//439230
 bool IsMediaFile(CSTR str) {
 	if (str.length() > 4) {
 		str.lastCut(4);
@@ -278,7 +262,6 @@ bool IsMediaFile(CSTR str) {
 	return false;
 }
 
-//439300
 bool IsSndFile(CSTR str) {
 	if (str.length() > 4) {
 		str.lastCut(4);
@@ -289,7 +272,6 @@ bool IsSndFile(CSTR str) {
 	return false;
 }
 
-//4393b0
 bool IsAviFile(CSTR str) {
 	if (str.length() > 4) {
 		str.lastCut(4);
@@ -299,7 +281,6 @@ bool IsAviFile(CSTR str) {
 	return false;
 }
 
-//439450
 bool IsLR2Folder(CSTR str) {
 	if (str.length() > 10) {
 		str.lastCut(10);
@@ -354,7 +335,6 @@ int IsFileChanged(unsigned int oldUnixtime, CSTR filepath, int *oNewtime) {
 	return 0;
 }
 
-//439820
 int DealWhiteSpace(CSTR *str) {
 	bool bFlag = false;
 	do{
@@ -378,7 +358,7 @@ int DealWhiteSpace(CSTR *str) {
 	}
 }
 
-//439a30 SplitCSV
+// SplitCSV
 int SplitCSV(CSTR csvStr, CSVbuf *oBuf, const char */*splitter*/) {
 	int pos,i;
 	bool bEnd = false;
@@ -439,7 +419,6 @@ int SplitCSV(CSTR csvStr, CSVbuf *oBuf, const char */*splitter*/) {
 	} while (true);
 }
 
-//439dc0
 int Base36ToInt(char ch1, char ch2) {
 	int ret = 0;
 
@@ -455,7 +434,6 @@ int Base36ToInt(char ch1, char ch2) {
 	return ret;
 }
 
-//439e40
 int HEXcharToInt(char ch1, char ch2) {
 	int ret = 0;
 
@@ -471,21 +449,18 @@ int HEXcharToInt(char ch1, char ch2) {
 	return ret;
 }
 
-//439ec0
 int RoundUp(double val) {
 	int ret = val;
 	if (ret != val) ret++; //TEST : if not work properly, use ceil from math.h
 	return ret;
 }
 
-//439ef0
 CSTR AssignCRC32(CSTR str) {
 	CSTR tmp;
 	cstrSprintf(&tmp, "%x", str.CRC32());
 	return tmp;
 }
 
-//439fa0
 CSTR AutomationFactory(){
 	switch (GetRand(15)) {
 		case 0:
@@ -525,7 +500,6 @@ CSTR AutomationFactory(){
 	}
 }
 
-//43a190
 int CountDigit(int num){
 	uint ret;
 
@@ -540,7 +514,6 @@ int CountDigit(int num){
 	return ret;
 }
 
-//43a1d0
 int GetDigitNum(int num, int pos) {
 	if ((0 < num) && (0 < pos)) {
 		if (1 < pos) {
@@ -555,7 +528,6 @@ int GetDigitNum(int num, int pos) {
 	return 0;
 }
 
-//43a230
 int FindAltImage(CSTR filename, CSTR dir, CSTR *oBuf) {
 
 	CSTR path;
@@ -624,7 +596,6 @@ int FindAltImage(CSTR filename, CSTR dir, CSTR *oBuf) {
 	return 0;
 }
 
-//43a5f0
 int FindAltSound(CSTR filename, CSTR dir, CSTR *oBuf) {
 
 	CSTR path;
@@ -718,7 +689,6 @@ int FindAltSound(CSTR filename, CSTR dir, CSTR *oBuf) {
 	return 0;
 }
 
-//43a900
 CSTR GetRandomFile(CSTR path, char fOnlyName) {
 	CSTR oBuf;
 	int count;
@@ -763,7 +733,6 @@ CSTR GetRandomFile(CSTR path, char fOnlyName) {
 #endif // _WIN32
 }
 
-//43abe0
 CSTR GetRandomFileNoError(CSTR path, CSTR /*dir*/) {
 	// TODO: 'dir' suspiciously not used
 	CSTR filepath = GetRandomFile(path, 0);
@@ -771,7 +740,7 @@ CSTR GetRandomFileNoError(CSTR path, CSTR /*dir*/) {
 	return path;
 }
 
-//443550 _ need simplification
+// _ need simplification
 void MD5byte(char **iStr, uint len, char *oByte){
 #ifdef _MSC_VER
 #pragma warning (push)
@@ -970,7 +939,6 @@ void MD5byte(char **iStr, uint len, char *oByte){
 #endif
 }
 
-//443ff0
 char md5str[33];
 char* MD5str(char *iStr) {
 	char* buf;

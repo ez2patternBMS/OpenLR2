@@ -1,7 +1,6 @@
 #include "Scene10_Po4decide.h"
 #include "LR2.h"
 
-//40d400
 int ProcI_PO4Decide(game *g) {
 
 	if (GetTimeLapse(0, &g->timer1) > g->skstruct.scenetime && g->procPhase == 1) {

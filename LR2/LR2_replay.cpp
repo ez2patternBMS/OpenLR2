@@ -5,7 +5,7 @@
 #include <filesystem>
 #include <system_error>
 
-//4c03c0 //TODO suspection about usage of cstrsprintf
+// TODO suspection about usage of cstrsprintf
 int MoveReplayFile(CSTR songMD5, CSTR localID) {
 	if (songMD5.length() > 36) {
 		songMD5 = MD5str(songMD5);
@@ -44,7 +44,6 @@ int MoveReplayFile(CSTR songMD5, CSTR localID) {
 	return (stage != 0);
 }
 
-//4c05e0
 int LoadReplayFileCourse(REPLAY *rp, CSTR songMD5, int stage, CSTR localID){
 	
 	int fHandle;
@@ -82,7 +81,6 @@ int LoadReplayFileCourse(REPLAY *rp, CSTR songMD5, int stage, CSTR localID){
 
 }
 
-//4c07e0
 int LoadReplayFile(REPLAY *rp, CSTR songMD5, CSTR localID) {
 
 	int fHandle;
@@ -119,7 +117,6 @@ int LoadReplayFile(REPLAY *rp, CSTR songMD5, CSTR localID) {
 	return 1;
 }
 
-//4c09e0
 int SaveReplay(REPLAY *rp, CSTR songMD5, CSTR localID) {
 
 	FILE *pFile;
@@ -143,7 +140,6 @@ int SaveReplay(REPLAY *rp, CSTR songMD5, CSTR localID) {
 	return 1;
 }
 
-//4c0b40
 int AllocReplayBuffer(REPLAY *rp){
 
 	rp->max = 10000;
@@ -160,7 +156,6 @@ int AllocReplayBuffer(REPLAY *rp){
 }
 
 
-//4c0bb0
 int ReleaseReplayBuffer(REPLAY *rp){
 	if (rp->max > 0 && rp->data != NULL) {
 		free(rp->data);
@@ -173,7 +168,6 @@ int ReleaseReplayBuffer(REPLAY *rp){
 }
 
 
-//4c0c00
 int AddReplayData(REPLAY *rp, int timing, uchar op, short value){
 
 	if (rp->max < 1) {
@@ -191,7 +185,6 @@ int AddReplayData(REPLAY *rp, int timing, uchar op, short value){
 	return 1;
 }
 
-//4c0c70
 int AddReplayDataHeader(CONFIG_PLAY *cfg, REPLAY *rp, AUDIO *snd, gameplay *gp){
 	AddReplayData(rp, 0, 0x64, static_cast<short>(cfg->hiSpeed[0]));
 	AddReplayData(rp, 0, 0x96, static_cast<short>(cfg->hiSpeed[1]));
@@ -249,7 +242,6 @@ int AddReplayDataHeader(CONFIG_PLAY *cfg, REPLAY *rp, AUDIO *snd, gameplay *gp){
 }
 
 
-//4c1050
 int InputToReplay(REPLAY *rp, inputStructure *is, int timing, int scratchSide) {
 
 	if (scratchSide == 0) {
@@ -313,7 +305,6 @@ int OverwriteReplayData(REPLAY* rp, int timing, uchar op, short value) {
 	return 1;
 }
 
-//4c1490
 int REPLAY_ApplyJudgeNote(gameplay *gp, Timer *T, game *g, uint judge, int player, int dp) {
 
 	if (judge > 5) return 0;
@@ -443,7 +434,6 @@ int REPLAY_ApplyJudgeNote(gameplay *gp, Timer *T, game *g, uint judge, int playe
 }
 
 
-//4c18b0
 int REPLAY_ApplyJudgeMine(gameplay *gp, Timer *T, game *g, int dmg, int player, int dp) {
 
 	gp->player[player].judgecount[1]++;
@@ -485,7 +475,6 @@ int REPLAY_ApplyJudgeMine(gameplay *gp, Timer *T, game *g, int dmg, int player, 
 	return 1;
 }
 
-//4c1a00
 int ReplayDataToInput(ReplayData *data, game *g, AUDIO *aud, gameplay *gp, inputStructure *is, Timer *T) {
 
 	if (data->op < 40) {
@@ -738,7 +727,6 @@ int ReplayDataToInput(ReplayData *data, game *g, AUDIO *aud, gameplay *gp, input
 	return 1;
 }
 
-//4c2280
 int SetReplayConfig(REPLAY *re, game *g, AUDIO *aud, gameplay *gp, inputStructure *in, Timer *T) {
 	
 	memcpy(&re->cfg, &g->config.play, sizeof(CONFIG_PLAY));
@@ -752,7 +740,6 @@ int SetReplayConfig(REPLAY *re, game *g, AUDIO *aud, gameplay *gp, inputStructur
 	return 1;
 }
 
-//4c2310
 int ReplayToInput(REPLAY *rp, game *g, AUDIO *aud, gameplay *gp, inputStructure *is, Timer *T){
 	if (rp->count < rp->max) {
 		while (rp->count < rp->max && rp->data[rp->count].timing < GetTimeLapse(41, T)) {

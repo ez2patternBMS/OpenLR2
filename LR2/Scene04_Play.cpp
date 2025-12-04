@@ -42,7 +42,6 @@ static int PerformGAS(gameplay& gameplay, int playerIdx, CONFIG_PLAY& cfg) {
 	return 3;
 }
 
-//405Fb0
 int ApplyJudgeNote(int judge, game *g, int _player, int lane, Timer *T, char isReplay) {
 
 	if (g->gameplay.replay.status == 2) return 0; //playing replay
@@ -221,7 +220,6 @@ int ApplyJudgeNote(int judge, game *g, int _player, int lane, Timer *T, char isR
 	return 1;
 }
 
-//406530
 int ApplyJudgeMine(int judge, game *g, int _player, int lane, int damage) {
 
 	if (g->gameplay.replay.status == 2) return 0; //playing replay
@@ -280,7 +278,6 @@ int ApplyJudgeMine(int judge, game *g, int _player, int lane, int damage) {
 }
 
 
-//406710
 int DrawNotes(game *g, skstruct *sk, Timer *T, CONFIG_PLAY *cfg) {
 	//TODO : refactor, test maniac mode
 	DSTdraw tDdraw;
@@ -660,7 +657,6 @@ int DrawNotes(game *g, skstruct *sk, Timer *T, CONFIG_PLAY *cfg) {
 
 
 
-//408490
 int DrawJudgeCombo(game *g, skstruct *sk, Timer *T, CONFIG_PLAY *cfg){
 	int judge, combo;
 
@@ -684,7 +680,6 @@ int DrawJudgeCombo(game *g, skstruct *sk, Timer *T, CONFIG_PLAY *cfg){
 	return 1;
 }
 
-//408580
 int DrawHPgauge(game *g){
 	char survival;
 
@@ -704,12 +699,10 @@ int DrawHPgauge(game *g){
 
 
 
-//418820
 int JudgeToScore(int judge, game *g, int player, int lane, char isReplay) {
 	return ApplyJudgeNote(judge, g, player, lane, &g->timer1, isReplay);
 }
 
-//418850
 int ProcSinglenote(game *g, int lane, int keypress, int timing, int player) {
 	NoteStruct &note = g->gameplay.bmsobj_note[lane].notes[g->gameplay.bmsobj_note[lane].note_count];
 	EXTENDEDPLAYERSTATS& extendedStats = g->gameplay.player[player].extendedStats;
@@ -883,7 +876,6 @@ int ProcSinglenote(game *g, int lane, int keypress, int timing, int player) {
 	}
 }
 
-//418e40
 int ProcLongnote(game *g, int lane, int keypress, int timing, int player) {
 	
 	NoteStruct &note = g->gameplay.bmsobj_note[lane].notes[g->gameplay.bmsobj_note[lane].note_count];
@@ -1080,7 +1072,6 @@ int ProcLongnote(game *g, int lane, int keypress, int timing, int player) {
 	return 1;
 }
 
-//419320
 int ProcNoteOnTiming(game *g, int lane, int keypress, int timing, int player) {
 
 	NoteStruct &note = g->gameplay.bmsobj_note[lane].notes[g->gameplay.bmsobj_note[lane].note_count];
@@ -1120,7 +1111,6 @@ static void QuickRestart(game& game, bool newRandom) {
 	}
 }
 
-//419650
 int ProcI_Play(game *g) {
 	int timeLimit;
 	double gameTime;
@@ -1182,7 +1172,6 @@ int ProcI_Play(game *g) {
 }
 
 
-//42b610
 int ProcGame(game *g) {
 
 	double oldt142;
@@ -1678,7 +1667,6 @@ int ProcGame(game *g) {
 	return 1;
 }
 
-//42cb50
 void ProcGameThread(game *g) {
 
 	g->gameplay.flag_threadExist = 1;
@@ -1796,7 +1784,6 @@ void ProcGameThread(game *g) {
 	return;
 }
 
-//42cf70
 int ProcS_Play(game *g, sqlite3* sql) {
 
 	int iTemp;

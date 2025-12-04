@@ -21,20 +21,17 @@ static void timeEndPeriod(int /*unused*/) {}
 
 #endif // _WIN32
 
-//4b6710
 int SetManualTimer(Timer *T, double newTime){
 	manualTimer = newTime;
 	T->movieTimer = newTime;
 	return 1;
 }
 
-//4b6730
 int SetHPtimerFlag(char val){
 	flagHighPerformanceTimer = val;
 	return 1;
 }
 
-//4b6740
 int SetManualTimerFlag(Timer *T, char flag){
 	T->flagMovieTimer = flag;
 	manualTimer = 0.0;
@@ -42,19 +39,16 @@ int SetManualTimerFlag(Timer *T, char flag){
 	return 1;
 }
 
-//4b6770
 int NONE_004b6770(void){
 	return 1;
 }
 
-//4b6780
 int MovieTimer(Timer *T){
 	T->movieTimer += (T->movieFramerate > 0.0)? (1000.0 / T->movieFramerate) : 33.33333333333334;
 	manualTimer = T->movieTimer;
 	return 1;
 }
 
-//4b67d0
 int ResetTimeLapse(int timerID, Timer *T){
 	T->clock[timerID] = -1.0;
 	if (timerID == 140) {
@@ -64,7 +58,7 @@ int ResetTimeLapse(int timerID, Timer *T){
 	return 1;
 }
 
-//4b6800 //logic shortened
+// logic shortened
 double GetTime(void){
 #ifdef _WIN32
 	LARGE_INTEGER pfc_time;
@@ -81,7 +75,6 @@ double GetTime(void){
 	return (double)(time & 0x7fffffff);
 }
 
-//4b6890
 double GetTimeWrap(void) {
 	if (flagManualTimer) {
 		return manualTimer;
@@ -92,7 +85,6 @@ double GetTimeWrap(void) {
 	return ret;
 }
 
-//4b68d0
 int InitTimer(Timer *T) {
 	//GetTimeWrap() call seems replaced by compiler
 	T->clock[0] = -1.0;
@@ -112,7 +104,6 @@ int InitTimer(Timer *T) {
 	return 1;
 }
 
-//4b6a10
 int CalcFPS(Timer *t){
 	//GetTimeWrap() call seems replaced by compiler
 	t->FPScount = t->FPScount + 1.0;
@@ -124,7 +115,6 @@ int CalcFPS(Timer *t){
 	return 1;
 }
 
-//4b6b10
 double GetTimeLapse(uint timerID, Timer *T) {
 	if (500 < timerID) return -1.0;
 	if (timerID == 140) return T->Rhythm;
@@ -137,7 +127,6 @@ double GetTimeLapse(uint timerID, Timer *T) {
 	return GetTimeWrap() - T->clock[timerID];
 }
 
-//4b6b80
 int SetTimeLapse(int timerID, Timer *T){
 	//GetTimeWrap() call seems replaced by compiler
 	if (T->flagMovieTimer && (0.0 < T->movieFramerate)) {

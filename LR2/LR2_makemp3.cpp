@@ -11,7 +11,6 @@ static void MessageBoxA(const char*,const char* title,const char*desc,const char
 }
 #endif // _WIN32
 
-//40d680
 int RunMP3Encoder(ConfigStruct *cfg, CSTR wavPath, CSTR mp3Path, char deleteWav, char movie) {
 	if (cfg->tools.mp3enc_body.canOpenFile() == 0) {
 		MessageBoxA(NULL, "MP3エンコーダーが見つかりません。\nコンフィグプログラムのJUKEBOX→詳細設定で設定して下さい。", "エラー", 0);
@@ -53,7 +52,6 @@ int RunMP3Encoder(ConfigStruct *cfg, CSTR wavPath, CSTR mp3Path, char deleteWav,
 #endif // _WIN32
 }
 
-//40d840
 int Proc_Auto2avi(game *g, CSTR /*directory*/, CSTR filename) {
 	printfDx("BMSを読み込み中です。しばらくお待ち下さい。");
 	ScreenFlip();
@@ -119,7 +117,6 @@ int Proc_Auto2avi(game *g, CSTR /*directory*/, CSTR filename) {
 	return 1;
 }
 
-//40dc30
 int RecordBmsSound(game *g, CSTR oPath) {
 	int startTime = g->rec.GetCurTime();
 	ErrorLogFmtAdd("音声の記録を開始します　曲開始時間+%dです。\n", startTime);

@@ -13,16 +13,21 @@
 #include <cmath>
 #include <array>
 #include <cstdint>
-#include <codecvt>
 
 using std::uintptr_t;
 
-#ifndef _WIN32
+#ifdef _WIN32
+
+#include <codecvt>
+
+#else
 
 #include <chrono>
 
 #define LOWORD(l) ((WORD)(((DWORD_PTR)(l)) & 0xffff))
 #define HIWORD(l) ((WORD)((((DWORD_PTR)(l)) >> 16) & 0xffff))
+
+enum { CP_ACP };
 
 static DWORD timeGetTime()
 {
@@ -43,7 +48,6 @@ static DWORD timeGetTime()
 //https://www.fmod.com/docs/2.02/api/welcome-revision-history.html
 //http://upstream.rosalinux.ru/changelogs/fmod/44418/changelog.html
 
-//4b7b80
 const char* GetFMODerror(int errCode){
 	switch (errCode) {
 	case 0:
@@ -235,7 +239,6 @@ const char* GetFMODerror(int errCode){
 	}
 }
 
-//4b7f30
 int IsAltSoundExist(CSTR *filepath){
 	// TODO: .flac, like in FindAltSound
 	const char *str;
@@ -258,7 +261,6 @@ int IsAltSoundExist(CSTR *filepath){
 }
 
 
-//4b8040
 int ReleaseSound(AUDIO *aud, SOUNDDATA *sound){
 	CSTR &filepath = sound->filename;
 
@@ -284,9 +286,8 @@ int ReleaseSound(AUDIO *aud, SOUNDDATA *sound){
 	return 0;
 }
 
-//4b80c0 COPY
+// COPY
 
-//4b8140
 int StopSound(AUDIO *aud, SOUNDDATA *sound){
 	FMOD_SOUND *tmpSnd;
 
@@ -303,7 +304,6 @@ int StopSound(AUDIO *aud, SOUNDDATA *sound){
 	return 0;
 }
 
-//4b8190
 int SetSoundVolume(AUDIO *aud, SOUNDDATA *sound, float volume){
 	FMOD_SOUND *tmpSnd;
 
@@ -320,7 +320,6 @@ int SetSoundVolume(AUDIO *aud, SOUNDDATA *sound, float volume){
 	return 0;
 }
 
-//4b8200
 int SoundGetCurrentTime(AUDIO *aud, SOUNDDATA *sound){
 	FMOD_SOUND *tmpSnd;
 	uint pos;
@@ -339,7 +338,7 @@ int SoundGetCurrentTime(AUDIO *aud, SOUNDDATA *sound){
 	return -1;
 }
 
-//4b8260 endsound
+// endsound
 int EndSound(AUDIO *aud){
 
 	if (aud->is_fmod_disabled != 1) {
@@ -359,7 +358,6 @@ int EndSound(AUDIO *aud){
 	return 0;
 }
 
-//4b82f0
 int SOUND_dxlibFx(SOUNDDATA sound, int v_master, int /*v_chn*/, int pitch, double freq) {
 
 	double dMul;
@@ -382,7 +380,6 @@ int SOUND_dxlibFx(SOUNDDATA sound, int v_master, int /*v_chn*/, int pitch, doubl
 	return 0;
 }
 
-//4b83d0
 int SetFadeOut(AUDIO *aud, int fadetime){
 
 	if (fadetime <= 0) {
@@ -394,7 +391,6 @@ int SetFadeOut(AUDIO *aud, int fadetime){
 	return 1;
 }
 
-//4b8410
 int SetFadePreview(AUDIO *aud, int fadetime, char quiet){
 
 	if (fadetime <= 0) {
@@ -408,7 +404,6 @@ int SetFadePreview(AUDIO *aud, int fadetime, char quiet){
 	return 1;
 }
 
-//4b8480
 char sndBufUnk;
 int GetSoundBuffer(AUDIO *aud, double runtime, int volume) {
 
@@ -440,7 +435,7 @@ int GetSoundBuffer(AUDIO *aud, double runtime, int volume) {
 	return 1;
 }
 
-//4b85b0 debug test needed
+// debug test needed
 void WriteSoundFile(AUDIO *aud, CSTR filename, uint size) {
 	
 	FILE* _File;
@@ -492,7 +487,6 @@ void WriteSoundFile(AUDIO *aud, CSTR filename, uint size) {
 	ErrorLogFmtAdd("データを保存しました。\n");
 }
 
-//4b8770
 int SOUND_normalize(AUDIO */*aud*/, SOUNDDATA *sound){
 	uint len;
 	int bitdepth;
@@ -539,7 +533,7 @@ int SOUND_normalize(AUDIO */*aud*/, SOUNDDATA *sound){
 	return 1;
 }
 
-//4b88b0 //TODO: need test
+// TODO: need test
 int RecordSound(AUDIO *aud, SOUNDDATA *sound, double time, double len) {
 
 	if (sound->load && len >= 0.0) {
@@ -585,7 +579,6 @@ int RecordSound(AUDIO *aud, SOUNDDATA *sound, double time, double len) {
 	return 0;
 }
 
-//4b8ad0
 int RecordFadeout(AUDIO *aud, double from, double length) {
 
 	if (length <= 0.0) return 0;
@@ -605,15 +598,21 @@ int RecordFadeout(AUDIO *aud, double from, double length) {
 }
 
 static std::string s2utf8(const std::string_view str, unsigned int codepage) {
-	int size_needed = MultiByteToWideChar(codepage, 0, str.data(), (int)str.size(), NULL, 0);
-	std::wstring wstr(size_needed, 0);
-	MultiByteToWideChar(codepage, 0, str.data(), (int)str.size(), wstr.data(), size_needed);
+#ifdef _WIN32
+	int size_needed = MultiByteToWideChar(codepage, 0, str.data(), static_cast<int>(str.size()), nullptr, 0);
+	auto wstr = std::make_unique_for_overwrite<wchar_t[]>(size_needed);
+	MultiByteToWideChar(codepage, 0, str.data(), static_cast<int>(str.size()), wstr.get(), size_needed);
 	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
-	return converter.to_bytes(wstr);
+	return converter.to_bytes(wstr.get(), wstr.get() + size_needed);
+#else
+	if (codepage == CP_ACP) { // Already UTF-8
+		return std::string{str};
+	}
+	return std::string{str}; // unused currently :P
+#endif // _WIN32
 }
 
-//4b8bb0
-int LoadSound(AUDIO *aud, SOUNDDATA *sound, CSTR filepath, int loop, int disableDSP, int previewFlag) {
+int LoadSound(AUDIO *aud, SOUNDDATA *sound, CSTR filepath, int loop, int /*disableDSP*/, int previewFlag) {
 
 	CSTR path;
 	path.assign(&filepath);
@@ -636,49 +635,16 @@ int LoadSound(AUDIO *aud, SOUNDDATA *sound, CSTR filepath, int loop, int disable
 	sound->streaming = previewFlag;
 
 	if (aud->is_fmod_disabled != 1) {
-		FMOD_MODE mode = 0;
 		FMOD_RESULT result;
 		if (aud->cmd_mediaOut) {
-			mode = FMOD_ACCURATETIME | FMOD_LOOP_OFF;
+			FMOD_MODE mode = FMOD_ACCURATETIME | FMOD_LOOP_OFF;
 			result = FMOD_System_CreateSound(aud->fmodSys, filepath, mode, NULL, &sound->fmod_sound); 
 			SOUND_normalize(aud, sound);
 		}
-		else { //AFTER RELEASE: It can be shortened.
-			if (previewFlag == 0) {
-				if (loop == 0) {
-					if (disableDSP == 0) {
-						mode = FMOD_LOOP_OFF;
-					}
-					else {
-						mode = FMOD_LOOP_OFF;
-					}
-				}
-				else {
-					if (disableDSP == 0) {
-						mode = FMOD_LOOP_NORMAL;
-					}
-					else {
-						mode = FMOD_LOOP_NORMAL;
-					}
-				}
-			}
-			else {
-				if (loop == 0) {
-					if (disableDSP == 0) {
-						mode = FMOD_CREATESTREAM | FMOD_LOOP_OFF;
-					}
-					else {
-						mode = FMOD_CREATESTREAM | FMOD_LOOP_OFF;
-					}
-				}
-				else {
-					if (disableDSP == 0) {
-						mode = FMOD_CREATESTREAM | FMOD_LOOP_NORMAL;
-					}
-					else {
-						mode = FMOD_CREATESTREAM | FMOD_LOOP_NORMAL;
-					}
-				}
+		else {
+			FMOD_MODE mode = loop == 0 ? FMOD_LOOP_OFF : FMOD_LOOP_NORMAL;
+			if (previewFlag != 0) {
+				mode |= FMOD_CREATESTREAM;
 			}
 			result = FMOD_System_CreateSound(aud->fmodSys, s2utf8(filepath.body, CP_ACP).c_str(), mode, NULL, &sound->fmod_sound);
 		}
@@ -717,7 +683,6 @@ int LoadSound(AUDIO *aud, SOUNDDATA *sound, CSTR filepath, int loop, int disable
 	return 1;
 }
 
-//4b8f20
 int PlaySound(AUDIO *aud, SOUNDDATA *sound, FMOD_CHANNELGROUP *channelgroup, int stage) {
 
 	if (aud->cmd_mediaOut == false) {
@@ -762,7 +727,6 @@ int PlaySound(AUDIO *aud, SOUNDDATA *sound, FMOD_CHANNELGROUP *channelgroup, int
 }
 
 
-//4b9070
 int SOUND_FmodToDxlib(AUDIO *aud) {
 	
 	int pitch, v_master, _volume_BGM, _volume_key;
@@ -801,7 +765,6 @@ int SOUND_FmodToDxlib(AUDIO *aud) {
 	return 0;
 }
 
-//4b9340
 int ApplySoundFX(AUDIO *aud, int /*flag*/, char /*disable*/) {
 
 	if(aud->cmd_mediaOut) return 0;
@@ -1078,7 +1041,6 @@ int ApplySoundFX(AUDIO *aud, int /*flag*/, char /*disable*/) {
 	return 1;
 }
 
-//4b9d70
 int InitFade(AUDIO *aud){
 	aud->param.fadeout_volume = 1.0;
 	aud->param.fadePreviewCurrentVolume = 1.0;
@@ -1090,7 +1052,6 @@ int InitFade(AUDIO *aud){
 	return 1;
 }
 
-//4b9db0
 int SetVolumeByFade(AUDIO *aud){
 	float fVar1;
 	DWORD timeNow;
@@ -1127,7 +1088,6 @@ int SetVolumeByFade(AUDIO *aud){
 	return 1;
 }
 
-//4b9ed0
 int InitSound(AUDIO *aud, uint bufferLength, int numBuffer, char fDisable, int outputType, int driver){
 
 	int numDrivers;
@@ -1230,7 +1190,6 @@ int InitSound(AUDIO *aud, uint bufferLength, int numBuffer, char fDisable, int o
 	return 1;
 }
 
-//4ba240
 RAWSOUND::RAWSOUND() {
 	channels = 0;
 	samples = 0;
@@ -1240,7 +1199,6 @@ RAWSOUND::RAWSOUND() {
 	data = NULL;
 }
 
-//4ba270
 void RAWSOUND::ExpandBuffer(int minSize) { 
 
 	size_t newSize = this->dataSize;
@@ -1259,7 +1217,6 @@ void RAWSOUND::ExpandBuffer(int minSize) {
 	return;
 }
 
-//4ba2d0
 void RAWSOUND::MakeBitDepth16(void){
 
 	if (this->bits == 8) {
@@ -1273,7 +1230,6 @@ void RAWSOUND::MakeBitDepth16(void){
 	return;
 }
 
-//4ba330
 void RAWSOUND::MakeStereo(void){
 
 	if (this->channels == 1) {
@@ -1289,7 +1245,7 @@ void RAWSOUND::MakeStereo(void){
 	return;
 }
 
-//4ba380 //TODO: I cannot understand this... replace with library would be good
+// TODO: I cannot understand this... replace with library would be good
 void RAWSOUND::MakeSampleRate44100(void) {
 	
 	dword* unkd[20];

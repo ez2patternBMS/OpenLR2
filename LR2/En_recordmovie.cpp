@@ -13,23 +13,19 @@
  #include <vfw.h>
 #endif
 
-//4bf4f0
 RECORDING::RECORDING() {
 	memset(this, 0, sizeof(RECORDING)); // FIXME: bad memset
 }
 
-//4bf510
 bool RECORDING::RefreshCurFrame() {
 	this->curFrame = this->writeSamplePos;
 	return true;
 }
 
-//4bf520
 int RECORDING::GetCurTime() {
 	return this->curFrame * 1000 / this->framerate;
 }
 
-//4bf540
 int RECORDING::CpyScreenToAVI() {
 #ifdef _WIN32
 	this->srcHDC = GetDC(this->hwnd);
@@ -41,7 +37,6 @@ int RECORDING::CpyScreenToAVI() {
 #endif // _WIN32
 }
 
-//4bf5b0
 bool RECORDING::Release() {
 #ifdef _WIN32
 	if (this->compvars.hic) {
@@ -65,7 +60,6 @@ bool RECORDING::Release() {
 }
 
 #ifdef _WIN32
-//4bf610
 static int REC_CpyAVIStreamToFile(PAVIFILE pfile, PAVISTREAM pavi, int /*unused*/) {
 
 	unsigned int lpos;
@@ -109,7 +103,6 @@ static int REC_CpyAVIStreamToFile(PAVIFILE pfile, PAVISTREAM pavi, int /*unused*
 	return 0;
 }
 
-//4bf7f0
 static int CreateStream(CSTR filename, int framerate, COMPVARS *compvars, BITMAPINFOHEADER* lpbmi, PAVIFILE* pAVIFILE, PAVISTREAM* pAVIstream) {
 
 	IAVIFile* pFile;
@@ -161,7 +154,6 @@ static int CreateStream(CSTR filename, int framerate, COMPVARS *compvars, BITMAP
 }
 #endif // _WIN32
 
-//4bfa10
 bool RECORDING::PrepareAVIRecord(double framerate, int bit, CSTR filename, uint frameLen, HWND hwnd) {
 #ifdef _WIN32
 	tagRECT cRect;
@@ -225,7 +217,6 @@ bool RECORDING::PrepareAVIRecord(double framerate, int bit, CSTR filename, uint 
 #endif // _WIN32
 }
 
-//4bfcb0
 int RECORDING::InsertAudioToMovie(CSTR pathAudio, bool deleteFlag) {
 #ifdef _WIN32
 	CSTR path(pathAudio);
@@ -267,7 +258,6 @@ int RECORDING::InsertAudioToMovie(CSTR pathAudio, bool deleteFlag) {
 #endif // _WIN32
 }
 
-//4bfec0
 static int REC_COPYFILE(FILE *oFile, FILE *iFile, uint size){
 	void *buf;
 	uint bufSize;
@@ -315,7 +305,6 @@ static int REC_COPYFILE(FILE *oFile, FILE *iFile, uint size){
 	return 0;
 }
 
-//4bffb0
 char WAVhead[70] = {0x52, 0x49, 0x46, 0x46, 0x00, 0x00, 0x00, 0x00, 0x57, 0x41, 0x56, 0x45, 0x66, 0x6d, 0x74, 0x20, 0x1e, 0x00, 0x00, 0x00, 0x55, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x0c, 0x00, 0x01, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x71, 0x05, 0x66, 0x61, 0x63, 0x74, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x64, 0x61, 0x74, 0x61, 0x00, 0x00, 0x00, 0x00 };
 int WAVstereo[4] = { 2,2,2,1 }; 
 char MP3VersionString[2][8] = { "mpeg1","mpeg2" }; //TODO : need different declare for exact same with original binary
@@ -389,7 +378,6 @@ int Mp3toWavF(FILE *iFile, FILE *oFile) { //TODO : need test
 	return 1;
 }
 
-//4c0350
 bool Mp3toWavP(char *iPath, char *oPath) {
 	FILE *iFile, *oFile;
 

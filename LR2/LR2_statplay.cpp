@@ -4,7 +4,6 @@
 #include "LR2.h"
 #include "Scene02_Songselect.h" //objstr in CheckMission()
 
-//401090
 bool CheckScoreSaveConditon(game *g){ //TOFIX : p2_assist == 1 but no battle, doesn't match with actual condition
 	if ( (g->config.play.battle == 0 || g->config.play.battle == 4) && g->config.play.is_extra != 1
 		&& g->config.play.m_addlong == 0 && g->config.play.m_loudness <= 0
@@ -18,7 +17,6 @@ bool CheckScoreSaveConditon(game *g){ //TOFIX : p2_assist == 1 but no battle, do
 	return false;
 }
 
-//401130
 int CheckClearLampChallenge(game *g){ //TOFIX : p2_assist == 1 but no battle, doesn't match with actual condition
 	int gauge;
 
@@ -43,7 +41,6 @@ int CheckClearLampChallenge(game *g){ //TOFIX : p2_assist == 1 but no battle, do
 	return 1;
 }
 
-//405a70
 uint ConvertOptionHistory(game *g){
 
 	int clear;
@@ -140,7 +137,6 @@ uint ConvertOptionHistory(game *g){
 	return ret;
 }
 
-//405bf0 
 int LogGraphPlayData(GRAPHDATA *grp, PLAYERSTATUS *pstat, int time, int endtime){
 	if (grp->cursor < 1000 && time <= endtime && 0 < endtime) {
 		do {
@@ -159,7 +155,6 @@ int LogGraphPlayData(GRAPHDATA *grp, PLAYERSTATUS *pstat, int time, int endtime)
 	return 0;
 }
 
-//405c90
 int LogGraphData(GRAPHDATAB *grp, int val, int time, int endtime)
 {
 	if (999 < grp->cursor) {
@@ -178,7 +173,6 @@ int LogGraphData(GRAPHDATAB *grp, int val, int time, int endtime)
 	return 0;
 }
 
-//405cf0
 int LogGraphPlayerDataToEnd(GRAPHDATA *grp, PLAYERSTATUS *pstat){
 
 	if (grp->cursor >= 1) {
@@ -204,7 +198,6 @@ int LogGraphPlayerDataToEnd(GRAPHDATA *grp, PLAYERSTATUS *pstat){
 }
 
 
-//405da0
 int CheckClear(PLAYERSTATUS *pstat, int gaugeType, char isCourse){
 
 	pstat->clearType = 1;
@@ -235,7 +228,6 @@ int CheckClear(PLAYERSTATUS *pstat, int gaugeType, char isCourse){
 }
 
 
-//408620
 int FlipScore(game *g){
 	
 	PLAYERSTATUS tmp;
@@ -281,7 +273,6 @@ static int GetBestClearedGauge(gameplay& gameplay, int playerIdx, CONFIG_PLAY& c
 	return 3;
 }
 
-//4086d0
 int CheckCourseClear(game* g) {
 	if (g->gameplay.courseStageNow < g->gameplay.courseStageCount - 1) {
 		for (int i = g->gameplay.courseStageNow - 1; i < g->gameplay.courseStageCount; i++) {
@@ -319,7 +310,6 @@ int CheckCourseClear(game* g) {
 	return 1;
 }
 
-//41b140
 int CheckMission(game *g){
 	int level;
 	int gauge;
@@ -608,7 +598,6 @@ int CheckMission(game *g){
 	return 0;
 }
 
-//41f1b0
 int SaveResult(game *g, sqlite3* sql) {
 
 	g->net.WaitAndInitRanking();

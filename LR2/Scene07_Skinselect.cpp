@@ -4,7 +4,6 @@
 
 #include "filesystem.h"
 
-//4198d0
 int SkinSelect_SoundSet(game *g, CSTR filepath) {
 	
 	FILE *pFile;
@@ -53,7 +52,6 @@ int SkinSelect_SoundSet(game *g, CSTR filepath) {
 	return 1;
 }
 
-//419c00
 int ProcI_SkinSelect(game *g) {
 	
 	//retutn to SongSelect
@@ -287,7 +285,6 @@ int ProcI_SkinSelect(game *g) {
 	return 1;
 }
 
-//41aff0
 int MakeSkinPreview(game* g, skstruct* sk, SkinManage* sm) {
 	//disable
 	if (g->config.system.disableskinpreview == 1 || sm->Data[sm->previewID].type == SKINTYPE_SOUNDSET) {
@@ -320,7 +317,6 @@ int MakeSkinPreview(game* g, skstruct* sk, SkinManage* sm) {
 	return 0;
 }
 
-//4218e0
 int PlayPreviewSample(game *g) {
 	int scratchSide = 0;
 	ConfigStruct tCfg = g->config;
@@ -426,7 +422,6 @@ int PlayPreviewSample(game *g) {
 	return 1;
 }
 
-//42d9a0
 int ProcS_SkinSelect(game *g) {
 	CSTR path;
 	SkinUser sku;
@@ -478,7 +473,6 @@ int ProcS_SkinSelect(game *g) {
 }
 
 
-//409ac0
 int SkinPreviewNext(SkinManage *sm, SKINTYPE type){
 
 	SKINTYPE newType;
@@ -541,7 +535,6 @@ int SkinPreviewNext(SkinManage *sm, SKINTYPE type){
 	return 0;
 }
 
-//409b80
 int SkinPreviewPrev(SkinManage *sm, SKINTYPE type) {
 
 	SKINTYPE newType;
@@ -604,7 +597,6 @@ int SkinPreviewPrev(SkinManage *sm, SKINTYPE type) {
 	return 0;
 }
 
-//409c40
 int SelectSkin(SkinManage *sm, CSTR *obuf){
 	obuf->assign(&sm->Data[sm->previewID].skinFile);
 	sm->skinID[sm->select] = sm->previewID;

@@ -22,17 +22,14 @@ static int _stricmp(const char* s1, const char* s2) {
 
 #endif // _WIN32
 
-//43ad60
 CSTR::CSTR(int size) {
 	body = (char*)calloc(1, size);
 }
 
-//43ad80
 CSTR::~CSTR() {
 	if (body) free(body);
 }
 
-//43ad90
 int CSTR::length() {
 	if (body)
 		return strlen(body);
@@ -40,7 +37,6 @@ int CSTR::length() {
 		return 0;
 }
 
-//43adb0
 DWORD CSTR::CRC32() {
 	char *pcVar2;
 	int pcVar3;
@@ -118,7 +114,7 @@ bool CSTR::resize(size_t size) {
 	return body != nullptr;
 }
 
-//43aed0 //TODO: wrong usage?
+// TODO: wrong usage?
 CSTR& CSTR::add(const char *str, int len) {
 	int size;
 	int size2;
@@ -195,7 +191,6 @@ CSTR& CSTR::add(const char *str, int len) {
 //	return this;
 //}
 
-//43af60
 uint CSTR::checkValidPos(int *pos, int *len) {
 	int bodylen;
 
@@ -228,7 +223,6 @@ inline void replace_all(std::string& str, std::string_view from, std::string_vie
 	}
 }
 
-//43b060
 CSTR& CSTR::replace(const char *str1, const char *str2) {
 	std::string string = this->body;
 	replace_all(string, str1, str2);
@@ -236,7 +230,6 @@ CSTR& CSTR::replace(const char *str1, const char *str2) {
 	return *this;
 }
 
-//43b100
 void CSTR::resize2(int size) {
 	if (size != 0) {
 		if (body != NULL) {
@@ -248,7 +241,6 @@ void CSTR::resize2(int size) {
 	return;
 }
 
-//43b140
 CSTR& CSTR::fillzero() {
 	size_t size;
 
@@ -259,7 +251,6 @@ CSTR& CSTR::fillzero() {
 	return *this;
 }
 
-//43b170
 char* CSTR::writeAtPos(int pos, char ch) {
 	size_t sVar1;
 
@@ -280,7 +271,6 @@ char* CSTR::writeAtPos(int pos, char ch) {
 	return body + pos;
 }
 
-//43b1d0
 CSTR& CSTR::upper() {
 	if (body) {
 		for (auto& c : std::span{body, strlen(body)}) {
@@ -290,7 +280,6 @@ CSTR& CSTR::upper() {
 	return *this;
 }
 
-//43b1f0
 CSTR& CSTR::lower() {
 	if (body) {
 		for (auto& c : std::span{body, strlen(body)}) {
@@ -300,13 +289,11 @@ CSTR& CSTR::lower() {
 	return *this;
 }
 
-//43b210
 CSTR& CSTR::nullAtPos(int pos) {
 	writeAtPos(pos, '\0');
 	return *this;
 }
 
-//43b230
 int CSTR::lastSpaceCount() {
 	int len;
 	if (body == nullptr) {
@@ -325,7 +312,6 @@ int CSTR::lastSpaceCount() {
 	return 0;
 }
 
-//43b280
 int CSTR::findStrPos(const char *str) {
 	if (body) {
 		if (char *chrPos = strstr(body, str); chrPos) {
@@ -380,7 +366,6 @@ char * cstrSprintf(CSTR *str, const char *format, ...) {
 	return str->body;
 }
 
-//43b330
 int CSTR::toFile(const char *filepath) {
 	char *_Str;
 	FILE *_File;
@@ -402,11 +387,9 @@ int CSTR::toFile(const char *filepath) {
 	return 1;
 }
 
-//43b390
 char* CSTR::outstr() {
 	return body;
 }
-//43b390_
 CSTR::operator char*() {
 	return body;
 }
@@ -414,48 +397,39 @@ CSTR::operator const char*() {
 	return body;
 }
 
-//43b3a0
 CSTR& CSTR::add(CSTR *param) {
 	return add(param->body, 0);
 }
 
-//43b3c0
 CSTR& CSTR::add(const char *str) {
 	return add(str, 0);
 }
 
-//43b3d0
 bool CSTR::isSame(const char *str) {
 	if (body == NULL) return false;
 	return (strcmp(body, str) == 0);
 }
 
-//43b420
 bool CSTR::isSame(CSTR *str) {
 	return (strcmp(body, str->body) == 0);
 }
 
-//43b470
 int CSTR::isDiff(const char *str) {
 	return (strcmp(body, str) != 0);
 }
 
-//43b4c0
 int CSTR::isDiff(CSTR *str) {
 	return (strcmp(body, str->body) != 0);
 }
 
-//43b510
 int CSTR::isDiffLow(CSTR *str) {
 	return (strcmp(body, str->body) < 0);
 }
 
-//43b560
 int CSTR::isDiffHigh(CSTR *str) {
 	return (strcmp(body, str->body) > 0);
 }
 
-//43b5b0
 char* CSTR::atPos(int pos) {
 	size_t sVar1;
 
@@ -474,7 +448,6 @@ char* CSTR::atPos(int pos) {
 	return body + pos;
 }
 
-//43b600
 bool CSTR::canOpenFile() {
 	FILE *_File;
 
@@ -486,12 +459,11 @@ bool CSTR::canOpenFile() {
 	return true;
 }
 
-//43b630
 CSTR::CSTR() {
 	body = (char *)calloc(1, 0x40);
 }
 
-//43b650 copy construct
+// copy construct
 CSTR::CSTR(const CSTR &str, int len) {
 	char *pStr;
 
@@ -513,7 +485,6 @@ CSTR::CSTR(const CSTR &str, int len) {
 	}
 }
 
-//43b6c0
 CSTR::CSTR(const char *str, int len) {
 	if (str == NULL) {
 		this->body = NULL;
@@ -534,7 +505,6 @@ CSTR::CSTR(const char *str, int len) {
 	}
 }
 
-//43b7e0
 CSTR& CSTR::assign(const char *str, int len) {
 	if (str == NULL) {
 		fillzero();
@@ -552,7 +522,6 @@ CSTR& CSTR::assign(const char *str, int len) {
 	return *this;
 }
 
-//43b890
 int CSTR::icmp(CSTR *param_1) {
 	if (body != nullptr) {
 		return _stricmp(body, param_1->body);
@@ -560,12 +529,10 @@ int CSTR::icmp(CSTR *param_1) {
 	return 0;
 }
 
-//43b8b0
 CSTR CSTR::left(int len) {
 	return CSTR(body, len);
 }
 
-//43b940
 CSTR CSTR::right(int len) {
 	if (len > -1 && length() >= len) {
 		return CSTR(body - len + length(), len);
@@ -573,7 +540,6 @@ CSTR CSTR::right(int len) {
 	return CSTR(body, length()); //more simple than original code, deleting some repeated code.
 }
 
-//43bac0
 CSTR CSTR::getSliced(int pos, int len) {
 	if (checkValidPos(&pos, &len)) {
 		return CSTR(body + pos, len);
@@ -581,11 +547,9 @@ CSTR CSTR::getSliced(int pos, int len) {
 	return CSTR("", 0); //more simple than original code, deleting some repeated code.
 }
 
-//43bbf0
 CSTR& CSTR::assign(const CSTR *iBuf) {
 	return assign(iBuf->body, 0);
 }
-//43bbf0_
 CSTR& CSTR::operator=(const CSTR *iBuf) {
 	return assign(iBuf->body, 0);
 }
@@ -598,16 +562,13 @@ CSTR& CSTR::operator=(CSTR &iBuf) {
 '= normal CSTR' is not const CSTR, goes to 43bbf0.
 */
 
-//43bc10
 CSTR& CSTR::assign(const char *str) {
 	return assign(str, 0);
 }
-//43bc10_
 CSTR& CSTR::operator=(const char *str) {
 	return assign(str, 0);
 }
 
-//43bc20
 CSTR CSTR::getDirectory() {
 	byte ch;
 	int len;
@@ -635,12 +596,10 @@ CSTR CSTR::getDirectory() {
 	return left(pos + 1);
 }
 
-//43bce0
 CSTR CSTR::getParaentDirectory() {
 	return getDirectory().getDirectory();
 }
 
-//43bd80
 CSTR& CSTR::cutDirectorySeparator() {
 	if( !strcmp(right(1), "/") || !strcmp(right(1), "\\")){
 		writeAtPos(strlen(body) - 1, 0);
@@ -648,12 +607,10 @@ CSTR& CSTR::cutDirectorySeparator() {
 	return *this;
 }
 
-//43beb0
 CSTR& CSTR::lastCut(int len) {
 	return assign( right(len).body, 0 );
 }
 
-//43bef0
 CSTR& CSTR::trimWhiteSpace() {
 	int fSpaceCount;
 	char cVar1;
@@ -678,7 +635,6 @@ CSTR& CSTR::trimWhiteSpace() {
 	return *this;
 }
 
-//43bf70
 CSTR CSTR::getFilename() {
 	byte ch;
 	int len;

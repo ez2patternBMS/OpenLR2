@@ -1,6 +1,5 @@
 #include "En_value.h"
 
-//401ec0
 int LoopInRange(int min, int max, int add, int *num){
 	*num = *num + add;
 	if (max < *num) {
@@ -28,7 +27,6 @@ double ByTime(double v1, double v2, double t1, double t2, double tO) {
 	}
 }
 
-//49a790
 double ChangeValueByTime(double val1, double val2, double time1, double time2, double timenow, int type){
 	double ratio;
 

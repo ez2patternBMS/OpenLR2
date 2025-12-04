@@ -14,7 +14,7 @@
 #include "En_dxlibstub.h"
 #endif // _WIN32
 
-//40e790 // _mRet __mRet : return ret, ret : return !ret
+//  _mRet __mRet : return ret, ret : return !ret
 bool GetOptionFlag_dst(game *gs, int option) {
 	int t = 0;
 	bool ret = (option >= 0);
@@ -1622,7 +1622,6 @@ bool GetOptionFlag_dst(game *gs, int option) {
 }
 
 
-//4024d0
 uint SetObjectValue_Num(game *g, int op) {
 	DATEDATA Date;
 
@@ -2222,7 +2221,6 @@ uint SetObjectValue_Num(game *g, int op) {
 
 
 
-//416a10
 int SetObjectValue_Bargraph(game *g) {
 
 	float max, val;
@@ -2467,7 +2465,6 @@ int SetObjectValue_Bargraph(game *g) {
 	return 1;
 }
 
-//4134b0
 int SetObjectValue_Slider(game *g, skstruct *sk, Timer *T, char flag) {
 	int mouseL, mouseR;
 	int iBuf, iTmp;
@@ -2668,7 +2665,6 @@ int SetObjectValue_Slider(game *g, skstruct *sk, Timer *T, char flag) {
 	return 1;
 }
 
-//41dc30
 int Proc_Text(game *g, sqlite3 *sql, char flag) {
 
 	char str[1024];
@@ -2899,7 +2895,6 @@ int Proc_Text(game *g, sqlite3 *sql, char flag) {
 	return 1;
 }
 
-//423450
 int SetObjectValue_Button(game *g, skstruct *sk, Timer *T, char flag) {
 	int mouseL, mouseR;
 	int isClickSuccess;
@@ -4008,7 +4003,6 @@ int SetObjectValue_Button(game *g, skstruct *sk, Timer *T, char flag) {
 	return 1;
 }
 
-//49bfc0
 int MouseOnDSTD(DSTdraw *dstd, int *x, int *y){ //1 right 2 left
 	float fxv;
 	float half;
@@ -4030,7 +4024,6 @@ int MouseOnDSTD(DSTdraw *dstd, int *x, int *y){ //1 right 2 left
 	return 0;
 }
 
-//49c070
 int MouseOnObject(DSTstruct *dst, Timer *T, int *x, int *y){
 	double time = GetTimeLapse(dst->timer, T);
 	DSTstruct _dst;
@@ -4039,7 +4032,7 @@ int MouseOnObject(DSTstruct *dst, Timer *T, int *x, int *y){
 	return MouseOnDSTD(&_dstd, x, y);
 }
 
-//49c0e0 maybe done
+// maybe done
 int SliderByTime(DrawingBuf */*drb*/, SRCstruct *src, DSTstruct *dst, Timer *T, int min, int max, int *value, inputStructure *input, int objectID) {
 	DSTdraw dstdTemp;
 	DSTstruct dstsTemp;
@@ -4140,7 +4133,6 @@ int SliderByTime(DrawingBuf */*drb*/, SRCstruct *src, DSTstruct *dst, Timer *T, 
 	return 1;
 }
 
-//49c560
 int ButtonByInput(DrawingBuf */*drb*/, SRCstruct *src, DSTstruct *dst, Timer *T, inputStructure *input, int *target, int min, int max, int panel) { //return 1:just clicked 2:changed 0:not changed
 	DSTdraw dstd;
 	int mouse, ret;
@@ -4181,7 +4173,6 @@ int ButtonByInput(DrawingBuf */*drb*/, SRCstruct *src, DSTstruct *dst, Timer *T,
 	return ret;
 }
 
-//4b6c00
 int InitObjectString(TextStruct *txt){
 	for (int i = 0; i < 300; i++) {
 		txt->objectStr[i].fillzero();
@@ -4191,7 +4182,6 @@ int InitObjectString(TextStruct *txt){
 	return 1;
 }
 
-//4b6c40
 int SetObjectString(uint num, CSTR string, CSTR *objectList){
 	if (num > 299) {
 		return 0;
@@ -4206,19 +4196,16 @@ int SetObjectString(uint num, CSTR string, CSTR *objectList){
 	return 1;
 }
 
-//4b6d00
 int SetObjectStringInt(int at, int val, CSTR *arr){
 	cstrSprintf(&arr[at], "%d", val);
 	return 1;
 }
 
-//4b6d30
 CSTR GetStringFromArray(int num, CSTR *strings) {
 	return strings[num];
 }
 
 
-//4b6d60
 int DefineOptionStrNum(OptionString *arrOpStr){
 	arrOpStr[19].count = 4;
 	arrOpStr[5].count = 4;
@@ -4248,7 +4235,6 @@ int DefineOptionStrNum(OptionString *arrOpStr){
 	return 1;
 }
 
-//4b6e30
 int ReadOptionstr(OptionString *opStr, CSVbuf csv) {
 	for (int i = 0; i < opStr->count; i++) {
 		opStr->str[i].assign(&csv.str[1+i]);
@@ -4259,8 +4245,7 @@ int ReadOptionstr(OptionString *opStr, CSVbuf csv) {
 	return 1;
 }
 
-//4b6ee0 : CSVbuf copy
-//4b6f20
+// : CSVbuf copy
 int ReadOptionstrFile(OptionString *arrOpStr, CSTR filepath) {
 	int bufSize = 256;
 

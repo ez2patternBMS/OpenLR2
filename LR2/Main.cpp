@@ -1804,7 +1804,9 @@ int main(int argc, char** argv) {
 					//TEST END
 					//TEST2
 					int dx, dy;
+#ifdef _WIN32
 					printfDx("is DX9 %d\n", GetUseDirect3DVersion()); //none:0 DX_DIRECT3D_9:1 9EX:2 11:3 default 2? //DEBUG
+#endif // _WIN32
 					printfDx("screen mode %d\n", gs.config.system.screenmode);
 					GetDrawScreenSize(&dx, &dy);
 					printfDx("skinsize %d %d \n", dx, dy);

@@ -1,7 +1,6 @@
 ﻿#include "Scene13_Courseresult.h"
 #include "LR2.h"
 
-//420e20
 int ProcS_subCourseResult(game *g, sqlite3 *sql) {
 	
 	g->net.IRresultMessage.fillzero();
@@ -165,7 +164,6 @@ int ProcS_subCourseResult(game *g, sqlite3 *sql) {
 	return 1;
 }
 
-//421820
 int ProcS_CourseResult(game *g, sqlite3 *sql) {
 	PlayerCheckAndSwap(&g->gameplay);
 	CheckCourseClear(g);

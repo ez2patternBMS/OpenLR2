@@ -59,7 +59,6 @@ static bool UTF8toANSI(LPCSTR str, char *oBuf, size_t *oSize){
 	return convert(str, oBuf, oSize, CP_UTF8, CP_ACP);
 }
 
-//4442f0
 int SQL_Run(CSTR queryStr, sqlite3 *sql) {
 	size_t size;
 	ANSItoUTF8(queryStr, nullptr, &size);
@@ -70,7 +69,6 @@ int SQL_Run(CSTR queryStr, sqlite3 *sql) {
 	return sqlite3_exec(sql, oBuf.body, nullptr, nullptr, nullptr);
 }
 
-//4443f0
 int SQL_prepare(CSTR queryStr, sqlite3 *sql, sqlite3_stmt **ppStmt) {
 	size_t size;
 	ANSItoUTF8(queryStr, nullptr, &size);
@@ -81,7 +79,6 @@ int SQL_prepare(CSTR queryStr, sqlite3 *sql, sqlite3_stmt **ppStmt) {
 	return sqlite3_prepare(sql, oBuf.body, -1, ppStmt, nullptr);
 }
 
-//4444f0
 CSTR SQL_GetColumn(int i, sqlite3_stmt *pStmt){
 	if (sqlite3_column_type(pStmt, i) == SQLITE_NULL) {
 		return {};

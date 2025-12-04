@@ -24,7 +24,6 @@ static void adjust_trailing_slash(CSTR& path)
 	*path.atPos(path.length()) = /* path += */ '\0';
 }
 
-//43c220
 int Read_JukeboxPath(CONFIG_JUKEBOX *box, TiXmlDocument *xml){
 	if (xml == NULL) {
 		return 0;
@@ -53,7 +52,6 @@ int Read_JukeboxPath(CONFIG_JUKEBOX *box, TiXmlDocument *xml){
 	return -1;
 }
 
-//43c510
 int ReadKeyConfig(game *game, const char *FilePath) {
 	TiXmlDocument *hXml;
 
@@ -97,7 +95,6 @@ int ReadKeyConfig(game *game, const char *FilePath) {
 	return 1;
 }
 
-//43c890
 int ReadMIDI(game *gs, const char *filepath){
 	TiXmlDocument *hXml;
 
@@ -192,7 +189,6 @@ int ReadMIDI(game *gs, const char *filepath){
 	return 1;
 }
 
-//43d080
 int WriteConfigXml(game *g, const char *filename){
 	FILE *pFile;
 	char buf[256];
@@ -613,7 +609,6 @@ int WriteConfigXml(game *g, const char *filename){
 	return 1;
 }
 
-//43ebd0
 void WriteXML_KeyConfig(FILE *hFile, CONFIG_INPUT cfg_in, const char *tag, int num){
 	char buf[256];
 
@@ -632,7 +627,6 @@ void WriteXML_KeyConfig(FILE *hFile, CONFIG_INPUT cfg_in, const char *tag, int n
 	return;
 }
 
-//43ecb0
 int WriteKeyConfig(game *g, const char *filepath, int key) {
 	FILE *pFile;
 	CONFIG_INPUT cfg_in;
@@ -751,7 +745,6 @@ int WriteKeyConfig(game *g, const char *filepath, int key) {
 	return 1;
 }
 
-//43f370
 int WriteMidiXml(game *g, const char *filename) {
 	FILE *pFile;
 
@@ -809,7 +802,6 @@ int WriteMidiXml(game *g, const char *filename) {
 	return 1;
 }
 
-//43f6d0
 int ReadSkinCustomize(SkinUser *sku, char *FilePath) {
 	TiXmlDocument *hXml;
 	TiXmlElement *xmlCur;
@@ -897,7 +889,7 @@ int ReadSkinCustomize(SkinUser *sku, char *FilePath) {
 	return 1;
 }
 
-//441340 //test
+// test
 int WriteSkinCustomizeXml(SkinUser *sku, char *filepath) {
 	
 	FILE *pFile;
@@ -1035,7 +1027,6 @@ int WriteSkinCustomizeXml(SkinUser *sku, char *filepath) {
 	return 1;
 }
 
-//441d30
 int ReadConfig(game* g, const char* filepath) {
 	TiXmlDocument* hXml;
 

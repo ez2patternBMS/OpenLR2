@@ -11,7 +11,6 @@
 #include <shellapi.h>
 #endif // _WIN32
 
-//401000
 void MYRANKING::InitRanking() {
 	this->songMD5.fillzero();
 	this->unused.fillzero();
@@ -47,7 +46,6 @@ void MYRANKING::InitRanking() {
 	return;
 }
 
-//4ba5e0
 int CMP_PlayerByExscore(const void *p1, const void *p2) {
 	
 	RANKINGPLAYER* s1 = (RANKINGPLAYER*)p1;
@@ -56,7 +54,6 @@ int CMP_PlayerByExscore(const void *p1, const void *p2) {
 	return (s2->pg * 2 + s2->gr) - (s1->pg * 2 + s1->gr);
 }
 
-//4ba670
 void RANKING::ExpandRankingBuffer(int add) {
 	
 	this->ranking = (RANKINGPLAYER*)realloc(this->ranking, (this->rankingMax + add) * sizeof(RANKINGPLAYER));
@@ -70,7 +67,6 @@ void RANKING::ExpandRankingBuffer(int add) {
 	return;
 }
 
-//4ba6e0
 void RANKING::Init() {
 	this->lastupdate.fillzero();
 	this->clearPlayers[0] = 0;
@@ -108,7 +104,6 @@ void RANKING::Init() {
 	return;
 }
 
-//4ba790
 int RANKING::ParseXML(const char* path) {
 	
 	TiXmlDocument *hXml;
@@ -240,7 +235,6 @@ int RANKING::ParseXML(const char* path) {
 	return 1;
 }
 
-//4bad70
 int CheckRivaldataNew(int rivalID) {
 
 	sqlite3 *pDb;
@@ -262,7 +256,6 @@ int CheckRivaldataNew(int rivalID) {
 	return ret;
 }
 
-//4baea0
 int ParseRivalData(long ID) {
 
 	CSTR name;
@@ -407,7 +400,6 @@ int ParseRivalData(long ID) {
 	return 1;
 }
 
-//4bb500
 int NETWORK::GetInsaneList() {
 
 	TiXmlDocument *hXml;
@@ -477,7 +469,6 @@ int NETWORK::GetInsaneList() {
 	return 1;
 }
 
-//4bb8d0
 CSTR UrlEncode(CSTR in) {
 
 	CSTR ret;
@@ -502,7 +493,6 @@ CSTR UrlEncode(CSTR in) {
 	return ret;
 }
 
-//4bb820
 RANKING::RANKING() {
 	// FIXME: replace with std::vector. Currently this leaks memory.
 	ranking = (RANKINGPLAYER*)malloc(sizeof(RANKINGPLAYER) * 1000);
@@ -519,7 +509,6 @@ void NETWORK::ParseRankingXml(const char* path)
 	rankingData.ParseXML(path);
 }
 
-//4bbd20
 int NETWORK::HTTPrequest() {
 #ifdef _WIN32
 	SOCKET s;
@@ -655,7 +644,6 @@ int NETWORK::HTTPrequest() {
 #endif // _WIN32
 }
 
-//4bc2b0
 void NETWORK::WaitAndInitRanking() {
 	GetTimeWrap();
 	this->waitForHandle = true;
@@ -666,7 +654,6 @@ void NETWORK::WaitAndInitRanking() {
 	this->rankingData.Init();
 }
 
-//4bc2f0
 int NETWORK::GetRanking(CSTR hash, char flagInit) {
 
 	CSTR path;
@@ -696,7 +683,6 @@ int NETWORK::GetRanking(CSTR hash, char flagInit) {
 	return 1;
 }
 
-//4bc4c0
 int NETWORK::GetRivalInfo(int rivalID) {
 	CSTR pathXML;
 	cstrSprintf(&pathXML, fs::make_preferred("LR2files/Rival/%d.xml").data(), rivalID);
@@ -718,7 +704,6 @@ int NETWORK::GetRivalInfo(int rivalID) {
 	return 1;
 }
 
-//4bc600
 int OpenWebRanking(CSTR songmd5){
 #ifdef _WIN32
 	CSTR url;
@@ -763,7 +748,6 @@ static void ThreadProc_IRsendScore(NETWORK *ir) {
 	ir->hHandle.detach(); // Detach ourselves TODO: refactor surrounding code to avoid this
 }
 
-//4bc970
 int NETWORK::GetTargetInfo(int mode, CSTR songmd5, CSTR *oData, CSTR *oName, int *oDigit1, int *oDigit2, int *oDigit3, int *oDigit4, int *oSeed, int *oExscore) {
 
 	CSTR search("top");
@@ -813,13 +797,11 @@ int NETWORK::GetTargetInfo(int mode, CSTR songmd5, CSTR *oData, CSTR *oName, int
 	return 0;
 }
 
-//4bcc50
 NETWORK::NETWORK() {
 	this->rankingData.target_ID = 0;
 	this->rankingData.Init();
 }
 
-//4bcda0
 int NETWORK::WS_clean() {
 #ifdef _WIN32
 	WSACleanup();
@@ -827,7 +809,6 @@ int NETWORK::WS_clean() {
 	return 1;
 }
 
-//4bcdd0
 int NETWORK::Login(int isDirectPlay) {
 #ifdef _WIN32
 	if (WSAStartup(2, &this->wsa)) {
@@ -950,7 +931,6 @@ int NETWORK::Login(int isDirectPlay) {
 	return -3;
 }
 
-//4bd640
 int NETWORK::MakeIRsendScoreThread() {
 	GetTimeWrap();
 	this->waitForHandle = true;
@@ -965,7 +945,6 @@ int NETWORK::MakeIRsendScoreThread() {
 }
 
 
-//4461f0
 int SaveIRID(int IRID, CSTR ID) {
 
 	CSTR scorefile;

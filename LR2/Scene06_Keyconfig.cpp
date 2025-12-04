@@ -3,7 +3,6 @@
 #include "LR2_skinobject.h"
 #include "filesystem.h"
 
-//401da0
 int ProcS_Keyconfig(game *g) {
 	CSTR t("-",0);
 	for (int i = 0; i < 8; i++) {
@@ -42,7 +41,6 @@ int isBannedInput(int key) {
 	}
 	return 0;
 }
-//409860
 int ProcI_Keyconfig(game *g) {
 	int fndkey;
 	if (g->KeyInput.config_key >= 0 && g->KeyInput.config_button_inMap > 0) {
@@ -98,7 +96,6 @@ int ProcI_Keyconfig(game *g) {
 	return 1;
 }
 
-//4bd830
 CSTR GetKeyIDname(int keyID) {
 	CSTR midiName[12] = { "C","C#","D","D#","E","F","F#","G","G#","A","A#","B" };
 	CSTR oBuf = "-";
@@ -681,7 +678,6 @@ CSTR GetKeyIDname(int keyID) {
 	return oBuf;
 }
 
-//4be430
 int ConfigButtonToKeyID7(int buttonID){
 	switch (buttonID) {
 	case 1:
@@ -733,7 +729,6 @@ int ConfigButtonToKeyID7(int buttonID){
 	}
 }
 
-//4be530
 int ConfigButtonToKeyID5(int buttonID){
 	switch (buttonID) {
 	case 1:
@@ -777,7 +772,6 @@ int ConfigButtonToKeyID5(int buttonID){
 	}
 }
 
-//4be600
 int ConfigButtonToKeyID9(int buttonID){
 	switch (buttonID) {
 	case 1:
@@ -807,7 +801,6 @@ int ConfigButtonToKeyID9(int buttonID){
 	}
 }
 
-//4be690
 int ConfigButtonFromKeyID7(int keyID) {
 	switch (keyID) {
 	case 1:
@@ -859,7 +852,6 @@ int ConfigButtonFromKeyID7(int keyID) {
 	}
 }
 
-//4be7b0
 int ConfigButtonFromKeyID5(int keyID){
 	switch (keyID) {
 	case 1:
@@ -903,7 +895,6 @@ int ConfigButtonFromKeyID5(int keyID){
 	}
 }
 
-//4be8b0
 int ConfigButtonFromKeyID9(int keyID){
 	switch (keyID) {
 	case 1:

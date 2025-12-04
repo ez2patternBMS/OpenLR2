@@ -9,7 +9,6 @@ static void MessageBoxA(const char*,const char* title,const char*desc,const char
 }
 #endif // _WIN32
 
-//445fa0
 CSTR MakePlayerStatHash(PLAYERSTATISTIC *ps) {
 	CSTR tmp;
 	cstrSprintf(&tmp, "%d%d%d%d%d%d%d%d%d%d%d%s%d%d%d%d%d%d%d%d%d%d%d", ps->bad, ps->clear, ps->combo, ps->fail, ps->good, ps->great, ps->maxcombo, ps->perfect, ps->playcount, ps->playtime, ps->poor, ps->passMD5.body,
@@ -17,7 +16,6 @@ CSTR MakePlayerStatHash(PLAYERSTATISTIC *ps) {
 	return MD5str(tmp);
 }
 
-//4460a0
 int UpdatePlayerStat(PLAYERSTATISTIC *ps, sqlite3 *sql) {
 	char query[1024];
 	CSTR hash = MakePlayerStatHash(ps);
@@ -28,7 +26,6 @@ int UpdatePlayerStat(PLAYERSTATISTIC *ps, sqlite3 *sql) {
 	return 1;
 }
 
-//44b380
 int ReadPlayerScore(CSTR id, CSTR pass, PLAYERSTATISTIC *pstat) {
 
 	CSTR dbPath, passMD5, query, MD5inDB;
@@ -145,7 +142,6 @@ int ReadPlayerScore(CSTR id, CSTR pass, PLAYERSTATISTIC *pstat) {
 	return 1;
 }
 
-//4457c0
 CSTR MakeScoreHash(STATUS *stat, CSTR *passMD5, CSTR *songMD5) {
 	CSTR str;
 
@@ -157,7 +153,6 @@ CSTR MakeScoreHash(STATUS *stat, CSTR *passMD5, CSTR *songMD5) {
 	return MD5str(str);
 }
 
-//4458b0
 bool isSameScoreHash(STATUS *stat, CSTR *passMD5, CSTR *songMD5, CSTR *besthash) {
 	CSTR newhash, althash;
 
@@ -199,7 +194,6 @@ bool isSameScoreHash(STATUS *stat, CSTR *passMD5, CSTR *songMD5, CSTR *besthash)
 	return false;
 }
 
-//445af0
 int UpdateScoreDB(CSTR hash, STATUS *stat, sqlite3 *sql, CSTR *passMD5) {
 
 	if (stat->rank > 7) stat->rank = 8;
@@ -219,7 +213,6 @@ int UpdateScoreDB(CSTR hash, STATUS *stat, sqlite3 *sql, CSTR *passMD5) {
 }
 
 
-//4469c0
 int DeleteScoreFromDB(CSTR hash, sqlite3 *sql){
 	
 	char str[256];

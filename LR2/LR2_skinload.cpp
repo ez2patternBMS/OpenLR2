@@ -3,7 +3,6 @@
 #include "LR2_configsave.h"
 #include "filesystem.h"
 
-//49a770
 bool IsMultibyte(byte ch){
 	/*if (0x80 < ch) {
 		if (ch < 0xa0) return true;
@@ -14,7 +13,6 @@ bool IsMultibyte(byte ch){
 }
 
 ////LR2graphic_load
-//49e7f0
 int InitSRC(SRCstruct *src){
 	for(int i = 0; i < src->graphcount; i++){
 		DeleteGraph(src->grHandles[i]);
@@ -56,7 +54,6 @@ int InitDST(DSTstruct *dst) {
 	return 1;
 }
 
-//49e8e0
 int ReadDST(DSTstruct *dst, CSVbuf *csv, int order){
 
 	//parameters only for first line
@@ -102,7 +99,6 @@ int ReadDST(DSTstruct *dst, CSVbuf *csv, int order){
 	return 1;
 }
 
-//49eae0
 int ReadSRC(SRCstruct *src, CSVbuf *csv, skstruct *sk){
 	src->n = csv->val[1];
 	src->cycle = csv->val[9];
@@ -144,7 +140,6 @@ int ReadSRC(SRCstruct *src, CSVbuf *csv, skstruct *sk){
 	return 1;
 }
 
-//49ec90
 bool CheckIndexRange(int index, int min, int max, int line, char *str){
 	if ((min <= index) && (index <= max)) {
 		return true;
@@ -153,7 +148,6 @@ bool CheckIndexRange(int index, int min, int max, int line, char *str){
 	return false;
 }
 
-//49ecd0
 int ReadSRC_BAR_TITLE(SRCstruct *src, CSVbuf *csv, skstruct *sk){
 	src->n = csv->val[1];
 	src->fontHandle = sk->fontHandle[csv->val[2]];
@@ -169,7 +163,7 @@ int ReadSRC_BAR_TITLE(SRCstruct *src, CSVbuf *csv, skstruct *sk){
 }
 
 
-//49ed50 InitSkin
+// InitSkin
 int InitSkin(skstruct *sk, int /*unused*/, char font) {
 	SetTransColor(0, 255, 0);
 	sk->startinput_start = 0;
@@ -521,7 +515,6 @@ int InitSkin(skstruct *sk, int /*unused*/, char font) {
 }
 
 //imagefont section
-//4a03e0
 int InitImageFont(ImageFont *imgfont) {
 	if (imgfont->size == 0) return 0;
 	imgfont->size = 0;
@@ -539,7 +532,6 @@ int InitImageFont(ImageFont *imgfont) {
 	return 1;
 }
 
-//4a0480
 int ReadImageFont(CSTR filename, ImageFont *imgfont) {
 	CSTR str1;
 	
@@ -599,7 +591,6 @@ int ReadImageFont(CSTR filename, ImageFont *imgfont) {
 	return 1;
 }
 
-//4a0870
 int LoadFontGraph(ImageFont *imgfont, int *fontNum){
 	int fnum;
 	
@@ -614,7 +605,6 @@ int LoadFontGraph(ImageFont *imgfont, int *fontNum){
 	return 0;
 }
 
-//4a0970
 int LoadFontCharGraph(ImageFont *imgfont, ushort vChar){
 	FontImage *fb;
 	int fNum;
@@ -642,7 +632,6 @@ int LoadFontCharGraph(ImageFont *imgfont, ushort vChar){
 	return 0;
 }
 
-//4a0a40
 int LoadFontForText(ImageFont *imgfont, CSTR *str){
 	ushort twochar;
 
@@ -670,7 +659,6 @@ int LoadFontForText(ImageFont *imgfont, CSTR *str){
 }
 
 //2p graphic section
-//4a0b30
 int FlipSide_Timer(int *n){
 	int t = *n;
 	switch (t) {
@@ -791,7 +779,6 @@ int FlipSide_Timer(int *n){
 	return 1;
 }
 
-//4a0c80
 int ApplyFlipside(skstruct *sk){
 	int iVar2;
 	SRCstruct srcTemp;
@@ -898,7 +885,6 @@ int ApplyFlipside(skstruct *sk){
 	return 1;
 }
 
-//4a1150
 int ClearSkinGraph(skstruct *sk){
 	InitSkin(sk, 0, '\0');
 	for (int i = 0; i < 200; i++) {
@@ -938,7 +924,7 @@ static void adjust_input_filepath(CSTR& path)
 #endif // _WIN32
 }
 
-//4a11c0 ReadSkin // maybe unsatble
+// ReadSkin // maybe unsatble
 int ReadSkin(skstruct *sk,CSTR FilePath, int unused, int skin_num, SkinUser* sku, char flag_skipFont) {
 	FILE *pFile;
 	CSTR fBuf(1024);
@@ -1846,7 +1832,7 @@ int ReadSkin(skstruct *sk,CSTR FilePath, int unused, int skin_num, SkinUser* sku
 	return tSkin_num;
 }
 
-//4a7520 LoadScene
+// LoadScene
 int LoadScene(skstruct* sk, CSTR skinfile, int p5, char font) {
 	SkinUser tsku;
 	CSTR tStr;

@@ -2,7 +2,6 @@
 #include "LR2.h"
 #include "Scenes.h"
 
-//408850
 int ProcS_Result(game *g) {
 
 	LoadSceneG(g, &g->skstruct, SKINTYPE_RESULT);
@@ -23,7 +22,6 @@ int ProcS_Result(game *g) {
 	return 1;
 }
 
-//408900
 int Proc_Result(game *g, skstruct *sk, Timer *T) {
 
 	if (GetTimeLapse(0, T) > sk->src_GAUGECHART_1P[0].op3 && GetTimeLapse(150, T) < 0.0) {

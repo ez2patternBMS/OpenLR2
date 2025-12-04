@@ -6,7 +6,6 @@
 
 #include "Scenes.h"
 
-//427090
 void ReactInput(game *g) {
 
 	GetTimeWrap();
