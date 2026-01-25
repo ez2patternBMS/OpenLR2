@@ -1180,11 +1180,7 @@ int ReadConfig(game* g, const char* filepath) {
 	ReadXml_Int("config", "play", "gomiscore", 0, &g->config.play.gomiscore, hXml);
 	ReadXml_Int("config", "play", "disableleftclickexit", 0, &g->config.play.disableleftclickexit, hXml);
 	ReadXml_Int("config", "play", "disablecurspeedchange", 0, &g->config.play.disablecurspeedchange, hXml);
-	{
-		int gasInt = 0;
-		ReadXml_Int("config", "play", "gaugeautoshift", 0, &gasInt, hXml);
-		g->config.play.m_gas = gasInt > 0 ? true : false;
-	}
+	ReadXml_PositiveIntAsBool("config", "play", "gaugeautoshift", false, &g->config.play.m_gas, hXml);
 	ReadXml_Str("config", "skin", "play_7", "", &g->config.skin.skinFilePath[0], hXml);
 	ReadXml_Str("config", "skin", "play_5", "", &g->config.skin.skinFilePath[1], hXml);
 	ReadXml_Str("config", "skin", "play_14", "", &g->config.skin.skinFilePath[2], hXml);

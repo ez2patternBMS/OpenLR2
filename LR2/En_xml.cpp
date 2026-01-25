@@ -51,6 +51,13 @@ int ReadXml_Int(const char *level1, const char *level2, const char *level3, int 
 	return -1;
 }
 
+int ReadXml_PositiveIntAsBool(const char *level1, const char *level2, const char *level3, bool initvalue, bool *oBuf, TiXmlDocument *xmlData) {
+	int v;
+	int ret = ReadXml_Int(level1, level2, level3, static_cast<int>(initvalue), &v, xmlData);
+	*oBuf = v > 0;
+	return ret;
+}
+
 int ReadXml_Str(const char *level1, const char *level2, const char *level3, const CSTR initvalue, CSTR* oBuf, TiXmlDocument *xmlData) {
 	TiXmlElement *cur;
 
