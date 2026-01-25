@@ -1,4 +1,8 @@
-﻿#include "structure.h"
+﻿/*
+ * Not existing 'filepath' when reading is not an error.
+ */
+
+#include "structure.h"
 #include "Engine.h"
 
 int Read_JukeboxPath(CONFIG_JUKEBOX *box, TiXmlDocument *xml);

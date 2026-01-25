@@ -110,10 +110,10 @@ int main(int argc, char** argv) {
 	ErrorLogAdd("コンフィグを読み込みます…");
 
 	if (!ReadConfig(&gs, fs::make_preferred("LR2files/Config/config.xml").data()) && gs.is_starter == false) {
-		MessageBoxA(NULL, "コンフィグファイルが見つかりません。", "エラー", NULL);
+		MessageBoxA(NULL, "Failed to read main config", "エラー", NULL);
 		return -1;
 	}
-	else if (gs.config.jukebox.numOfPath <= 0 && gs.is_starter == false) {
+	if (gs.config.jukebox.numOfPath <= 0 && gs.is_starter == false) {
 		MessageBoxA(NULL, "設定プログラムのJUKEBOX1タブで、\n曲を検索するフォルダの登録を行ってください。", "エラー", NULL);
 		return -1;
 	}
