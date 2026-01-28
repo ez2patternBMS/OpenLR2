@@ -834,6 +834,8 @@ int FindAltSound(CSTR filename, CSTR dir, CSTR *oBuf) {
 		}
 	}
 
+	ErrorLogFmtAdd("FindAltSound: '%s' not found in '%s'\n", filename.c_str(), dir.c_str());
+
 	oBuf->fillzero();
 	return 0;
 }

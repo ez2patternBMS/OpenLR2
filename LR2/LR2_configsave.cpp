@@ -22,8 +22,8 @@ static void adjust_trailing_slash(CSTR& path)
 		}
 		path.body[i] = '\0';
 	}
-	*path.atPos(path.length()) = /* path += */ std::filesystem::path::preferred_separator;
-	*path.atPos(path.length()) = /* path += */ '\0';
+	*path.atPos(path.length() + 1) = '\0';
+	*path.atPos(path.length()) = std::filesystem::path::preferred_separator;
 }
 
 int Read_JukeboxPath(CONFIG_JUKEBOX *box, TiXmlDocument *xml){

@@ -59,7 +59,10 @@ class CSTR {
 		CSTR& trimWhiteSpace();
 		CSTR getFilename();
 
-		// Methods with same interface as std::string_view for easier transition later
+		// Methods with same interface as std::string for easier transition later
+		const char* c_str() const {
+			return body;
+		};
 		bool starts_with(const char*);
 };
 

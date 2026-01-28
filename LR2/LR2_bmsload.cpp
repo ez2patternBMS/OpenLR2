@@ -2,8 +2,16 @@
 #include "Engine.h"
 #include "LR2_replay.h"
 #include "filesystem.h"
+
 #include <algorithm>
+#include <atomic>
+#include <mutex>
+#include <ranges>
+#include <thread>
 #include <unordered_map>
+#include <vector>
+
+#include <DxLib/DxLib.h>
 
 int StopAllKeysound(game *g){
 	for (int i = 0; i < 6480; i++) {
@@ -480,14 +488,13 @@ int LoadBmsResource(gameplay *gp, CSTR /*BMSfilepath*/, AUDIO *aud, ConfigStruct
 	std::atomic<int> keysoundsLoaded = 0;
 	std::atomic<bool> keysoundsLoadAbort = false;
 	keysoundLoadQueue.reserve(6480);
-	keysoundsLoadWorkers.resize(std::max(2u, cfg->system.coreCount / 2));
 	for (int i = 0; i < 6480; i++) {
 		if (gp->keysound_filename[i].length() > 0) {
 			keysoundLoadQueue.push_back(i);
 		}
 	}
-	for (auto& worker : keysoundsLoadWorkers) {
-		worker = std::jthread([&]() {
+	for (auto i : std::views::iota(0u, std::max(2u, cfg->system.coreCount / 2) + 1)) {
+		keysoundsLoadWorkers.emplace_back([&]() {
 			while (!keysoundsLoadAbort) {
 				int queue_i = keysoundsLoaded++;
 				if (queue_i >= keysoundLoadQueue.size())
@@ -502,7 +509,7 @@ int LoadBmsResource(gameplay *gp, CSTR /*BMSfilepath*/, AUDIO *aud, ConfigStruct
 			}
 		});
 	}
-	std::for_each(keysoundsLoadWorkers.begin(), keysoundsLoadWorkers.end(), [](auto& worker) { if (worker.joinable()) worker.join(); });
+	keysoundsLoadWorkers.clear(); // join all
 	if (keysoundsLoadAbort) return 1;
 
 	gp->flag_0note = 1;
@@ -1803,6 +1810,7 @@ unsigned char channelConvert[] = { 0x00, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3
 									0x00, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x31, 0x32, 0x33, 0x34,
 									0x00, 0x3c, 0x35, 0x36, 0x37, 0x38, 0x39, 0x00, 0x3a, 0x3b };
 int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMSMETA *meta, int bgaFlag, int scratchSide) {
+	ErrorLogFmtAdd("ParseBmsFile(%s)\n", filename);
 
 	std::unordered_map<double, int> notesPerBpm{};
 	double avgBPM_bpmsum{};

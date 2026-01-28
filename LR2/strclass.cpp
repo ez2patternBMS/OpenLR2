@@ -534,8 +534,8 @@ CSTR& CSTR::operator=(const char *str) {
 CSTR CSTR::getDirectory() {
 	CSTR out;
 	out.assign(std::filesystem::path{this->body}.parent_path().string().c_str());
-	*out.atPos(out.length()) /* out += */ = std::filesystem::path::preferred_separator;
-	*out.atPos(out.length()) /* out += */ = '\0';
+	*out.atPos(out.length() + 1) = '\0';
+	*out.atPos(out.length()) = std::filesystem::path::preferred_separator;
 	return out;
 }
 
