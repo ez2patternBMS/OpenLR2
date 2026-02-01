@@ -1076,10 +1076,10 @@ struct TextStruct {
 };
 
 struct REPLAY {
-	struct ReplayData * data;
-	int max;
-	int count;
-	int status; /* 0:off 1:recording 2:playing */
+	ReplayData* data{};
+	int max{};
+	int count{};
+	int status{}; /* 0:off 1:recording 2:playing */
 	struct CONFIG_PLAY cfg;
 	struct AUDIO_PARAM aud;
 };

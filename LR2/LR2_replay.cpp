@@ -141,7 +141,7 @@ int SaveReplay(REPLAY *rp, CSTR songMD5, CSTR localID) {
 }
 
 int AllocReplayBuffer(REPLAY *rp){
-
+	ReleaseReplayBuffer(rp);
 	rp->max = 10000;
 	rp->count = 0;
 	rp->data = (ReplayData *)malloc(rp->max * sizeof(ReplayData));
