@@ -1094,19 +1094,11 @@ void MD5byte(char **iStr, uint len, char *oByte){
 
 char md5str[33];
 char* MD5str(char *iStr) {
-	char* buf;
+	char* buf = (char*)md5String(iStr);
 	unsigned char md5buf[16];
-
-	/*buf = (char*)malloc(strlen(iStr));
-	strcpy(buf, iStr);
-	MD5byte(&buf, strlen(buf), (char*)md5buf);
-	sprintf(md5str,"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x", md5buf[0], md5buf[1], md5buf[2], md5buf[3], 
-		md5buf[4], md5buf[5], md5buf[6], md5buf[7], md5buf[8], md5buf[9], md5buf[10], md5buf[11], md5buf[12], md5buf[13], md5buf[14], md5buf[15]);
-	free(buf);*/
-	buf = (char*)md5String(iStr);
 	memcpy(md5buf, buf, 16);
 	sprintf(md5str, "%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x", md5buf[0], md5buf[1], md5buf[2], md5buf[3],
 		md5buf[4], md5buf[5], md5buf[6], md5buf[7], md5buf[8], md5buf[9], md5buf[10], md5buf[11], md5buf[12], md5buf[13], md5buf[14], md5buf[15]);
-
+	free(buf);
 	return md5str;
 }
