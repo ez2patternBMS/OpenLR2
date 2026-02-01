@@ -63,24 +63,6 @@ int SetTarget(game *g) {
 	return 1;
 }
 
-static void ThreadProc_LoadBanner(game* g) {
-	CSTR path;
-	CSTR dir(g->sSelect.bmsList[g->sSelect.cur_song].filepath.getDirectory());
-
-	if (g->sSelect.bmsList[g->sSelect.cur_song].isBanner && g->skstruct.reloadbanner == 1) {
-		path = dir;
-		path.add(g->sSelect.bmsList[g->sSelect.cur_song].banner);
-
-		if (ReloadImage(path, &g->skstruct.GrHandle[GrH_Banner]) == -1) {
-			path = path.left(path.length() - 3);
-			path.add("png");
-			if (ReloadImage(path, &g->skstruct.GrHandle[GrH_Banner]) == -1) {
-				g->sSelect.bmsList[g->sSelect.cur_song].isBanner = 0;
-			}
-		}
-	}
-}
-
 int SetBmsFilter(game *g, sqlite3 */*sql*/){
 
 	g->sSelect.searchType = 0;
@@ -1698,6 +1680,15 @@ static void ThreadProc_LoadPreview(game *g) {
 	}
 }
 
+// handle == -1 means an error
+// \return input paths and newly made sihandle
+static std::pair<std::pair<std::string, std::string>, int> MyLoadImage(CSTR dir, CSTR banner) {
+	CSTR image_path;
+	if (FindAltImage(banner, dir, &image_path) != 1)
+		return {std::pair{dir.c_str(), banner.c_str()}, -1};
+	// QUESTION: Skipped initial 300x80 creation, is that fine?
+	return {std::pair{dir.c_str(), banner.c_str()}, LoadSoftImageWithStrLen(image_path.c_str(), image_path.length())};
+}
 
 int ProcS_Select(game *g) {
 	
@@ -1775,7 +1766,9 @@ int ProcS_Select(game *g) {
 	g->sSelect.levelsOfSong[4] = g->sSelect.bmsList[g->sSelect.cur_song].difficultyLevel[4];
 
 	if (g->sSelect.bmsList[g->sSelect.cur_song].isBanner && g->skstruct.reloadbanner == 1 && g->procSelecter == 2) {
-		g->hThreadBanner = std::jthread(ThreadProc_LoadBanner, g);
+		g->hThreadBanner.push_back(std::async(std::launch::async, MyLoadImage,
+					g->sSelect.bmsList[g->sSelect.cur_song].filepath.getDirectory(),
+					g->sSelect.bmsList[g->sSelect.cur_song].banner));
 	}
 	if (g->net.isOnline && g->procSelecter == 2) {
 		g->net.WaitAndInitRanking();
@@ -2696,6 +2689,30 @@ int ProcI_Select(game *g, sqlite3 *sql) {
 		}
 	}
 	g->sSelect.is_mouseOnTextInput = 0;
+
+	for (auto& banner_future : g->hThreadBanner)
+	{
+		if (!banner_future.valid() || banner_future.wait_for(std::chrono::seconds(0)) != std::future_status::ready)
+			continue;
+		const auto& [dir_and_banner, sihandle] = banner_future.get();
+		const auto& [dir, banner] = dir_and_banner;
+		if (dir != std::string_view{ g->sSelect.bmsList[g->sSelect.cur_song].filepath.getDirectory() }
+			|| banner != std::string_view{ g->sSelect.bmsList[g->sSelect.cur_song].banner })
+		{
+			DeleteSoftImage(sihandle);
+			continue;
+		}
+		if (sihandle == -1)
+		{
+			g->sSelect.bmsList[g->sSelect.cur_song].isBanner = 0;
+			continue;
+		}
+		if (ReCreateGraphFromSoftImage(sihandle, g->skstruct.GrHandle[GrH_Banner]) == -1)
+			g->sSelect.bmsList[g->sSelect.cur_song].isBanner = 0;
+		DeleteSoftImage(sihandle);
+	}
+	std::erase_if(g->hThreadBanner, std::not_fn(&std::future<std::pair<std::pair<std::string, std::string>, int>>::valid));
+
 	return 1;
 }
 

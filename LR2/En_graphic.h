@@ -1,6 +1,5 @@
 ﻿#include "structure.h"
 
-int ReloadImage(CSTR filename, int * grHandle);
 int ScreenCapture(uint iGrHandle, int x, int y);
 extern int hBackImage;
 int SetBackground(int hImage);

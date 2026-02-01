@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <future>
 #include <mutex>
 #include <thread>
 #include <unordered_map>
@@ -1434,7 +1435,7 @@ struct game {
 	int po4MainMenuCursor;
 	int procSelecter; /* 2:select 3:deciide 4:play 5:result 6:keyconfig 7:skinselect */
 	int procPhase;
-	std::jthread hThreadBanner;
+	std::vector<std::future<std::pair<std::pair<std::string, std::string>, int>>> hThreadBanner;
 	struct gameplay gameplay;
 	char is_clicked_screenModeChange;
 	int isSkipDrawTick; /* skip frame? */

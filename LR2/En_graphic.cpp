@@ -1,10 +1,6 @@
 ﻿#include "En_graphic.h"
 #include "DxLib/DxLib.h"
 
-int ReloadImage(CSTR filename, int *grHandle) {
-	return ReloadGraph(filename, *grHandle, 0);
-}
-
 int ScreenCapture(uint iGrHandle, int x, int y){
 	GetDrawScreenGraph(0, 0, x, y, iGrHandle, 1);
 	return 0;
