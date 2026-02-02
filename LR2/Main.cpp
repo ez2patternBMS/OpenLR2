@@ -3,6 +3,7 @@
 #include "LR2.h"
 #include "Scenes.h"
 #include "filesystem.h"
+#include "LR2_customir.h"
 
 #include <chrono>
 #include <filesystem>
@@ -365,6 +366,13 @@ int main(int argc, char** argv) {
 		printfDx(gs.net.request_result);
 		ErrorLogAdd(gs.net.request_result);
 	}
+	{
+		std::error_code ec; // ignore errors
+		std::filesystem::path path("LR2files/CustomIRs");
+		std::filesystem::create_directories(path, ec);
+		gs.net.customIR.Initialize(path);
+	}
+	gs.net.customIR.Login();
 
 	int loadingGrHandle = LoadGraph(fs::make_preferred("LR2files/Config/loading.bmp").data(), 0);
 
@@ -1364,6 +1372,7 @@ int main(int argc, char** argv) {
 					}
 					else if (gs.gameplay.player[0].judgecount[3] + gs.gameplay.player[0].judgecount[4] + gs.gameplay.player[0].judgecount[5] != 0) {
 						SaveResult(&gs, sql3);
+						gs.net.customIR.SendScore(gs, sql3, 0);
 					}
 					else if (gs.config.play.m_lunaris == 0 && gs.config.play.battle != 1) {
 						gs.procSelecter = 2;
@@ -1375,6 +1384,7 @@ int main(int argc, char** argv) {
 					}
 					else if ((gs.gameplay.player[1].judgecount[3] + gs.gameplay.player[1].judgecount[4] + gs.gameplay.player[1].judgecount[5] != 0) || gs.config.play.battle != 1) {
 						SaveResult(&gs, sql3);
+						gs.net.customIR.SendScore(gs, sql3, 1);
 					}
 					else {
 						gs.procSelecter = 2;

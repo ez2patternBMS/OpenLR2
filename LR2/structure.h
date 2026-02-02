@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "strclass.h"
+#include "LR2_customir.h"
 
 #ifdef _WIN32
 #include <winsock2.h>
@@ -1390,6 +1391,7 @@ struct NETWORK {
 	std::jthread hHandle;
 	int IRstatus {0}; /* 0:notIR 1:loading 2:loaded -1:playerNotExist -3:connection_fail -2:bansong 3:waitUpadate 4:connection 5:IRbusy */
 	CSTR IRresultMessage;
+	CUSTOMIR_MANAGER customIR;
 
 	int GetInsaneList();
 

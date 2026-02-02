@@ -64,6 +64,7 @@ add_library(
     LR2/LR2_audio.cpp
     LR2/LR2_bmsload.cpp
     LR2/LR2_configsave.cpp
+    LR2/LR2_customir.cpp
     LR2/LR2_gameloop.cpp
     LR2/LR2_ghost.cpp
     LR2/LR2_ir.cpp

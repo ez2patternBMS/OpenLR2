@@ -168,6 +168,7 @@ int ProcS_CourseResult(game *g, sqlite3 *sql) {
 	PlayerCheckAndSwap(&g->gameplay);
 	CheckCourseClear(g);
 	ProcS_subCourseResult(g, sql);
+	g->net.customIR.SendScore(*g, sql, 0);
 	LoadSceneG(g, &g->skstruct, SKINTYPE_COURSERESULT);
 	
 	if (g->skstruct.flag_flip) {

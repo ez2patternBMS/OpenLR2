@@ -42,6 +42,8 @@
     <ClInclude Include="LR2\LR2_audio.h" />
     <ClInclude Include="LR2\LR2_bmsload.h" />
     <ClInclude Include="LR2\LR2_configsave.h" />
+    <ClInclude Include="LR2\LR2_customir.h" />
+    <ClInclude Include="LR2\LR2_customir_api.h" />
     <ClInclude Include="LR2\LR2_gameloop.h" />
     <ClInclude Include="LR2\LR2_ghost.h" />
     <ClInclude Include="LR2\LR2_ir.h" />
@@ -89,6 +91,7 @@
     <ClCompile Include="LR2\LR2_audio.cpp" />
     <ClCompile Include="LR2\LR2_bmsload.cpp" />
     <ClCompile Include="LR2\LR2_configsave.cpp" />
+    <ClCompile Include="LR2\LR2_customir.cpp" />
     <ClCompile Include="LR2\LR2_gameloop.cpp" />
     <ClCompile Include="LR2\LR2_ghost.cpp" />
     <ClCompile Include="LR2\LR2_ir.cpp" />
