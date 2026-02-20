@@ -840,17 +840,17 @@ int LRDrawImg(int *grHandle, DSTdraw *dstD) {
 		vec4.y = y2 - ry;
 		VectorRotationZ(&vec4, &vec4, rad);
 		if (dstD->h != 0.0 && dstD->w != 0.0 && dstD->time >= 0) {
-			DrawModiGraphF((vec1.x + rx)  * skinsizeX, (vec1.y + ry)  * skinsizeY, (vec2.x + rx)  * skinsizeX, (vec2.y + ry)  * skinsizeY,
-				(vec3.x + rx)  * skinsizeX, (vec3.y + ry)  * skinsizeY, (vec4.x + rx)  * skinsizeX, (vec4.y + ry)  * skinsizeY, *grHandle, 1);
+			DrawModiGraph((vec1.x + rx) * skinsizeX + 0.5f, (vec1.y + ry) * skinsizeY + 0.5f, (vec2.x + rx) * skinsizeX + 0.5f, (vec2.y + ry) * skinsizeY + 0.5f,
+				(vec3.x + rx) * skinsizeX + 0.5f, (vec3.y + ry) * skinsizeY + 0.5f, (vec4.x + rx) * skinsizeX + 0.5f, (vec4.y + ry) * skinsizeY + 0.5f, *grHandle, 1);
 		}
 	}
 	else {
 		GetGraphSize(*grHandle, &xs, &ys);
 		GetTimeWrap();
 		if (dstD->isDrawBackbox) {
-			DrawBox(x1*skinsizeX, y1*skinsizeY, x2*skinsizeX, y2*skinsizeY, GetColor(0, 0, 0), true);
+			DrawBox(x1*skinsizeX + 0.5f, y1*skinsizeY + 0.5f, x2*skinsizeX + 0.5f, y2*skinsizeY + 0.5f, GetColor(0, 0, 0), true);
 		}
-		DrawExtendGraphF(x1*skinsizeX, y1*skinsizeY, x2*skinsizeX, y2*skinsizeY, *grHandle, 1);
+		DrawExtendGraph(x1*skinsizeX + 0.5f, y1*skinsizeY + 0.5f, x2*skinsizeX + 0.5f, y2*skinsizeY + 0.5f, *grHandle, 1);
 	}
 	return 1;
 }
@@ -937,7 +937,7 @@ void LRDrawText(int* grHandle, DSTdraw *dstd, CSTR *str, ImageFont *imF) {
 				}
 				xf *= wl;
 				if (ch != U' ' && ch != U'\n' && chTex.grHandle != -1) {
-					DrawExtendGraphF(dstd->x + wSum, dstd->y, dstd->x + wSum + xf, dstd->y + hl * yf, chTex.grHandle, 1);
+					DrawExtendGraph(dstd->x + wSum + 0.5f, dstd->y + 0.5f, dstd->x + wSum + xf + 0.5f, dstd->y + hl * yf + 0.5f, chTex.grHandle, 1);
 				}
 				wSum = imF->kerning * wl + xf + wSum;
 			}
