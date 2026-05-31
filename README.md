@@ -55,3 +55,7 @@ use visual studio 2022, right click on OpenLR2_vs22, build. I'm working on x86 r
 *md5.c, md5.h
  from https://github.com/Zunawe/md5-c. not in original LR2 but to save time I used this.
 
+# Thanks to
+.red who wrote lr2skin specification
+
+and all contributters
