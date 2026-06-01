@@ -19,7 +19,7 @@ get original LR2 beta3 100201
 put OpenLR2.exe into the folder and run (or you can replace original LR2body.exe )
 
 > [!CAUTION]
-> It uses same score DB with origianl one.
+> It uses same score DB with original one.
 > 
 > If you want to avoid potential data corruption, do not run this on where you played original LR2 (or use -ns option),
 > 
@@ -74,4 +74,4 @@ use visual studio 2022, right click on OpenLR2_vs22, build. I'm working on x86 r
 # Thanks to
 .red who wrote lr2skin specification
 
-and all contributters
+and all contributers
