@@ -1885,8 +1885,7 @@ int main(int argc, char** argv) {
 			//TEST
 			printfDx("maxGAP %.3f\n", gs.timer1.maxGAP);
 			printfDx("avgGAP %.3f\n", gs.timer1.avgOnlyGAP);
-			printfDx("GAPS %d\n", gs.timer1.GAPcount);
-			printfDx("game total tick %d\n", gs.timer1.GAPtick);
+			printfDx("GAP ticks %d / %d\n", gs.timer1.GAPcount, gs.timer1.GAPtick);
 			//TEST END
 			//TEST2
 			int dx, dy;
@@ -1895,9 +1894,8 @@ int main(int argc, char** argv) {
 #endif // _WIN32
 			printfDx("%s\n", gs.config.system.screenmode? "windowed":"fullscreen");
 			GetDrawScreenSize(&dx, &dy);
-			printfDx("skinsize %d %d \n", dx, dy);
 			GetWindowSize(&screenSizeX, &screenSizeY);
-			printfDx("scrnsize %d %d \n", screenSizeX, screenSizeY);
+			printfDx("skin %d %d >> scrn %d %d\n", dx, dy, screenSizeX, screenSizeY);
 			//TEST2 END
 		}
 		gs.sSelect.flag_maniacPanel = 0;
