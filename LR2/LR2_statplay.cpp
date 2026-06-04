@@ -784,8 +784,8 @@ int SaveResult(game *g, sqlite3* sql) {
 		ErrorLogFmtAdd("通常のスコア保存処理を行います\n");
 		
 		if (g->config.play.battle == 1) {
+			g->gameplay.player[1].lastCourseGaugeType = g->gameplay.player[1].gaugeType;
 			if (g->config.play.m_gas) {
-				g->gameplay.player[1].lastCourseGaugeType = g->gameplay.player[1].gaugeType;
 				g->gameplay.player[1].gaugeType = GetBestClearedGauge(g->gameplay, 1, g->config.play, g->gameplay.courseStageNow != 0);
 			}
 			if (g->gameplay.courseStageNow == 0 || is_gauge_better(g->gameplay.player[1].clearGaugeTypeCourse, g->gameplay.player[1].gaugeType)) {
