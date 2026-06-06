@@ -1997,6 +1997,10 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 	}
 	endtime = 0.0;
 
+	int key = 7;
+	if (meta->keymode == 5 || meta->keymode == 10) key = 5;
+	else if (meta->keymode == 9) key = 9;
+
 	//TOFIX : in nonstop mode(courseType==1), gp->courseConnection[stage - 1] doesn't check if stage >= 1. It can affects at #BPM
 	/* start of stage loop */
 	for (int stage = 0; stage < stages; stage++) {
@@ -2881,9 +2885,6 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 			double t_bmsTiming = 0.0;
 			memset(mapAdded, 0, 20);
 			int addNoteCount[2] = { 0, };
-			int key = 7;
-			if (meta->keymode == 5 || meta->keymode == 10) key = 5;
-			else if (meta->keymode == 9) key = 9;
 
 			for (int i = 0; i < gp->bmsobj.count; i++) {
 				if (l_realTiming < gp->bmsobj.notes[i].realTiming) {
@@ -2959,9 +2960,6 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 			double t_bmsTiming = 0.0;
 			bool mapAdded[2][10] = { 0, };
 			int addNoteCount[2] = { 0, };
-			int key = 7;
-			if (meta->keymode == 5 || meta->keymode == 10) key = 5;
-			else if (meta->keymode == 9) key = 9;
 
 			for (int i = 0; i < gp->bmsobj.count; i++) {
 				if (l_realTiming < gp->bmsobj.notes[i].realTiming) {
@@ -3367,6 +3365,11 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 				}
 			}
 		}
+	}
+
+	for (int p : {0, 1}) {
+		gp->randomLayoutForDisplay[p] = 0;
+		for (int i = 1; i < 1 + key; ++i) gp->randomLayoutForDisplay[p] += std::pow(10, p * 10 + key - noteRandomTable[p][i]) * i;
 	}
 
 	double p1LastTiming = 0.0, p2LastTiming = 0.0;
