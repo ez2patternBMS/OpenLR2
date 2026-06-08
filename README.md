@@ -41,6 +41,10 @@ https://web.archive.org/web/20190802100906/http://www.dream-pro.info/~lavalse/LR
   
 - Base62 support – support more keysounds on some newer charts that require them.
 
+- Frame Limiter - Replace vSync, which has a problem with tickrate.
+
+- Unrandomizer - Input '/random 1357246' or any number you want into search bar.
+
 ## How do I use HD skins with OpenLR2?
 
 <img width="441" height="64" alt="image" src="https://github.com/user-attachments/assets/30f21a53-aa14-430b-ae74-9a11c62f3c49" />
