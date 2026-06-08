@@ -2083,8 +2083,8 @@ int main(int argc, char** argv) {
 		if (gs.isSkipDrawTick == 0) {
 			if (gs.gameplay.flag_gameinput != 0 && gs.config.system.thread == 0 && gs.config.system.vsync == 1 && gs.is_recordmode == 0) {
 				//TODO : Get appropriate device
-				double a = DxLib::GetRefreshRate() + 1.0 ;
-				double m_lMillisecPerFrame = 1000 / a;
+				double a = DxLib::GetRefreshRate();
+				double m_lMillisecPerFrame = 1000 / a - 1.0;
 
 				while (GetTimeWrap() - gs.timer1.vSyncTick < m_lMillisecPerFrame) {
 					ProcGame(&gs);
