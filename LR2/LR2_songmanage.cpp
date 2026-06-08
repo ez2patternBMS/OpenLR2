@@ -224,12 +224,6 @@ int SetUndefinedDifficulty(sqlite3 *sql) {
 	sqlite3_stmt *pStmt;
 	CSTR folder;
 	int mode, difficulty;
-	int shouldCommit;
-
-	shouldCommit = sqlite3_get_autocommit(sql);
-	if (shouldCommit && SQL_Run("BEGIN IMMEDIATE", sql) != 0) {
-		shouldCommit = 0;
-	}
 
 	sqlite3_prepare(sql, "SELECT difficulty,folder,mode,path FROM song ORDER BY folder,mode,karinotes", -1, &pStmt, NULL);
 	while (sqlite3_step(pStmt) == 100) {
@@ -256,9 +250,6 @@ int SetUndefinedDifficulty(sqlite3 *sql) {
 		}
 	}
 	sqlite3_finalize(pStmt);
-	if (shouldCommit) {
-		SQL_Run("COMMIT", sql);
-	}
 	return 1;
 }
 
@@ -1065,6 +1056,8 @@ int ChangeCourseID(sqlite3 *sql, int newID, int oldID, int type) {
 }
 
 
+// Returns the stored timestamp for a song/folder path, or -1 when no row exists.
+// SearchSongsFromPath uses this as the old "missing row" signal before insert/update.
 int GetRegisteredDateFromPath(const char *table, sqlite3 *sql, CSTR path) {
 	sqlite3_stmt *pStmt = NULL;
 	char str[1024];
@@ -1081,6 +1074,9 @@ int GetRegisteredDateFromPath(const char *table, sqlite3 *sql, CSTR path) {
 	return date;
 }
 
+// Checks whether an existing song row can be kept without reparsing the BMS file.
+// The timestamp check keeps the fast path for unchanged charts, while the CRC checks
+// repair legacy rows created with a stale parent/folder relationship.
 int IsRegisteredSongCurrent(sqlite3 *sql, CSTR path, int filetime) {
 	sqlite3_stmt *pStmt = NULL;
 	char str[1024];
@@ -1090,6 +1086,7 @@ int IsRegisteredSongCurrent(sqlite3 *sql, CSTR path, int filetime) {
 	CSTR expectedParent;
 	int ret = 0;
 
+	// folder is the physical chart directory; parent is where the chart appears in select.
 	expectedFolder = AssignCRC32(path.getDirectory());
 	expectedParent = AssignCRC32(path.getParentDirectory());
 
@@ -1137,6 +1134,7 @@ int SearchSongsFromPath(CSTR root, sqlite3 *sql, CSTR path) {
 				searchPath = root;
 				searchPath.add(findFileData.cFileName);
 				filetime = GetUnixtimeFromFiletime(findFileData.ftLastWriteTime);
+				// Skip expensive metadata parsing only when date and hierarchy CRCs are valid.
 				if (IsRegisteredSongCurrent(sql, searchPath, filetime) == 0) {
 					ErrorLogFmtAdd("曲を発見しました。　パス:%s\n", searchPath.body);
 					SQL_Run(sqlite3_snprintf(2048, str, "DELETE FROM song WHERE path = \'%q\'", searchPath.body), sql);
@@ -1176,6 +1174,8 @@ int SearchSongsFromPath(CSTR root, sqlite3 *sql, CSTR path) {
 			folderinfo.add("folderinfo.txt");
 			filetime = GetUnixtimeFromFiletime(findFileData.ftLastWriteTime);
 			oldtime = GetRegisteredDateFromPath("folder", sql, searchPath);
+			// The folder row timestamp only describes this folder entry.
+			// Child charts may still be missing, changed, or require parent/folder repair.
 			if (IsFileExist(folderinfo)) {
 				ret = 0;
 				if (oldtime < filetime) {
@@ -1235,7 +1235,8 @@ int ReloadSongsByQuery(CSTR query, sqlite3 *sql, CONFIG_JUKEBOX *jb) {
 	sqlite3_stmt *pStmt;
 	char sBuf[1024];
 	int cAlready = 0, cNot = 0, cChange = 0;
-	int shouldCommit;
+	// This query often reads song/folder, and the branches below can delete or insert
+	// into those same tables. Snapshot first, then finalize the SELECT before mutating.
 	std::vector<CSTR> pathList;
 	std::vector<int> timeList;
 
@@ -1266,6 +1267,7 @@ int ReloadSongsByQuery(CSTR query, sqlite3 *sql, CONFIG_JUKEBOX *jb) {
 			if (jb->numOfPath == 0 || is_path_in_jukebox){
 				int newTime;
 				int chg = IsFileChanged(time, str, &newTime);
+				// IsFileChanged only compares timestamps; force reinsert when hierarchy CRCs are stale.
 				if (chg == 0 && is_bms_file && IsRegisteredSongCurrent(sql, str, newTime) == 0) {
 					chg = 2;
 				}
@@ -1274,26 +1276,15 @@ int ReloadSongsByQuery(CSTR query, sqlite3 *sql, CONFIG_JUKEBOX *jb) {
 				}
 				else if (chg == 1) {
 					cNot++;
-					shouldCommit = sqlite3_get_autocommit(sql);
-					if (shouldCommit && SQL_Run("BEGIN IMMEDIATE", sql) != 0) {
-						shouldCommit = 0;
-					}
 					if (is_bms_file) {
 						SQL_Run(sqlite3_snprintf(512, sBuf, "DELETE FROM song WHERE path=\'%q\'", str.body), sql); 
 					}
 					else {
 						SQL_Run(sqlite3_snprintf(512, sBuf, "DELETE FROM folder WHERE path=\'%q\'", str.body), sql);
 					}
-					if (shouldCommit) {
-						SQL_Run("COMMIT", sql);
-					}
 				}
 				else if (chg == 2) {
 					cChange++;
-					shouldCommit = sqlite3_get_autocommit(sql);
-					if (shouldCommit && SQL_Run("BEGIN IMMEDIATE", sql) != 0) {
-						shouldCommit = 0;
-					}
 					if (is_bms_file) {
 						SQL_Run(sqlite3_snprintf(1024, sBuf, "DELETE FROM song WHERE path=\'%q\'", str.body), sql);
 						BMSMETA meta;
@@ -1327,25 +1318,15 @@ int ReloadSongsByQuery(CSTR query, sqlite3 *sql, CONFIG_JUKEBOX *jb) {
 							}
 						}
 					}
-					if (shouldCommit) {
-						SQL_Run("COMMIT", sql);
-					}
 				}
 				
 			}
 			else {
-				shouldCommit = sqlite3_get_autocommit(sql);
-				if (shouldCommit && SQL_Run("BEGIN IMMEDIATE", sql) != 0) {
-					shouldCommit = 0;
-				}
 				if (is_bms_file) {
 					SQL_Run(sqlite3_snprintf(512, sBuf, "DELETE FROM song WHERE path=\'%q\'", str.body), sql);
 				}
 				else {
 					SQL_Run(sqlite3_snprintf(512, sBuf, "DELETE FROM folder WHERE path=\'%q\'", str.body), sql);
-				}
-				if (shouldCommit) {
-					SQL_Run("COMMIT", sql);
 				}
 			}
 		}
