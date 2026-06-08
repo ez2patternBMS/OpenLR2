@@ -1015,7 +1015,6 @@ int GetSongDataFromPath(CSTR filepath, SONGDATA *song, sqlite3 *sql, SONGSELECT 
 	song->judge = meta.judge;
 	song->subartist = meta.subartist;
 	song->subtitle = meta.subtitle;
-	song->folderType = 0;
 	song->title = meta.title;
 	song->folderType = 0;
 	ErrorLogFmtAdd("GetSongDataFromPath() 曲をロードしました\n");
