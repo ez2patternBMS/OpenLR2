@@ -418,8 +418,11 @@ int main(int argc, char** argv) {
 			: fs::make_preferred("LR2files/Database/song.db").data(), &sql3);
 	LoadLR2CustomFolder(sql3, &gs.config.jukebox, pathScoreDB, gs.is_starter, gs.cmd_directplay);
 	if (gs.cmd_directplay == false) {
-		if (gs.config.network.lr2ir == 1 && (((unsigned char)gs.config.jukebox.customfolder & 0x80) != 0)) {
-			gs.net.GetInsaneList();
+		if (((unsigned char)gs.config.jukebox.customfolder & 0x80) != 0) {
+			if (gs.config.network.lr2ir == 1) {
+				gs.net.GetInsaneList();
+			}
+			gs.net.ApplyInsaneList();
 		}
 		if (gs.is_starter == false) {
 			printfDx(LR2VERSIONSTRING"\n");

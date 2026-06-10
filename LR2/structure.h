@@ -1402,6 +1402,7 @@ struct NETWORK {
 	CUSTOMIR_MANAGER customIR;
 
 	int GetInsaneList();
+	int ApplyInsaneList();
 
 	void ParseRankingXml(const char* path);
 
