@@ -1348,6 +1348,7 @@ int ProcGame(game *g) {
 				}
 				break;
 			case 4:
+				SetPlaySpeedRateMovieToGraph(g->gameplay.bgaHandle[val], g->gameplay.freqSpeedMultiplier);
 				if (g->gameplay.courseType == 1) {
 					g->gameplay.courseBgaLayer1[stage] = val;
 					g->gameplay.isBgaPlaying = 1;
