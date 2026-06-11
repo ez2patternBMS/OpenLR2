@@ -260,10 +260,12 @@ int main(int argc, char** argv) {
 			return -1;
 		}
 	}
-	//make beta3 score backup
-	CSTR pathScoreDBBackUp;
-	cstrSprintf(&pathScoreDBBackUp, "LR2files/Database/Score/%s.db_backup", gs.config.player.id.body);
-	CopyFile(pathScoreDB, pathScoreDBBackUp, true); //intended failure when exist
+	{
+		// make beta3 score backup
+		CSTR pathScoreDBBackUp;
+		cstrSprintf(&pathScoreDBBackUp, "LR2files/Database/Score/%s.db_backup", gs.config.player.id.body);
+		copy_if_not_exists(pathScoreDB.body, pathScoreDBBackUp.body);
+	}
 
 	gs.sSelect.playerPassMD5.assign(&gs.config.player.passMD5);
 	gs.sSelect.playerID.assign(&gs.config.player.id);
