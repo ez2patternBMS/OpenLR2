@@ -1,7 +1,10 @@
 #include "LR2_customir.h"
+
+#ifdef _WIN32
+
 #include "LR2_customir_api.h"
-#include "structure.h"
 #include "LR2_songmanage.h"
+#include "structure.h"
 
 #include <filesystem>
 #include <format>
@@ -500,3 +503,11 @@ void CUSTOMIR_MANAGER::SendScore(game& game, sqlite3* sql, int player) {
 		}
 	}, IRScoreInternal{ game, sql, player }, mModules));
 }
+#else
+
+CUSTOMIR_MANAGER::~CUSTOMIR_MANAGER() {};
+void CUSTOMIR_MANAGER::Initialize(const std::filesystem::path& directory) {};
+void CUSTOMIR_MANAGER::Login() {};
+void CUSTOMIR_MANAGER::SendScore(game& game, sqlite3* sql, int player) {};
+
+#endif // _WIN32
