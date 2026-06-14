@@ -281,7 +281,7 @@
     <ClCompile Include="lib\tinyxml\tinyxmlparser.cpp">
       <Filter>소스 파일\lib</Filter>
     </ClCompile>
-    <ClCompile Include="lib\md5.cpp">
+    <ClCompile Include="lib\md5\md5.cpp">
       <Filter>소스 파일\lib</Filter>
     </ClCompile>
     <ClCompile Include="LR2\LR2_customir.cpp">

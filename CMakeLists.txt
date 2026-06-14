@@ -47,8 +47,8 @@ else()
     message(FATAL_ERROR "No DxLib for this platform")
 endif()
 
-add_library(md5 STATIC lib/md5.cpp)
-target_include_directories(md5 PUBLIC lib)
+add_library(md5 STATIC lib/md5/md5.cpp)
+target_include_directories(md5 PUBLIC lib/md5)
 
 # Separate target so that SkinEditor can use it
 add_library(
