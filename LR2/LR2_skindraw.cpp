@@ -855,8 +855,8 @@ void LRDrawText(int* grHandle, DSTdraw *dstd, CSTR *str, ImageFont *imF) {
 			double hl = dstd->h / (float)size;
 			float width = GetDrawStringWidthToHandle(str->outstr(), str->length(), *grHandle, 0);
 			if (width != 0.0) {
-				float wl = width > dstd->w ? wl = dstd->w / width : 1.f;
-				wl = wl * hl;
+				float wl = width > dstd->w ? dstd->w / width : 1.f;
+				wl *= hl;
 				if (dstd->align == 1) {
 					dstd->x = dstd->x - (int)(width*wl*0.5);
 				}
@@ -875,8 +875,8 @@ void LRDrawText(int* grHandle, DSTdraw *dstd, CSTR *str, ImageFont *imF) {
 		double hl = dstd->h / (float)imF->size;
 		float width = GetTextGraphLength(str, imF);
 		if (width != 0.0) {
-			float wl = width > dstd->w ? wl = dstd->w / width : 1.f;		
-			wl = wl * hl;
+			float wl = width > dstd->w ? dstd->w / width : 1.f;
+			wl *= hl;
 			if (dstd->align == 1) {
 				dstd->x = dstd->x - (int)(width*wl*0.5);
 			}
