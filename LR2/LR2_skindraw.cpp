@@ -73,6 +73,7 @@ int InitDSTdraw(DSTdraw *dstd){
 
 DSTdraw DSTDbyTime(DSTdraw *dstd1, DSTdraw *dstd2, double t1, double t2, double tO) {
 	DSTdraw ret;
+	InitDSTdraw(&ret);
 	
 	ret.x = ByTime(dstd1->x, dstd2->x, t1, t2, tO);
 	ret.y = ByTime(dstd1->y, dstd2->y, t1, t2, tO);
