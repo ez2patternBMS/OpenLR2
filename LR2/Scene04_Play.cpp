@@ -391,6 +391,8 @@ int DrawNotes(game *g, skstruct *sk, Timer *T, CONFIG_PLAY *cfg) {
 						
 			float p1_y = sk->adjust.note_1p_y + (songtimer_render - g->gameplay.bmsobj_line.notes[i].renderTiming)* cfg->hiSpeed[0] * g->gameplay.speedmultiplier * (cfg->basespeed / 100.0) / 600.0;
 			float p2_y = sk->adjust.note_2p_y + (songtimer_render - g->gameplay.bmsobj_line.notes[i].renderTiming)* cfg->hiSpeed[0] * g->gameplay.speedmultiplier * (cfg->basespeed / 100.0) / 600.0;
+			//NOTE: comment out these two lines cause measure_lines displayed under judge line. 
+			// Left as a note since the solution may vary depending on the refactor goals.
 			//if (p2_y > 0.0) p2_y = 0; //TOFIX : delete these for skinadjust
 			//if (p1_y > 0.0) p1_y = 0.0;
 
