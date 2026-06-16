@@ -1259,7 +1259,7 @@ void RAWSOUND::MakeSampleRate44100(void) {
 						if ((int)lo >= 0x8000) lo = 0x7fff;
 						else if ((int)lo < -0x8000) lo = -0x8000;
 
-						*unkd[j] = (hi << 16) | (lo && 0xffff);
+						*unkd[j] = (hi << 16) | (lo & 0xffff);
 					}
 
 					int aupos = i / (44100.0 / (double)this->samples);
