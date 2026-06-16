@@ -3027,13 +3027,13 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 
 									if (key > -1) {
 										for (int lane = 0; lane <= key; lane++) {
-											if (mapAdded[lane + p * 10] == 0) emptyCount++;
+											if (mapAdded[p][lane] == 0) emptyCount++;
 										}
 										if (emptyCount && emptyCount > 0) {
 											int addlane = GetRand(emptyCount - 1);
 
 											for (int lane = 0; lane <= key; lane++) {
-												if (mapAdded[lane + p * 10] == 0) {
+												if (mapAdded[p][lane] == 0) {
 													if (addlane == 0) {
 														gp->bmsobj.notes[gp->bmsobj.count].bmsTiming = t_bmsTiming;
 														gp->bmsobj.notes[gp->bmsobj.count].bmsTiming_ln = t_bmsTiming;
@@ -3105,7 +3105,7 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 							if (GetRand(100) <= cfg->play.m_loudness) {
 								if (key > -1) {
 									for (int lane = 0; lane <= key; lane++) {
-										if (mapAdded[lane + p * 10] == 0) {
+										if (mapAdded[p][lane] == 0) {
 											gp->bmsobj.notes[gp->bmsobj.count].bmsTiming = t_bmsTiming;
 											gp->bmsobj.notes[gp->bmsobj.count].bmsTiming_ln = t_bmsTiming;
 											gp->bmsobj.notes[gp->bmsobj.count].realTiming = t_realTiming;
