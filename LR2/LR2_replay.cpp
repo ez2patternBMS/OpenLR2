@@ -492,6 +492,7 @@ int ReplayDataToInput(ReplayData *data, game *g, AUDIO *aud, gameplay *gp, input
 			else if ((gp->scratchSide == 2 || gp->scratchSide == 3) && (26 <= data->op && data->op <= 27)) is->p1_buttonInput[data->op - 5] = 3;
 			else is->p1_buttonInput[data->op] = 3;
 		}
+		return 1;
 	}
 
 	switch (data->op) {
@@ -716,14 +717,6 @@ int ReplayDataToInput(ReplayData *data, game *g, AUDIO *aud, gameplay *gp, input
 			break;
 	}
 
-	//TOFIX
-	if (data == (ReplayData *)0x1) {
-		ApplySoundFX(aud, 0, (char)g->config.sound.disabledsp);
-	}
-	else if (data == (ReplayData *)0x2) {
-		ApplySoundFX(aud, 1, (char)g->config.sound.disabledsp);
-	}
-	
 	return 1;
 }
 
