@@ -386,48 +386,57 @@ static int ParseRivalData(int ID) {
 	return 1;
 }
 
+// Download insane difficulty list into LR2files/Database/exlevel.xml.
 int NETWORK::GetInsaneList() {
-
-	TiXmlDocument *hXml;
-	TiXmlElement *cur;
-	sqlite3 *pSongDB;
-
 	cstrSprintf(&this->param," ");
 	this->target_URL = "http://www.dream-pro.info/~lavalse/LR2IR/2/getinsanelist.cgi";
-	if (HTTPrequest() == 1) {
-		this->httpResult.toFile(fs::make_preferred("LR2files/Database/exlevel.xml").data());
-		printfDx("発狂難度リストをダウンロードしました。\n");
-		ErrorLogFmtAdd("発狂難度リストをダウンロードしました。\n");
-	}
-	else{
-		printfDx("発狂難度リストの更新に失敗しました。");
-		ErrorLogFmtAdd("発狂難度リストの更新に失敗しました。\n");
-	}
-	ScreenFlip();
-
-	std::string path = fs::make_preferred("LR2files/Database/exlevel.xml").data();
-	hXml = new TiXmlDocument(path.c_str());
-	if (!parse_cp932_xml(hXml, path.c_str())) {
-		delete(hXml);
-		printfDx("発狂レベルリストにアクセスできません。\n");
-		ErrorLogFmtAdd("発狂難度リストにアクセスできません。\n");
+	if (HTTPrequest() != 1) {
+		printfDx("発狂難度リストのダウンロードに失敗しました。 / Failed to download the Insane difficulty list.\n");
+		ErrorLogFmtAdd("発狂難度リストのダウンロードに失敗しました。 / Failed to download the Insane difficulty list.\n");
+		ScreenFlip();
+		ProcessMessage();
 		return 0;
 	}
-	cur = hXml->FirstChildElement("list");
+	this->httpResult.toFile(fs::make_preferred("LR2files/Database/exlevel.xml").data());
+	printfDx("発狂難度リストをダウンロードしました。 / Downloaded the Insane difficulty list.\n");
+	ErrorLogFmtAdd("発狂難度リストをダウンロードしました。 / Downloaded the Insane difficulty list.\n");
+	ScreenFlip();
+	ProcessMessage();
+	return 1;
+}
+
+// Apply song exlevel from LR2files/Database/exlevel.xml.
+int NETWORK::ApplyInsaneList() {
+	printfDx("発狂難度データベースを更新しています... / Updating the Insane difficulty database...\n");
+	ScreenFlip();
+	ProcessMessage();
+
+	const std::string path = fs::make_preferred("LR2files/Database/exlevel.xml").data();
+
+	TiXmlDocument *hXml = new TiXmlDocument(path.c_str());
+
+	if (!parse_cp932_xml(hXml, path.c_str())) {
+		delete(hXml);
+		printfDx("発狂レベルリストにアクセスできません。 / Cannot access the Insane level list.\n");
+		ErrorLogFmtAdd("発狂難度リストにアクセスできません。 / Cannot access the Insane level list.\n");
+		return 0;
+	}
+	TiXmlElement *cur = hXml->FirstChildElement("list");
 	if (!cur) {
 		delete(hXml);
-		printfDx("発狂レベルリストの読み込みに失敗しました。\n");
+		printfDx("発狂レベルリストの読み込みに失敗しました。 / Failed to load the Insane level list.\n");
 		return 0;
 	}
 	cur = cur->FirstChildElement("song");
 	if (!cur) {
 		delete(hXml);
-		printfDx("発狂レベルリストの更新はありません。\n");
+		printfDx("発狂レベルリストの更新はありません。 / No update for the Insane level list.\n");
 		return 0;
 	}
 
 	CSTR query;
 	std::string hash;
+	sqlite3 *pSongDB;
 	sqlite3_open(fs::make_preferred("LR2files/Database/song.db").data(), &pSongDB);
 	SQL_Run("BEGIN", pSongDB);
 	while (cur) {
