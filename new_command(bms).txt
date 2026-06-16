@@ -1,5 +1,8 @@
+1. #BASE 62
+base62 bms support
+
 260615 6:41(UTC)
-1. #SCROLLxx nnn, #XXXSC(channel) added
+2. #SCROLLxx nnn, #XXXSC(channel) added
 Related article: https://note.com/numuther/n/n57bf895e7969
 
 - Example(Normal Chart)
