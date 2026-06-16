@@ -1862,6 +1862,7 @@ unsigned char channelConvert[] = { 0x00, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3
 									0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c,
 									0x00, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x31, 0x32, 0x33, 0x34,
 									0x00, 0x3c, 0x35, 0x36, 0x37, 0x38, 0x39, 0x00, 0x3a, 0x3b };
+#define SC_CHANNEL 888 //NOTE: channelConvert[] cannot handle SC channel unless make it use base36
 int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMSMETA *meta, int bgaFlag, int scratchSide) {
 	ErrorLogFmtAdd("ParseBmsFile(%s)\n", filename.c_str());
 
@@ -1884,7 +1885,7 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 	int stages{};
 
 	LaneStruct tmpLane[10]{};
-	double BPMslot[SINGLESLOTS]{}, STOPslot[SINGLESLOTS]{};
+	double BPMslot[SINGLESLOTS]{}, STOPslot[SINGLESLOTS]{}, SCROLLslot[SINGLESLOTS]{};
 	int bmsobj_stageFirst{};
 	double oldSpeedMultiplier{};
 		
@@ -1949,6 +1950,7 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 
 	for (int i = 0; i < SINGLESLOTS; i++) BPMslot[i] = -1.0;
 	for (int i = 0; i < SINGLESLOTS; i++) STOPslot[i] = -1.0;
+	for (int i = 0; i < SINGLESLOTS; i++) SCROLLslot[i] = -1.0;
 
 	int isDSC = 0, isPMS = 0;
 	bool is5key = 0, is7key = 0, is9key = 0;
@@ -2038,6 +2040,7 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 	double bpmt_realtime = 0.0;
 	double bpmt_bmstime = 0.0;
 	double bpmt_rendertime = 0.0;
+	double bpmt_scMultiplier = 1.0;
 	double prevNoteBmstime = 0.0;
 	nowBPM = 0.0;
 	endtime = 0.0;
@@ -2153,10 +2156,14 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 			}
 
 
-			if (isdigit(*fBuf.atPos(1)) && isdigit(*fBuf.atPos(2)) && isdigit(*fBuf.atPos(3)) && isdigit(*fBuf.atPos(5))) {
+			if (isdigit(*fBuf.atPos(1)) && isdigit(*fBuf.atPos(2)) && isdigit(*fBuf.atPos(3)) && (isdigit(*fBuf.atPos(5)) || (*fBuf.atPos(4) == 'S' && *fBuf.atPos(5) == 'C'))) {
 				uint thisMeasure = atol(fBuf.getSliced(1, 3)) + stageStartMeasure;
-
-				channel = *fBuf.atPos(5) - 0x30 + HEXcharToInt('0', *fBuf.atPos(4)) * 10;
+				
+				if (*fBuf.atPos(4) == 'S' && *fBuf.atPos(5) == 'C') {
+					channel = SC_CHANNEL;
+				} else {
+					channel = *fBuf.atPos(5) - 0x30 + HEXcharToInt('0', *fBuf.atPos(4)) * 10;
+				}
 				if (channel == 4 || channel == 7) gp->soundonly = 0;
 				if (channel < 150) {
 					switch (channelConvert[channel]) {
@@ -2416,7 +2423,7 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 								lastNoteTime = gp->bmsobj.notes[gp->bmsobj.count].bmsTiming;
 							}
 
-							if (channel == 8 || channel == 9) { //BPM, STOP
+							if (channel == 8 || channel == 9 || channel == SC_CHANNEL) { //BPM, STOP, SCROLL
 								gp->bmsobj.notes[gp->bmsobj.count].val = Base36or62ToInt(*fBufOrg.atPos(ii), *fBufOrg.atPos(ii + 1), isBase62);
 							}
 							else {
@@ -2517,6 +2524,15 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 				param2 = atol(fBuf.right(fBuf.length() - 8));
 				if (1 <= param1 && param1 < SINGLESLOTS && param2 > 0) {
 					STOPslot[param1] = param2;
+				}
+			}
+			else if (fBuf.left(7).isSame("#SCROLL")) {
+				int param1;
+				double param2;
+				param1 = Base36or62ToInt(*fBufOrg.atPos(7), *fBufOrg.atPos(8),isBase62);
+				param2 = atof(fBuf.right(fBuf.length() - 10));
+				if (1 <= param1 && param1 < SINGLESLOTS) {
+					SCROLLslot[param1] = param2;
 				}
 			}
 			else if (fBuf.left(4).isSame("#WAV") && cfg->play.autojudge != 2) {
@@ -2733,7 +2749,7 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 				else {
 					double delta = meaLength * 1920.0 * (gp->bmsobj.notes[i].bmsTiming - prevNoteBmstime);
 					bpmt_bmstime += delta;
-					bpmt_rendertime += delta;
+					bpmt_rendertime += delta * bpmt_scMultiplier;
 					prevNoteBmstime = gp->bmsobj.notes[i].bmsTiming;
 					stopRealtime = 0.0;
 				}
@@ -2881,6 +2897,28 @@ int ParseBmsFile(gameplay *gp, CSTR filename, AUDIO *aud, ConfigStruct* cfg, BMS
 					stopRealtime = stopVal / 192.0 * 240000.0 / nowBPM;
 					gp->bmsobj.notes[i].val = (240000.0 / nowBPM) * STOPslot[(int)gp->bmsobj.notes[i].val] / 192.0;
 					break;
+				case SC_CHANNEL: { // SCROLL
+					bpmt_scMultiplier = SCROLLslot[(int)gp->bmsobj.notes[i].val];
+
+					if (gp->bpmt_count == gp->bpmt_buffersize) {
+						gp->bpmt_buffersize += 100;
+						gp->bpmt_data = (BPMtiming*)realloc(gp->bpmt_data, gp->bpmt_buffersize * sizeof(BPMtiming));
+						assert(gp->bpmt_data != nullptr);
+						for (int j = gp->bpmt_buffersize - 100; j < gp->bpmt_buffersize; j++) {
+							gp->bpmt_data[j].BPM = 0;
+							gp->bpmt_data[j].converted = 0;
+							gp->bpmt_data[j].render_converted = 0;
+							gp->bpmt_data[j].realtime = 0;
+						}
+					}
+					
+					gp->bpmt_data[gp->bpmt_count].BPM = nowBPM; 
+					gp->bpmt_data[gp->bpmt_count].realtime = bpmt_realtime;
+					gp->bpmt_data[gp->bpmt_count].converted = bpmt_bmstime;
+					gp->bpmt_data[gp->bpmt_count].render_converted = bpmt_rendertime;
+					gp->bpmt_count++;
+					break;
+				}
 			}
 
 			if (10 <= gp->bmsobj.notes[i].op && gp->bmsobj.notes[i].op < 29) {
