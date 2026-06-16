@@ -937,7 +937,7 @@ void LRDrawTextInput(int* hFont, DSTdraw *dstd, int* hInput, ImageFont *imgfont)
 				grLen = GetTextGraphLength(&tCstr, imgfont);
 			}
 			if (pIME == NULL)	buf.fillzero();
-			else				cstrSprintf(&buf, "%s", *pIME);
+			else				cstrSprintf(&buf, "%s", pIME->InputString);
 			dstd->x += grLen;
 			if (buf.length() < 1) {
 				DrawBox(dstd->x, dstd->y, dstd->x + 1.0, dstd->y + dstd->h, GetColor(0xff, 0xff, 0xff), 1);
