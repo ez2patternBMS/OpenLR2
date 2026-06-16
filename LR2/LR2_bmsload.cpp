@@ -1647,6 +1647,7 @@ int DPsplitLaneScratch(LaneStruct *lane, int start, CHARTCONVERTER *cc) {
 					}
 				}
 				else {
+					lane->notes[scratchNoteID].op += 10;
 					if (cc->assist2p == 0) {
 						for (int j = scratchNoteID; j > 0; j--) {
 							if (lane->notes[j].op == 2) break;
@@ -1707,7 +1708,7 @@ int SPtoDP(LaneStruct *lane, int baseNoteID, CHARTCONVERTER *cc) {
 		if (cc->noteCountPerLane[i]) cc->laneCount++;
 	}
 
-	qsort(&cc->arr1, SINGLESLOTS, sizeof(cc->arr1), CMP_CCARRbyCount);
+	qsort(&cc->arr1, SINGLESLOTS, sizeof(struct_0x14), CMP_CCARRbyCount);
 
 	bool fA = false, fB = false;
 	if (cc->arr2[0].count && cc->arr1[0].count&& ((cc->arr1[0].ID == cc->arr2[0].ID && (cc->arr1[1].ID == cc->arr2[1].ID || cc->arr1[1].ID == cc->arr2[2].ID || cc->arr1[2].ID == cc->arr2[1].ID || cc->arr1[2].ID == cc->arr2[2].ID)) 
@@ -1725,7 +1726,7 @@ int SPtoDP(LaneStruct *lane, int baseNoteID, CHARTCONVERTER *cc) {
 		cc->unk14428 = 0;
 	}
 
-	qsort(&cc->arr2, SINGLESLOTS,sizeof(cc->arr2), CMP_CCARRbyID);
+	qsort(&cc->arr2, SINGLESLOTS,sizeof(struct_0x14), CMP_CCARRbyID);
 	if (fA) {
 		for (int i = 0; i < SINGLESLOTS; i++) {
 			if (cc->arr2[i].field3_0xc == 0) cc->arr2[i].field3_0xc = 1;
@@ -1768,7 +1769,7 @@ int SPtoDP(LaneStruct *lane, int baseNoteID, CHARTCONVERTER *cc) {
 		cc->arr2[i].field3_0xc = cc->arr1[i].field3_0xc;
 	}
 
-	qsort(&cc->arr1, SINGLESLOTS, sizeof(cc->arr1), CMP_CCARRbyID);
+	qsort(&cc->arr1, SINGLESLOTS, sizeof(struct_0x14), CMP_CCARRbyID);
 	for (int i = baseNoteID + 1; i < lane->count; i++) {
 
 		if (lane->notes[i].op == 2) break;
