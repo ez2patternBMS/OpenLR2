@@ -39,10 +39,6 @@ int SetManualTimerFlag(Timer *T, char flag){
 	return 1;
 }
 
-int NONE_004b6770(void){
-	return 1;
-}
-
 int MovieTimer(Timer *T){
 	T->movieTimer += (T->movieFramerate > 0.0)? (1000.0 / T->movieFramerate) : 33.33333333333334;
 	manualTimer = T->movieTimer;

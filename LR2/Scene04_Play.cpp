@@ -283,7 +283,6 @@ int DrawNotes(game *g, skstruct *sk, Timer *T, CONFIG_PLAY *cfg) {
 	DSTdraw tDdraw;
 
 	SoundGetCurrentTime(&g->audio, &g->gameplay.muon);
-	NONE_004b6770();
 	int drawStartHeight = 0;
 
 	if (sk->dst_NOTE[1].dstCount > 0) {
@@ -366,7 +365,6 @@ int DrawNotes(game *g, skstruct *sk, Timer *T, CONFIG_PLAY *cfg) {
 	}
 
 	SoundGetCurrentTime(&g->audio, &g->gameplay.muon);
-	NONE_004b6770();
 	double songtimer = RealTimeToBMSTime(&g->gameplay, GetTimeLapse(41, T) + cfg->judgetiming);
 	double songtimer_render = RealTimeToRenderTime(&g->gameplay, GetTimeLapse(41, T) + cfg->judgetiming);
 	if (g->gameplay.bpmChangedBmstime > 0) {
@@ -1124,7 +1122,6 @@ int ProcI_Play(game *g) {
 
 	DrawHPgauge(g);
 	SoundGetCurrentTime(&g->audio, &g->gameplay.muon);
-	NONE_004b6770();
 
 	if (GetTimeLapse(41, &g->timer1) > 0.0 && g->config.play.m_lunaris == 0) {
 		DrawNotes(g, &g->skstruct, &g->timer1, &g->config.play);
@@ -1192,7 +1189,6 @@ int ProcGame(game *g) {
 	}
 	g->gameplay.procGameCallCount++;
 	SoundGetCurrentTime(&g->audio, &g->gameplay.muon); //anti cheat
-	NONE_004b6770();
 	bool fx = false;
 	double t142 = GetTimeLapse(142, &g->timer1);
 	double t41 = GetTimeLapse(41, &g->timer1);
@@ -1242,7 +1238,6 @@ int ProcGame(game *g) {
 		int gaugeType[2] = { g->gameplay.player[0].gaugeType, g->gameplay.player[1].gaugeType };
 		if (g->gameplay.bmsobj.notes[g->gameplay.bmsobj.note_count].realTiming >= t142 || g->gameplay.bpmChangedBmstime >= 0) {
 			SoundGetCurrentTime(&g->audio, &g->gameplay.muon); //anti cheat
-			NONE_004b6770();
 			t142 = GetTimeLapse(142, &g->timer1);
 			if (g->gameplay.isPreviewLoad == '\0') {
 				ReactInput(g);

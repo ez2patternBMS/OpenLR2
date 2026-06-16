@@ -7,8 +7,6 @@ int SetManualTimerFlag(Timer * T, char flag);
 int SetManualTimer(Timer * T, double newTime);
 int MovieTimer(Timer * T);
 
-int NONE_004b6770(void);
-
 //config and init timer
 int SetHPtimerFlag(char val);
 int InitTimer(Timer * T);
