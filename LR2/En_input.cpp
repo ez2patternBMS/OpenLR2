@@ -9,7 +9,24 @@
 
 #include <algorithm>
 
-MIDI midi;
+#ifdef _WIN32
+#include <windows.h>
+#else
+struct HMIDIIN {};
+#ifndef CALLBACK
+#define CALLBACK
+#endif // CALLBACK
+#endif // _WIN32
+
+typedef struct MIDI {
+	byte input[260]; //0x101:ptich_minus 0x102:pitch_plus 0x103:pedal;
+	int unusedFC;
+	int controller_n;
+	int controller_v;
+	HMIDIIN phmiArray[16];
+}MIDI;
+
+static MIDI midi;
 
 #ifndef _WIN32
 #define LOWORD(l) ((WORD)(((DWORD_PTR)(l)) & 0xffff))
@@ -31,7 +48,7 @@ int InitInputStructure2(inputStructure *is){
 	return 1;
 }
 
-void EndMIDIInput(void){
+static void EndMIDIInput(void){
 #ifdef _WIN32
 	UINT numDev;
 
@@ -47,7 +64,7 @@ void EndMIDIInput(void){
 #endif // _WIN32
 }
 
-void GetMidiInput(dword msg, dword /*timestamp*/) {
+static void GetMidiInput(dword msg, dword /*timestamp*/) {
 	// http://www.gweep.net/~prefect/eng/reference/protocol/midispec.html
 	byte status = (msg & 0xff);
 	byte data1 = LOWORD(msg) >> 8;
@@ -124,7 +141,7 @@ int CloseMIDI(void){
 	return 1;
 }
 
-void ProcessInput(inputStructure *is, int interval) {
+static void ProcessInput(inputStructure *is, int interval) {
 
 	int mouseX, mouseY;
 	uint new_joyInput[256];
@@ -285,7 +302,7 @@ void ProcessInput(inputStructure *is, int interval) {
 	}
 }
 
-void CALLBACK MIDIInProc(HMIDIIN /*hMidiIn*/, uint wMsg, dword /*dwInstance*/, dword dwParam1, dword dwParam2){
+static void CALLBACK MIDIInProc(HMIDIIN /*hMidiIn*/, uint wMsg, dword /*dwInstance*/, dword dwParam1, dword dwParam2){
 	if (wMsg == 0x3c3) { // = 963
 		GetMidiInput(dwParam1, dwParam2);
 	}
@@ -417,7 +434,7 @@ int InputToButton(inputStructure *is, CONFIG_INPUT *cfg_input, int player, int i
 	return 1;
 }
 
-void InitMIDIInput(void){
+static void InitMIDIInput(void){
 #ifdef _WIN32
 	midi.controller_v = 0;
 	midi.controller_n = 0;
