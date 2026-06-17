@@ -59,23 +59,28 @@ CustomIR::CustomIR(const std::filesystem::path& _directory) {
 	for (auto& file : std::filesystem::directory_iterator(_directory)) {
 		if (!file.is_regular_file()) continue;
 		if (file.path().extension().string() != ".dll") continue;
+		const auto filename = file.path().filename().string();
+		ErrorLogFmtAdd("Trying to load CustomIR %s", filename.c_str());
 		if (auto s = file.path().stem().string(); !s.ends_with(ARCH)) {
-			ErrorLogFmtAdd("'%s' skipping IR module with invalid file name stem (expected %s)\n", s.c_str(), ARCH);
+			ErrorLogFmtAdd("'%s' skipping per invalid file name stem (expected %s)\n", s.c_str(), ARCH);
 			continue;
 		}
 		mDllHandle.reset(LoadLibrary(file.path().string().c_str()));
-		if (mDllHandle == nullptr) continue;
+		if (mDllHandle == nullptr) {
+			ErrorLogFmtAdd("'%s' LoadLibrary failed\n", filename.c_str());
+			continue;
+		}
 		auto GetMethodTable = reinterpret_cast<void (__cdecl*)(MethodTable&)>(GetProcAddress(mDllHandle.get(), "GetMethodTable"));
 		if (GetMethodTable == nullptr) {
-			ErrorLogFmtAdd("'%s' not loaded, missing 'GetMethodTable' export.\n", file.path().filename().string().c_str());
+			ErrorLogFmtAdd("'%s' skipping per missing 'GetMethodTable' export\n", filename.c_str());
 			continue;
 		};
 		GetMethodTable(mMethods);
 		if (mMethods.GetName == nullptr) {
-			ErrorLogFmtAdd("'%s' not loaded, missing essential 'GetName' implementation.\n", file.path().filename().string().c_str());
+			ErrorLogFmtAdd("'%s' skipping per missing 'GetName' implementation\n", filename.c_str());
 			continue;
 		};
-		ErrorLogFmtAdd("'%s' loaded: %s\n", file.path().filename().string().c_str(), mMethods.GetName());
+		ErrorLogFmtAdd("CustomIR %s loaded: %s\n", filename.c_str(), mMethods.GetName());
 		break;
 	}
 }
