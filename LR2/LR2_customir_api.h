@@ -3,6 +3,14 @@
 #include <string>
 #include <array>
 
+#ifdef _WIN32
+#define OLR2_IR_API __cdecl
+#define OLR2_IR_EXPORT __declspec(dllexport)
+#else
+#define OLR2_IR_API
+#define OLR2_IR_EXPORT
+#endif // _WIN32
+
 struct IRScoreV1 {
 	struct SONG {
 		std::string hash;
@@ -105,14 +113,8 @@ enum class SendScoreStatus: int {
 	Fail,
 };
 
-#ifndef _WIN32
-#define __cdecl
-#endif // _WIN32
 struct MethodTable {
-	const char*(__cdecl* GetName)() = nullptr;
-	bool(__cdecl* LoginV1)() = nullptr;
-	SendScoreStatus(__cdecl* SendScoreV1)(const IRScoreV1& score) = nullptr;
+	const char*(OLR2_IR_API* GetName)() = nullptr;
+	bool(OLR2_IR_API* LoginV1)() = nullptr;
+	SendScoreStatus(OLR2_IR_API* SendScoreV1)(const IRScoreV1& score) = nullptr;
 };
-#ifndef _WIN32
-#undef __cdecl
-#endif // _WIN32

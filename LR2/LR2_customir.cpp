@@ -1,38 +1,67 @@
 #include "LR2_customir.h"
 
-#ifdef _WIN32
-
 #include "LR2_customir_api.h"
 #include "LR2_songmanage.h"
 #include "structure.h"
 
+#include <algorithm>
+#include <cmath>
 #include <filesystem>
-#include <format>
 #include <future>
-#include <queue>
 #include <ranges>
 #include <thread>
-#include <type_traits>
 
 #include <DxLib/DxLib.h>
+
+#ifdef _WIN32
 #include <libloaderapi.h>
 #include <wtypes.h>
+#else
+#include <dlfcn.h>
+#endif // _WIN32
+
+#if _WIN32
 
 #if _WIN64
 #if _DEBUG
 constexpr auto&& ARCH = "_D.x64";
 #else
 constexpr auto&& ARCH = ".x64";
-#endif
-#elif _WIN32
+#endif // _DEBUG
+#else
 #if _DEBUG
 constexpr auto&& ARCH = "_D.x86";
 #else
 constexpr auto&& ARCH = ".x86";
-#endif
+#endif // _DEBUG
+#endif // _WIN64
+
+constexpr auto&& DLL = ".dll";
+
 #else
-#error "Unsupported Arch Linux"
-#endif
+
+#if __x86_64__
+#if _DEBUG
+constexpr auto&& ARCH = "_D.x64";
+#else
+constexpr auto&& ARCH = ".x64";
+#endif // _DEBUG
+#else
+#if _DEBUG
+constexpr auto&& ARCH = "_D.x86";
+#else
+constexpr auto&& ARCH = ".x86";
+#endif // _DEBUG
+#endif // __x86_64__
+
+constexpr auto&& DLL = ".so";
+
+using HMODULE = void*;
+static HMODULE LoadLibrary(const char* fp) { return dlopen(fp, RTLD_NOW); }
+static void* GetProcAddress(HMODULE h, const char* name) { return dlsym(h, name); }
+static void FreeLibrary(HMODULE h) { dlclose(h);}
+
+#endif // _WIN32
 
 // TODO
 #define OverlayNotification ErrorLogFmtAdd
@@ -58,7 +87,7 @@ private:
 CustomIR::CustomIR(const std::filesystem::path& _directory) {
 	for (auto& file : std::filesystem::directory_iterator(_directory)) {
 		if (!file.is_regular_file()) continue;
-		if (file.path().extension().string() != ".dll") continue;
+		if (file.path().extension().string() != DLL) continue;
 		const auto filename = file.path().filename().string();
 		ErrorLogFmtAdd("Trying to load CustomIR %s", filename.c_str());
 		if (auto s = file.path().stem().string(); !s.ends_with(ARCH)) {
@@ -70,7 +99,7 @@ CustomIR::CustomIR(const std::filesystem::path& _directory) {
 			ErrorLogFmtAdd("'%s' LoadLibrary failed\n", filename.c_str());
 			continue;
 		}
-		auto GetMethodTable = reinterpret_cast<void (__cdecl*)(MethodTable&)>(GetProcAddress(mDllHandle.get(), "GetMethodTable"));
+		auto GetMethodTable = reinterpret_cast<void (OLR2_IR_API*)(MethodTable&)>(GetProcAddress(mDllHandle.get(), "GetMethodTable"));
 		if (GetMethodTable == nullptr) {
 			ErrorLogFmtAdd("'%s' skipping per missing 'GetMethodTable' export\n", filename.c_str());
 			continue;
@@ -508,11 +537,3 @@ void CUSTOMIR_MANAGER::SendScore(game& game, sqlite3* sql, int player) {
 		}
 	}, IRScoreInternal{ game, sql, player }, mModules));
 }
-#else
-
-CUSTOMIR_MANAGER::~CUSTOMIR_MANAGER() {};
-void CUSTOMIR_MANAGER::Initialize(const std::filesystem::path& directory) {};
-void CUSTOMIR_MANAGER::Login() {};
-void CUSTOMIR_MANAGER::SendScore(game& game, sqlite3* sql, int player) {};
-
-#endif // _WIN32
