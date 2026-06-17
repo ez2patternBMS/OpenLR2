@@ -293,7 +293,7 @@ static int ParseRivalData(int ID) {
 
 	CSTR hash, query;
 	int count = 0;
-	int clear, notes, combo, pg, gr, gd, bd, pr, minbp, option, lastupdate;
+	int clear{}, notes{}, combo{}, pg{}, gr{}, gd{}, bd{}, pr{}, minbp{}, option{}, lastupdate{};
 	SQL_Run("BEGIN", pRivalDB);
 
 	while (cur) {
