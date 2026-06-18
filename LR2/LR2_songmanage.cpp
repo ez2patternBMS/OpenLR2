@@ -6,8 +6,11 @@
 #include <cstring>
 #include <iterator>
 #include <ranges>
+#include <string>
 #include <string_view>
 #include <charconv>
+#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 #ifdef _WIN32
@@ -17,6 +20,128 @@
 int EnabledInsane;
 
 namespace {
+
+// --- Reload scan cache (single init per full autoreload) -------------------
+// Built once before a full reload; lets the folder/song passes skip charts
+// already present in song.db. The skip is hash-verified, so an in-place edit
+// (same path, changed content) still falls through to a full reparse.
+bool g_fullSongPass = false;
+std::unordered_map<std::string, std::string> g_songHashes;
+std::unordered_set<std::string> g_processedSongPaths;
+std::string g_songPassDisplayedFolder;
+
+std::string MakePathKey(CSTR path) {
+	return path.body ? std::string(path.body) : std::string();
+}
+
+void BuildSongReloadSnapshot(sqlite3* sql) {
+	g_fullSongPass = true;
+	g_songHashes.clear();
+	g_processedSongPaths.clear();
+	g_songPassDisplayedFolder.clear();
+
+	sqlite3_stmt* pStmt = nullptr;
+	if (sqlite3_prepare(sql, "SELECT path,hash FROM song", -1, &pStmt, nullptr) != 0) return;
+	while (sqlite3_step(pStmt) == 100) {
+		const std::string pathKey = MakePathKey(SQL_GetColumn(0, pStmt));
+		g_songHashes.emplace(pathKey, MakePathKey(SQL_GetColumn(1, pStmt)));
+	}
+	sqlite3_finalize(pStmt);
+}
+
+void EndSongReloadSnapshot() {
+	g_fullSongPass = false;
+	g_songHashes.clear();
+	g_processedSongPaths.clear();
+}
+
+// --- Scan progress display (loading screen feedback during autoreload) ------
+
+void ShowReloadFolderPassProgress(const size_t processed, const size_t total, CSTR path) {
+	if (!g_fullSongPass || total == 0) return;
+	if (processed != total && processed % 64 != 0) { 
+		ProcessMessage(); 
+		return; 
+	}
+
+	const int percent = static_cast<int>(100 * processed / total);
+	if (hBackImage > 0) DrawGraph(0, 0, hBackImage, 0); 
+	
+	printfDx("Now Loading...\n%d / %d (%d%%)\n%s\n", static_cast<int>(processed), static_cast<int>(total), percent, path.body);
+	ScreenFlip(); 
+	ClsDrawScreen(); 
+	clsDx(); 
+	ProcessMessage();
+}
+
+// Song-pass feedback. Called with an empty path from the row loop (shows the
+// overall progress bar, only until the first file gets hash-checked) and with a
+// concrete path from RefreshSongDateIfHashMatches (shows the folder being
+// hashed, once per folder).
+void ShowReloadSongPassProgress(const size_t processed, const size_t total, CSTR path) {
+	if (!g_fullSongPass || total == 0) return;
+
+	if (path.body && path.body[0]) {
+		const CSTR folder(path.getDirectory());
+		const std::string folderKey = MakePathKey(folder);
+		if (folderKey == g_songPassDisplayedFolder) {
+			ProcessMessage();
+			return;
+		}
+		g_songPassDisplayedFolder = folderKey;
+		if (hBackImage > 0) DrawGraph(0, 0, hBackImage, 0);
+
+		printfDx("Checking song folder...\n%s\n", folder.body);
+		ScreenFlip();
+		ClsDrawScreen();
+		clsDx();
+		ProcessMessage();
+		return;
+	}
+
+	if (!g_songPassDisplayedFolder.empty()) {
+		ProcessMessage();
+		return;
+	}
+
+	if (processed != total && processed % 512 != 0) {
+		ProcessMessage();
+		return;
+	}
+
+	const int width = 300, height = 14, x = 0, y = 32;
+	const int filled = static_cast<int>(width * processed / total);
+	const int percent = static_cast<int>(100 * processed / total);
+
+	if (hBackImage > 0) DrawGraph(0, 0, hBackImage, 0);
+
+	printfDx("Checking song files...\n%d / %d (%d%%)\n", static_cast<int>(processed), static_cast<int>(total), percent);
+	DrawBox(x, y, x + width, y + height, GetColor(64, 64, 64), true);
+	DrawBox(x, y, x + filled, y + height, GetColor(255, 255, 255), true);
+
+	ScreenFlip();
+	ClsDrawScreen();
+	clsDx();
+	ProcessMessage();
+}
+
+// ---------------------------------------------------------------------------
+
+bool RefreshSongDateIfHashMatches(sqlite3* sql, CSTR path, const int newTime, char* queryBuffer, const size_t queryBufferSize) {
+	if (!g_fullSongPass) return false;
+
+	const auto it = g_songHashes.find(MakePathKey(path));
+	if (it == g_songHashes.end() || it->second.empty()) return false;
+
+	ShowReloadSongPassProgress(0, 1, path);
+	CSTR currentHash;
+	if (makeFileHash(path.body, currentHash.body) != 1) return false;
+	if (strcmp(currentHash.body, it->second.c_str()) != 0) return false;
+
+	SQL_Run(sqlite3_snprintf(static_cast<int>(queryBufferSize), queryBuffer, "UPDATE song SET date = %d WHERE path = \'%q\'", newTime, path.body), sql);
+	g_processedSongPaths.insert(MakePathKey(path));
+	return true;
+}
 
 char ToUpperAscii(char ch) {
 	if ('a' <= ch && ch <= 'z') return ch - ('a' - 'A');
@@ -1195,12 +1320,15 @@ int SearchSongsFromPath(CSTR root, sqlite3 *sql, CSTR path) {
 				searchPath = root;
 				searchPath.add(findFileData.cFileName);
 				filetime = GetUnixtimeFromFiletime(findFileData.ftLastWriteTime);
-				ErrorLogFmtAdd("曲を発見しました。　パス:%s\n", searchPath.body);
-				ParseBMSMETA(&meta, searchPath, 1);
-				LoadBMSMETAFromDB(&meta, sql);
-				sqlite3_snprintf(2048, str, "INSERT INTO song (hash,title,subtitle,genre,artist,subartist,level,date,path,folder,stagefile,banner,backbmp,parent,maxbpm,minbpm,random,longnote,judge,mode,bga,difficulty,favorite,type,txt,karinotes,adddate,exlevel) VALUES(\'%q\',\'%q\',\'%q\',\'%q\',\'%q\',\'%q\',%d,%d,\'%q\',\'%q\',\'%q\',\'%q\',\'%q\',\'%q\',%d,%d,%d,%d,%d,%d,%d,%d,0,0,%d,%d,%d,%d)",
-					meta.hash.body, meta.title.body, meta.subtitle.body, meta.genre.body, meta.artist.body, meta.subartist.body, meta.selLevel, filetime, searchPath.body, AssignCRC32(meta.folderpath).body, meta.stagefilepath.body, meta.bannerpath.body, meta.backBMPpath.body, AssignCRC32(meta.parentfolderpath).body, meta.maxbpm, meta.minbpm, meta.random, meta.longnote, meta.judge, meta.keymode, meta.bga, meta.difficulty, meta.hasTxt, meta.notecount, now, meta.exlevel);
-				SQL_Run(str, sql);
+				if (!g_fullSongPass || !g_songHashes.contains(MakePathKey(searchPath))) {
+					ErrorLogFmtAdd("曲を発見しました。　パス:%s\n", searchPath.body);
+					ParseBMSMETA(&meta, searchPath, 1);
+					LoadBMSMETAFromDB(&meta, sql);
+					sqlite3_snprintf(2048, str, "INSERT INTO song (hash,title,subtitle,genre,artist,subartist,level,date,path,folder,stagefile,banner,backbmp,parent,maxbpm,minbpm,random,longnote,judge,mode,bga,difficulty,favorite,type,txt,karinotes,adddate,exlevel) VALUES(\'%q\',\'%q\',\'%q\',\'%q\',\'%q\',\'%q\',%d,%d,\'%q\',\'%q\',\'%q\',\'%q\',\'%q\',\'%q\',%d,%d,%d,%d,%d,%d,%d,%d,0,0,%d,%d,%d,%d)",
+						meta.hash.body, meta.title.body, meta.subtitle.body, meta.genre.body, meta.artist.body, meta.subartist.body, meta.selLevel, filetime, searchPath.body, AssignCRC32(meta.folderpath).body, meta.stagefilepath.body, meta.bannerpath.body, meta.backBMPpath.body, AssignCRC32(meta.parentfolderpath).body, meta.maxbpm, meta.minbpm, meta.random, meta.longnote, meta.judge, meta.keymode, meta.bga, meta.difficulty, meta.hasTxt, meta.notecount, now, meta.exlevel);
+					SQL_Run(str, sql);
+					if (g_fullSongPass) g_processedSongPaths.insert(MakePathKey(searchPath));
+				}
 				count++;
 			}
 			else if (((findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) && IsLR2Folder(findFileData.cFileName)){
@@ -1264,7 +1392,7 @@ int SearchSongsFromPath(CSTR root, sqlite3 *sql, CSTR path) {
 }
 
 // TODO:arrange duplicated code
-int ReloadSongsByQuery(CSTR query, sqlite3 *sql, CONFIG_JUKEBOX *jb) {
+int ReloadSongsByQuery(CSTR query, sqlite3 *sql, CONFIG_JUKEBOX *jb, ReloadProgress progress) {
 
 	sqlite3_stmt *pStmt;
 	char sBuf[1024];
@@ -1282,10 +1410,23 @@ int ReloadSongsByQuery(CSTR query, sqlite3 *sql, CONFIG_JUKEBOX *jb) {
 	}
 	sqlite3_finalize(pStmt);
 
+	const bool showFolderPassProgress = (progress == ReloadProgress::FolderPass);
+	const bool showSongPassProgress = (progress == ReloadProgress::SongPass);
+	if (showFolderPassProgress) ShowReloadFolderPassProgress(0, pathList.size(), CSTR(""));
+
+	size_t rowIndex = 0;
 	for (const auto& [str, time] : std::views::zip(pathList, timeList)) {
+		rowIndex++;
+		if (showFolderPassProgress) ShowReloadFolderPassProgress(rowIndex, pathList.size(), str);
+		else if (showSongPassProgress) ShowReloadSongPassProgress(rowIndex, pathList.size(), CSTR(""));
 		if (!str.left(8).isSame("LR2files")) {
 			const bool is_bms_file = IsBmsFile(str);
 			const bool is_lr2folder = IsLR2Folder(str);
+
+			if (is_bms_file && g_fullSongPass && g_processedSongPaths.contains(MakePathKey(str))) {
+				cAlready++;
+				continue;
+			}
 
 			int is_path_in_jukebox = 0;
 			for (int i = 0; i < jb->numOfPath; i++) {
@@ -1312,12 +1453,16 @@ int ReloadSongsByQuery(CSTR query, sqlite3 *sql, CONFIG_JUKEBOX *jb) {
 				else if (chg == 2) {
 					cChange++;
 					if (is_bms_file) {
+						if (RefreshSongDateIfHashMatches(sql, str, newTime, sBuf, sizeof(sBuf))) {
+							continue;
+						}
 						SQL_Run(sqlite3_snprintf(1024, sBuf, "DELETE FROM song WHERE path=\'%q\'", str.body), sql);
 						BMSMETA meta;
 						ParseBMSMETA(&meta, str, 1);
 						LoadBMSMETAFromDB(&meta, sql);
 						SQL_Run(sqlite3_snprintf(1024, sBuf, "INSERT INTO song (hash,title,subtitle,genre,artist,subartist,level,date,path,folder,stagefile,banner,backbmp,parent,maxbpm,minbpm,random,longnote,judge,mode,bga,difficulty,favorite,type,txt,karinotes,adddate,exlevel) VALUES(\'%q\',\'%q\',\'%q\',\'%q\',\'%q\',\'%q\',%d,%d,\'%q\',\'%q\',\'%q\',\'%q\',\'%q\',\'%q\',%d,%d,%d,%d,%d,%d,%d,%d,0,0,%d,%d,%d,%d)",
 							meta.hash.body, meta.title.body, meta.subtitle.body, meta.genre.body, meta.artist.body, meta.subartist.body, meta.selLevel, newTime, str.body, AssignCRC32(meta.folderpath).body, meta.stagefilepath.body, meta.bannerpath.body, meta.backBMPpath.body,AssignCRC32(meta.parentfolderpath).body,meta.maxbpm,meta.minbpm,meta.random,meta.longnote,meta.judge,meta.keymode,meta.bga,meta.difficulty,meta.hasTxt,meta.notecount,now,meta.exlevel), sql);
+						if (g_fullSongPass) g_processedSongPaths.insert(MakePathKey(str));
 					}
 					else if (is_lr2folder) {
 						SQL_Run(sqlite3_snprintf(1024, sBuf, "DELETE FROM folder WHERE path=\'%q\'", str.body), sql);
@@ -2637,10 +2782,15 @@ int LoadLR2CustomFolder(sqlite3 *sql, CONFIG_JUKEBOX *jb, CSTR scoreDBpath, char
 		}
 
 		if (jb->autoreload == 2 || flag_starter) {
+			BuildSongReloadSnapshot(sql);
+
 			ErrorLogAdd("フォルダ更新チェックを行います。 / Checking folder updates.\n");
-			ReloadSongsByQuery("SELECT path,date FROM folder", sql, jb);
+			ReloadSongsByQuery("SELECT path,date FROM folder", sql, jb, ReloadProgress::FolderPass);
+
 			ErrorLogAdd("ファイル更新チェックを行います。 / Checking file updates.\n");
-			ReloadSongsByQuery("SELECT path,date FROM song", sql, jb);
+			ReloadSongsByQuery("SELECT path,date FROM song", sql, jb, ReloadProgress::SongPass);
+
+			EndSongReloadSnapshot();
 		}
 		else {
 			ErrorLogAdd("フォルダ更新チェック(ルートのみ)を行います。 / Checking folder updates (root only).\n");
