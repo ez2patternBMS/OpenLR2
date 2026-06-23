@@ -2265,6 +2265,10 @@ int main(int argc, char** argv) {
 			LoadSceneG(&gs, &gs.skstruct, SKINTYPE_SELECT);
 			SetWaitVSyncFlag(0); //VSYNC
 			SetMouseDispFlag(0);
+#ifdef _WIN32
+			SetForegroundWindow(GetMainWindowHandle()); // restore OS focus so the cursor isn't frozen after leaving exclusive
+#endif // _WIN32
+			gs.KeyInput.mouse_buttonL = 0; // consume the click so the transition can't re-trigger the screen-mode toggle
 			gs.is_clicked_screenModeChange = 0;
 			SetObjectStrings_SongSelect(&gs);
 		}
