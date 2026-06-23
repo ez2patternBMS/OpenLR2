@@ -319,7 +319,7 @@ int main(int argc, char** argv) {
 
 	int resX, resY;
 	GetConfigResolution(gs.config.system.resolution, &resX, &resY);
-	SetGraphMode(resX, resY, (gs.config.system.highcolor == 0) ? 32 : 16, 60);
+	SetGraphMode(resX, resY, (gs.config.system.highcolor == 0) ? 32 : 16, GetRefreshRate());
 	if (gs.rec.recMode == 3) {
 		SetGraphMode(256, 256, 32, 60);
 	}
@@ -1960,7 +1960,7 @@ int main(int argc, char** argv) {
 					for (int i = 0; i < 10; i++) {
 						gs.skstruct.ImageFonts[i].filepath[0] = 0;
 					}
-					SetGraphMode(resX, resY, (gs.config.system.highcolor == 0 ? 32 : 16), 60); //redundant?
+					SetGraphMode(resX, resY, (gs.config.system.highcolor == 0 ? 32 : 16), GetRefreshRate()); //redundant?
 					SetWaitVSyncFlag(0); //VSYNC
 #ifdef _WIN32
 					ChangeWindowMode(gs.config.system.screenmode);
@@ -2004,7 +2004,7 @@ int main(int argc, char** argv) {
 					for (int i = 0; i < 10; i++) {
 						gs.skstruct.ImageFonts[i].filepath[0] = 0;
 					}
-					SetGraphMode(resX, resY, (gs.config.system.highcolor == 0 ? 32 : 16), 60); //redundant?
+					SetGraphMode(resX, resY, (gs.config.system.highcolor == 0 ? 32 : 16), GetRefreshRate()); //redundant?
 					SetWaitVSyncFlag(0); //VSYNC
 #ifdef _WIN32
 					ChangeWindowMode(gs.config.system.screenmode);
@@ -2245,7 +2245,7 @@ int main(int argc, char** argv) {
 			for (int i = 0; i < 10; i++) {
 				gs.skstruct.ImageFonts[i].filepath[0] = 0;
 			}
-			SetGraphMode(resX, resY, (gs.config.system.highcolor == 0 ? 32 : 16), 60); //redundant?
+			SetGraphMode(resX, resY, (gs.config.system.highcolor == 0 ? 32 : 16), GetRefreshRate()); //redundant?
 			SetWaitVSyncFlag(0); //VSYNC
 #ifdef _WIN32
 			ApplyScreenMode(gs.config.system.screenmode);
@@ -2274,7 +2274,7 @@ int main(int argc, char** argv) {
 			for (int i = 0; i < 10; i++) {
 				gs.skstruct.ImageFonts[i].filepath[0] = 0;
 			}
-			SetGraphMode(resX, resY, (gs.config.system.highcolor == 0 ? 32 : 16), 60); //redundant?
+			SetGraphMode(resX, resY, (gs.config.system.highcolor == 0 ? 32 : 16), GetRefreshRate()); //redundant?
 			SetDrawScreen(DX_SCREEN_BACK);
 			LoadSceneG(&gs, &gs.skstruct, SKINTYPE_SELECT);
 			SetWaitVSyncFlag(0); //VSYNC
