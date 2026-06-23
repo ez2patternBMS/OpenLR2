@@ -332,11 +332,11 @@ int main(int argc, char** argv) {
 	if (gs.is_starter) {
 		if (MessageBoxA(NULL, "フルスクリーンモードで起動しますか？", "確認", 4) == 6) {
 			gs.config.system.screenmode = 0;
-			ChangeWindowMode(0);
+			ApplyScreenMode(gs.config.system.screenmode);
 		}
 		else {
 			gs.config.system.screenmode = 1;
-			ChangeWindowMode(1);
+			ApplyScreenMode(gs.config.system.screenmode);
 		}
 	}
 	else {
@@ -345,16 +345,16 @@ int main(int argc, char** argv) {
 			if (gs.is_starter) { //unreachable duplicated code
 				if (MessageBoxA(NULL, "フルスクリーンモードで起動しますか？", "確認", 4) == 6) {
 					gs.config.system.screenmode = 0;
-					ChangeWindowMode(0);
+					ApplyScreenMode(gs.config.system.screenmode);
 				}
 				else {
 					gs.config.system.screenmode = 1;
-					ChangeWindowMode(1);
+					ApplyScreenMode(gs.config.system.screenmode);
 				}
 			}
 		}
 		SetWaitVSyncFlag(0); //VSYNC
-		ChangeWindowMode(1);
+		ApplyScreenMode(1);
 		SetWaitVSyncFlag(0); //VSYNC
 	}
 
