@@ -350,6 +350,7 @@ struct CONFIG_SYSTEM {
 	int windowsize_y{};
 	int maindisplay{};
 	int softwarerendering{};
+	int resolution{};   // 0=SD 640x480, 1=HD 1280x720, 2=UHD 1920x1080
 	unsigned int coreCount = 0;
 };
 
@@ -1489,6 +1490,7 @@ struct SkinHeader { /* SkinInfo */
 	int custom_count;
 
 	//RESOLUTION
+	bool hasResolutionTag = false; // true if the skin declared #RESOLUTION; else fall back to config global
 	int targetX = 640;
 	int targetY = 480;
 };
