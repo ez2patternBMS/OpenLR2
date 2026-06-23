@@ -4,6 +4,7 @@
 #include <future>
 #include <mutex>
 #include <optional>
+#include <string>
 #include <thread>
 #include <unordered_map>
 #include <vector>
@@ -28,6 +29,7 @@
 
 
 struct sqlite3;
+struct game;
 
 typedef unsigned char   undefined;
 typedef unsigned int    ImageBaseOffset32;
@@ -881,7 +883,7 @@ struct MYRANKING {
 	int clear_sd;
 	int clear_db;
 	int rseed;
-	CSTR ghost; /* struct to? */
+	CSTR _ghost; // TODO: remove when we throw out memset usage
 
 	void InitRanking();
 };
@@ -1182,7 +1184,7 @@ struct PLAYSCORE {
 	char GetJudgeFromQueue(void);
 	int SetDefaultGhost(int target, int notes);
 	int SetGhost(int exscore, int notes, CSTR name);
-	CSTR EncodeGhostData(void);
+	CSTR EncodeGhostData(void) const;
 	int DecodeGhostData(CSTR data);
 	int SetScore(PLAYERSTATUS *pstat, char flagExpect);
 };
@@ -1307,7 +1309,8 @@ struct gameplay {
 	float earthquake_y;
 	int bpmChangedRealtime; /* timer142 */
 	int bpmChangedBmstime; /* bpm change timing */
-	char ghostBattle; 
+	char ghostBattle;
+	std::string resultGhostForIr;
 	struct CONFIG_PLAY targetCfg; /* //1p_speed ~ struct */
 	int delayDetectedCount;
 	int delayCheckCount;
@@ -1415,16 +1418,18 @@ struct NETWORK {
 	void ParseRankingXml(const char* path);
 
 	int HTTPrequest();
+	void WaitForRankingHandle();
 	void WaitAndInitRanking();
 	int GetRanking(CSTR hash, char flagInit);
 
 	int GetRivalInfo(int ID_rival);
 
-	int GetTargetInfo(int mode, CSTR songmd5, CSTR * oStr1, CSTR * oStr2, int * oDigit1, int * oDigit2, int * oDigit3, int * oDigit4, int * oUnk, int * oExscore);
+	int LR2IR_GetTargetInfo(int mode, CSTR songmd5, CSTR * oStr1, CSTR * oStr2, int * oDigit1, int * oDigit2, int * oDigit3, int * oDigit4, int * oUnk, int * oExscore);
+	bool GetTargetInfo(int mode, CSTR songmd5, CSTR * oStr1, CSTR * oStr2, int * oDigit1, int * oDigit2, int * oDigit3, int * oDigit4, int * oUnk, int * oExscore);
 	NETWORK();
 	int WS_clean();
 	int Login(int isDirectPlay);
-	int MakeIRsendScoreThread();
+	int MakeIRsendScoreThread(std::string ghostString);
 };
 
 struct game {
