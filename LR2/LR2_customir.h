@@ -1,7 +1,6 @@
 #pragma once
 
 #include "LR2_customir_api.h"
-#include "strclass.h"
 
 #include <filesystem>
 #include <future>

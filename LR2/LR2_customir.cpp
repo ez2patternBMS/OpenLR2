@@ -380,7 +380,7 @@ struct IRScoreInternal {
 	double rate{};
 	int clearType{};
 	int inputType{};
-	std::string ghostData{};
+	std::string ghostData;
 	struct GRAPHDATA {
 		std::array<std::array<int, 1000>, 6> hp{};
 		std::array<int, 1000> combo{};
