@@ -308,6 +308,8 @@ int main(int argc, char** argv) {
 	gs.is_clicked_screenModeChange = 0;
 	gs.flag_Screenshot = false;
 	ReadOptionstrFile(gs.txtStruct.option_str, fs::make_preferred("LR2files/Config/optionstr.csv").data());
+	if (gs.txtStruct.option_str[12].str[2].length() == 0)
+		gs.txtStruct.option_str[12].str[2].assign("EXCLUSIVE");
 	gs.audio.is_fmod_disabled = gs.config.sound.disablefmod;
 	if (gs.config.sound.disablefmod != 0) {
 		gs.config.select.preview = 0;
