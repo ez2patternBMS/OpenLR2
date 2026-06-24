@@ -82,6 +82,24 @@ static bool run_tests() {
 }
 
 #ifdef _WIN32
+static int GetWindowDisplayIndex() {
+	int wx = 0, wy = 0;
+	int ww = 0, wh = 0;
+	GetWindowPosition(&wx, &wy);
+	GetWindowSize(&ww, &wh);
+
+	const int targetX = wx + ww / 2;
+	const int targetY = wy + wh / 2;
+	const int displayCount = GetDisplayNum();
+	for (int i = 0; i < displayCount; i++) {
+		int dx = 0, dy = 0, dw = 0, dh = 0, primary = 0;
+		if (GetDisplayInfo(i, &dx, &dy, &dw, &dh, &primary) != 0) continue;
+		if (targetX >= dx && targetX < dx + dw && targetY >= dy && targetY < dy + dh) return i;
+	}
+
+	return -1;
+}
+
 // Applies the configured screen mode.
 //   0 = borderless fullscreen (virtual; composited by the DWM)
 //   1 = windowed
@@ -90,10 +108,13 @@ static bool run_tests() {
 // ChangeWindowMode only toggles windowed(1)/fullscreen(0).
 static void ApplyScreenMode(int screenmode) {
 	switch (screenmode) {
-	case 2:
+	case 2: {
+		const int displayIndex = GetWindowDisplayIndex();
+		if (displayIndex >= 0) SetUseDisplayIndex(displayIndex);
 		SetFullScreenResolutionMode(DX_FSRESOLUTIONMODE_DESKTOP);
 		ChangeWindowMode(0);
 		break;
+	}
 	case 1:
 		ChangeWindowMode(1);
 		break;
