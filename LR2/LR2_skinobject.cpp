@@ -2464,17 +2464,17 @@ int SetObjectValue_Bargraph(game *g) {
 					val = mybest.stat_exscore;
 					break;
 
-				case 48:
+				case 48: // Extension: fast-slow
 					max = g->gameplay.player[0].extendedStats.slow + g->gameplay.player[0].extendedStats.fast;
 					val = g->gameplay.player[0].extendedStats.slow;
 					break;
 
-				case 49:
+				case 49: // Extension: fast-slow
 					max = g->gameplay.player[0].extendedStats.slow + g->gameplay.player[0].extendedStats.fast;
 					val = g->gameplay.player[0].extendedStats.fast;
 					break;
 
-				case 58:
+				case 58: // Extension: fast-slow
 					if (g->config.play.battle == 1) {
 						max = g->gameplay.player[1].extendedStats.slow + g->gameplay.player[1].extendedStats.fast;
 						val = g->gameplay.player[1].extendedStats.slow;
@@ -2482,7 +2482,7 @@ int SetObjectValue_Bargraph(game *g) {
 					else continue;
 					break;
 
-				case 59:
+				case 59: // Extension: fast-slow
 					if (g->config.play.battle == 1) {
 						max = g->gameplay.player[1].extendedStats.slow + g->gameplay.player[1].extendedStats.fast;
 						val = g->gameplay.player[1].extendedStats.fast;
