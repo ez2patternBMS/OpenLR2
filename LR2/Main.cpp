@@ -1497,6 +1497,7 @@ int main(int argc, char** argv) {
 						if (gs.config.play.battle >= 1 && gs.config.play.battle != 3) gs.config.play.battle = 0;
 					}
 					gs.gameplay.flag_retry = 0;
+					SetObjectString(30, gs.sSelect.stack_searchTitle[gs.sSelect.cur], gs.txtStruct.objectStr);
 					break;
 				case 3:
 					gs.config.play.randSC[0] = 0;
@@ -2355,7 +2356,8 @@ int main(int argc, char** argv) {
 		remove("LR2files/movie_temp.mp3");
 		remove("LR2files/movie_temp.wav");
 	}
-	gs.net.WaitAndInitRanking();
+	gs.net.WaitForRankingHandle();
+	gs.net.rankingData.Init();
 	gs.gameplay.flag_closingPhase = 1;
 	gs.gameplay.isPreviewLoad = 0;
 	gs.gameplay.flag_gameinput = 0;
