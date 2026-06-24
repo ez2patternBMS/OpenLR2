@@ -2463,6 +2463,32 @@ int SetObjectValue_Bargraph(game *g) {
 					max = mybest.total_notes * 2;
 					val = mybest.stat_exscore;
 					break;
+
+				case 48:
+					max = g->gameplay.player[0].extendedStats.slow + g->gameplay.player[0].extendedStats.fast;
+					val = g->gameplay.player[0].extendedStats.slow;
+					break;
+
+				case 49:
+					max = g->gameplay.player[0].extendedStats.slow + g->gameplay.player[0].extendedStats.fast;
+					val = g->gameplay.player[0].extendedStats.fast;
+					break;
+
+				case 58:
+					if (g->config.play.battle == 1) {
+						max = g->gameplay.player[1].extendedStats.slow + g->gameplay.player[1].extendedStats.fast;
+						val = g->gameplay.player[1].extendedStats.slow;
+					}
+					else continue;
+					break;
+
+				case 59:
+					if (g->config.play.battle == 1) {
+						max = g->gameplay.player[1].extendedStats.slow + g->gameplay.player[1].extendedStats.fast;
+						val = g->gameplay.player[1].extendedStats.fast;
+					}
+					else continue;
+					break;
 			}
 
 			if (val > 0) {
@@ -3239,8 +3265,8 @@ int SetObjectValue_Button(game *g, skstruct *sk, Timer *T, char flag) {
 			case 41:
 				if (g->config.play.battle == 1) {
 					isClickSuccess = g->procSelecter == 4 || g->procSelecter == 5 || g->procSelecter == 13 ?
-						ButtonByInput(&sk->drBuf, &sk->otherObject[1].src[i], &sk->otherObject[1].dst[i], T, &g->KeyInput, &g->gameplay.player[0].gaugeType, 0, 5, g->sSelect.panel) :
-						ButtonByInput(&sk->drBuf, &sk->otherObject[1].src[i], &sk->otherObject[1].dst[i], T, &g->KeyInput, &g->config.play.gaugeOption[0], 0, 5, g->sSelect.panel);
+						ButtonByInput(&sk->drBuf, &sk->otherObject[1].src[i], &sk->otherObject[1].dst[i], T, &g->KeyInput, &g->gameplay.player[1].gaugeType, 0, 5, g->sSelect.panel) :
+						ButtonByInput(&sk->drBuf, &sk->otherObject[1].src[i], &sk->otherObject[1].dst[i], T, &g->KeyInput, &g->config.play.gaugeOption[1], 0, 5, g->sSelect.panel);
 					if (isClickSuccess == 2) {
 						PlaySound(&g->audio, &g->audio.sysSound.option_change, g->audio.chnKey, -1);
 						SetObjectStrings_SongSelect(g);
