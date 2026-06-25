@@ -8,6 +8,8 @@
 
 void ReactInput(game *g) {
 
+	SetClientMousePositionFixFlag(g->procSelecter != 4);
+
 	GetTimeWrap();
 	if (g->txtStruct.readme.show > 0 && g->is_starter == 0) {
 

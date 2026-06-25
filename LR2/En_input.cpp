@@ -1,7 +1,6 @@
 ﻿#include "En_input.h"
 #include "En_timer.h"
 #include "En_graphic.h"
-
 #include <DxLib/DxLib.h>
 
 #ifndef _WIN32
@@ -28,6 +27,7 @@ typedef struct MIDI {
 }MIDI;
 
 static MIDI midi;
+static bool g_clientMousePositionFix = false;
 
 #ifndef _WIN32
 #define LOWORD(l) ((WORD)(((DWORD_PTR)(l)) & 0xffff))
@@ -42,6 +42,9 @@ static int ScaleClientPointToSkin(int point, int clientSize, int skinSize) {
 }
 
 static void FixMousePointWithClientPosition(int* mouseX, int* mouseY) {
+	if (!g_clientMousePositionFix) return;
+	if (GetUseFullScreenResolutionMode() != DX_FSRESOLUTIONMODE_BORDERLESS_WINDOW) return;
+
 	const HWND hWnd = GetMainWindowHandle();
 	if (hWnd == nullptr) return;
 
@@ -58,6 +61,10 @@ static void FixMousePointWithClientPosition(int* mouseX, int* mouseY) {
 	*mouseY = ScaleClientPointToSkin(cursorPoint.y, clientHeight, skinSizeY);
 }
 #endif // _WIN32
+
+void SetClientMousePositionFixFlag(bool enabled) {
+	g_clientMousePositionFix = enabled;
+}
 
 // TODO structure array rework
 int InitInputStructure2(inputStructure *is){
