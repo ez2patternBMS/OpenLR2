@@ -248,11 +248,16 @@ void CUSTOMIR_MANAGER::Initialize(const std::filesystem::path& directory, std::s
 }
 
 void CUSTOMIR_MANAGER::Login() {
+	login_result.clear();
+	display_ir_login = false;
 	for (auto& ir : mModules) {
 		if (ir->Login()) {
-			OverlayNotification("[%s] Logged in\n", ir->Name().c_str());
+			login_result += "[" + ir->Name() + "] Logged in\n";
+			if (ir->Name() == mDisplayIr) {
+				display_ir_login = true;
+			}
 		} else {
-			OverlayNotification("[%s] Failed to log in\n", ir->Name().c_str());
+			login_result += "[" + ir->Name() + "] Failed to log in\n";
 		}
 	}
 }
