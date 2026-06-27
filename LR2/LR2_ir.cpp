@@ -626,6 +626,8 @@ int NETWORK::HTTPrequest() {
 	ErrorLogAdd(this->request_debug);
 	return 0;
 #else
+	cstrSprintf(&this->request_debug, "Linux user error\n");
+	ErrorLogAdd(this->request_debug);
 	return -1; // TODO(linux): stub
 #endif // _WIN32
 }
@@ -862,14 +864,6 @@ int NETWORK::LR2IR_Login(int isDirectPlay) {
 		this->isOnline = false;
 		ErrorLogAdd(this->request_debug);
 		WSACleanup();
-		return -99;
-	}
-#else
-	if (true) { // TODO(linux): stub
-		this->request_debug = "linux\n";
-		this->request_result = "happy with yourself?\n";
-		this->isOnline = false;
-		ErrorLogAdd(this->request_debug);
 		return -99;
 	}
 #endif // _WIN32
