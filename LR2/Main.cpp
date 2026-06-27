@@ -84,35 +84,23 @@ static bool run_tests() {
 #ifdef _WIN32
 static int g_exclusiveDisplayIndex = -1;
 
-// Pick the monitor that contains the center of the game window. This makes
-// fullscreen follow the game window after it was moved to another monitor.
-static int GetWindowDisplayIndex() {
-	// wx/wy are the game window position. ww/wh are the game window size.
+static int FindMonitorThatContainsWindowCenter() {
+	// All of these functions return coordinates on the global plane, where all monitors are laid out consecutively.
 	int wx = 0, wy = 0;
-	int ww = 0, wh = 0;
 	GetWindowPosition(&wx, &wy);
+	int ww = 0, wh = 0;
 	GetWindowSize(&ww, &wh);
 
-	// targetX/targetY are the center point used to decide the target monitor.
-	const int targetX = wx + ww / 2;
-	const int targetY = wy + wh / 2;
+	const int centerX = wx + ww / 2;
+	const int centerY = wy + wh / 2;
 	const int displayCount = GetDisplayNum();
 	for (int i = 0; i < displayCount; i++) {
-		// dx/dy are the monitor position. dw/dh are the monitor size.
 		int dx = 0, dy = 0, dw = 0, dh = 0, primary = 0;
-		// Get each monitor rectangle and check if the game window center is inside it.
 		if (GetDisplayInfo(i, &dx, &dy, &dw, &dh, &primary) != 0) continue;
-		if (targetX >= dx && targetX < dx + dw && targetY >= dy && targetY < dy + dh) return i;
+		if (centerX >= dx && centerX < dx + dw && centerY >= dy && centerY < dy + dh) return i;
 	}
 
 	return -1;
-}
-
-static int GetDisplayRefreshRate(int displayIndex) {
-	if (displayIndex < 0) return 0;
-	int refreshRate = 0;
-	if (GetDisplayInfo(displayIndex, nullptr, nullptr, nullptr, nullptr, nullptr, &refreshRate) != 0) return 0;
-	return refreshRate;
 }
 
 // Applies the configured screen mode.
@@ -124,7 +112,7 @@ static int GetDisplayRefreshRate(int displayIndex) {
 static void ApplyScreenMode(int screenmode) {
 	switch (screenmode) {
 		case 0: {
-			const int displayIndex = GetWindowDisplayIndex();
+			const int displayIndex = FindMonitorThatContainsWindowCenter();
 			if (displayIndex >= 0) {
 				SetUseDisplayIndex(displayIndex);
 				g_exclusiveDisplayIndex = displayIndex;
@@ -140,7 +128,7 @@ static void ApplyScreenMode(int screenmode) {
 		case 2:
 		default: {
 			g_exclusiveDisplayIndex = -1;
-			const int displayIndex = GetWindowDisplayIndex();
+			const int displayIndex = FindMonitorThatContainsWindowCenter();
 			if (displayIndex >= 0) SetUseDisplayIndex(displayIndex);
 			SetFullScreenResolutionMode(DX_FSRESOLUTIONMODE_BORDERLESS_WINDOW);
 			ChangeWindowMode(0);
@@ -152,9 +140,19 @@ static void ApplyScreenMode(int screenmode) {
 
 static double GetFrameLimiterRefreshRate() {
 #ifdef _WIN32
-	int refreshRate = GetDisplayRefreshRate(g_exclusiveDisplayIndex);
-	if (refreshRate <= 0) refreshRate = GetDisplayRefreshRate(GetWindowDisplayIndex());
-	if (refreshRate > 0) return (double)refreshRate;
+	int refreshRate = 0;
+	if (g_exclusiveDisplayIndex >= 0 &&
+		GetDisplayInfo(g_exclusiveDisplayIndex, nullptr, nullptr, nullptr, nullptr, nullptr, &refreshRate) == 0 &&
+		refreshRate > 0) {
+		return (double)refreshRate;
+	}
+
+	const int displayIndex = FindMonitorThatContainsWindowCenter();
+	if (displayIndex >= 0 &&
+		GetDisplayInfo(displayIndex, nullptr, nullptr, nullptr, nullptr, nullptr, &refreshRate) == 0 &&
+		refreshRate > 0) {
+		return (double)refreshRate;
+	}
 #endif // _WIN32
 
 	const double fallbackRefreshRate = DxLib::GetRefreshRate();
