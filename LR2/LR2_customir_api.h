@@ -109,6 +109,12 @@ struct IRScoreV1 {
 	} graphs{};
 	// In LR2 ghost format. May not be present in some cases, e.g. course scores. Example: E@3ZZ.
 	std::string ghostData;
+	// Chart level at play time (SONGDATA::level). 0 if unknown or not applicable.
+	int songPlayLevel{};
+	uint64_t reserved1{};
+	uint64_t reserved2{};
+	uint64_t reserved3{};
+	uint64_t reserved4{};
 };
 
 enum class SendScoreStatus: int {
