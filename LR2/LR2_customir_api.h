@@ -59,6 +59,7 @@ struct IRScoreV1 {
 		int m_extra{};
 		char m_lunaris{};
 		bool m_gas{};
+		int m_newbmscommand{};
 		int gomiscore{};
 		int disablecurspeedchange{};
 	} settings{};

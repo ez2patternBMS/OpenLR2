@@ -93,7 +93,7 @@ int Print_ManiacOptions(game *g) {
 	printfDx("変態オプションの仮置き場です。\n");
 	printfDx("トライアル改訂の際はこの手のオプションを多数取り入れる予定です。\n");
 	printfDx("これらのオプションは、基本的にリプレイに反映されません。\n");
-	printfDx("カーソルキーで選択・変更ができます。\n%03d/%03d\n\n\n",g->sSelect.maniac_cursor + 1, 22);
+	printfDx("カーソルキーで選択・変更ができます。\n%03d/%03d\n\n\n",g->sSelect.maniac_cursor + 1, 23);
 
 	int pg_cursor = g->sSelect.maniac_cursor / 10 * 10;
 	int pg_max = pg_cursor + 10;
@@ -417,6 +417,18 @@ int Print_ManiacOptions(game *g) {
 					if (g->KeyInput.inputID[KEY_INPUT_RIGHT] == 1) g->config.play.m_gas = g->config.play.m_gas == 0;
 				}
 				break;
+			case 22:
+				printfDx("NEW BMS COMMAND     ");
+				pOpVal = &g->config.play.m_newbmscommand;
+				if (*pOpVal == -1) printfDx("STRICT OFF");
+				if (*pOpVal == 0) printfDx("OFF");
+				if (*pOpVal == 1) printfDx("ON");	
+
+				if (g->sSelect.maniac_cursor == 22) {
+					if (g->KeyInput.inputID[KEY_INPUT_LEFT] == 1) LoopInRange(-1, 1, -1, pOpVal);
+					if (g->KeyInput.inputID[KEY_INPUT_RIGHT] == 1) LoopInRange(-1, 1, 1, pOpVal);
+				}
+				break;
 			default:
 				break;
 		}
@@ -522,14 +534,18 @@ int Print_ManiacOptions(game *g) {
 		printfDx("Will not shift to the gauge harder than originally selected (Start with easy -> groove).\n");
 		printfDx("If enabled, will save the score with the best survived gauge regardless of what's displayed.\n");
 		break;
+	case 22:
+		printfDx("Test new BMS command that score impactive.\n");
+		printfDx("Currently score will not saved.\n");
+		break;
 	}
 
 	if (g->KeyInput.inputID[KEY_INPUT_UP] == 1) {
-		LoopInRange(0, 21, -1, &g->sSelect.maniac_cursor);
+		LoopInRange(0, 22, -1, &g->sSelect.maniac_cursor);
 	}
 
 	if (g->KeyInput.inputID[KEY_INPUT_DOWN] == 1) {
-		LoopInRange(0, 21, 1, &g->sSelect.maniac_cursor);
+		LoopInRange(0, 22, 1, &g->sSelect.maniac_cursor);
 	}
 
 	return 1;

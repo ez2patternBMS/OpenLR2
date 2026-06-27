@@ -581,6 +581,8 @@ int WriteOpenLr2ConfigXml(game *g, const char *filename){
 	fputs("\t<play>\n", pFile);
 	sprintf(buf, "\t\t<%s>%d</%s>\n", "gaugeautoshift", (g->config).play.m_gas, "gaugeautoshift");
 	fputs(buf, pFile);
+	sprintf(buf, "\t\t<%s>%d</%s>\n", "newbmscommand", (g->config).play.m_newbmscommand, "newbmscommand");
+	fputs(buf, pFile);
 	fputs("\t</play>\n", pFile);
 
 	fputs("\t<skin>\n", pFile);
@@ -1182,6 +1184,7 @@ int ReadOpenLr2Config(game* g, const char* filepath) {
 	}
 	ReadXml_Int("config", "system", "resolution", 0, &g->config.system.resolution, hXml);
 	ReadXml_PositiveIntAsBool("config", "play", "gaugeautoshift", false, &g->config.play.m_gas, hXml);
+	ReadXml_Int("config", "play", "newbmscommand", 0, &g->config.play.m_newbmscommand, hXml);
 	ReadXml_Str("config", "skin", "courseresult", "", &g->config.skin.skinFilePath[15], hXml);
 	ReadXml_Str("config", "network", "display_ir", "", &g->config.network.displayIr, hXml);
 	delete(hXml);

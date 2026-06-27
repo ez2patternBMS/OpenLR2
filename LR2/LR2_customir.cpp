@@ -349,6 +349,7 @@ struct IRScoreInternal {
 		int m_extra{};
 		char m_lunaris{};
 		bool m_gas{};
+		int m_newbmscommand{};
 		int gomiscore{};
 		int disablecurspeedchange{};
 	} settings{};
@@ -448,6 +449,7 @@ void IRScoreInternal::MakeScoreV1(IRScoreV1& scoreOut) const {
 	scoreOut.settings.m_extra = settings.m_extra;
 	scoreOut.settings.m_lunaris = settings.m_lunaris;
 	scoreOut.settings.m_gas = settings.m_gas;
+	scoreOut.settings.m_newbmscommand = settings.m_newbmscommand;
 	scoreOut.settings.gomiscore = settings.gomiscore;
 	scoreOut.settings.disablecurspeedchange = settings.disablecurspeedchange;
 
@@ -570,6 +572,7 @@ IRScoreInternal::IRScoreInternal(game& game, sqlite3* sql, int _player) {
 	settings.m_extra = cfg.m_extra;
 	settings.m_lunaris = cfg.m_lunaris;
 	settings.m_gas = cfg.m_gas;
+	settings.m_newbmscommand = cfg.m_newbmscommand;
 	settings.gomiscore = cfg.gomiscore;
 	settings.disablecurspeedchange = cfg.disablecurspeedchange;
 
