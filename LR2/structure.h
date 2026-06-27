@@ -90,23 +90,17 @@ typedef enum SKINTYPE {
 
 typedef enum GRHANDLETYPE {
 	GRHTYPE_STAGE = 100,
-	GRHTYPE_BACKBMP = 101,
-	GRHTYPE_BANNER = 102,
+	GRHTYPE_BACKBMP,
+	GRHTYPE_BANNER,
 
 	GRHTYPE_PREVIEW = 105,
+	GRHTYPE_PREVIEW_106,
 
 	GRHTYPE_BLACK = 110,
-	GRHTYPE_WHITE = 111
+	GRHTYPE_WHITE
 }GRHANDLETYPE;
 
 constexpr const char* HSFIXSTRINGS[] = { "OFF", "MAXBPM", "MINBPM", "AVERAGE", "CONSTANT", "MAINBPM" };
-
-#define GrH_Stage 100
-#define GrH_BackBMP 101
-#define GrH_Banner 102
-#define GrH_Preview 105 
-#define GrH_Black 110 
-#define GrH_White 111 
 
 struct BMSMETA {
 	CSTR hash;
