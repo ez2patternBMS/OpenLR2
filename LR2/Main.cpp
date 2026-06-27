@@ -115,12 +115,6 @@ static int GetDisplayRefreshRate(int displayIndex) {
 	return refreshRate;
 }
 
-static int ApplyCurrentWindowDisplayIndex() {
-	const int displayIndex = GetWindowDisplayIndex();
-	if (displayIndex >= 0) SetUseDisplayIndex(displayIndex);
-	return displayIndex;
-}
-
 // Applies the configured screen mode.
 //   0 = desktop fullscreen (exclusive, bypasses the DWM -> lower input latency)
 //   1 = windowed
@@ -129,24 +123,29 @@ static int ApplyCurrentWindowDisplayIndex() {
 // ChangeWindowMode only toggles windowed(1)/fullscreen(0).
 static void ApplyScreenMode(int screenmode) {
 	switch (screenmode) {
-	case 0: {
-		const int displayIndex = ApplyCurrentWindowDisplayIndex();
-		if (displayIndex >= 0) g_exclusiveDisplayIndex = displayIndex;
-		SetFullScreenResolutionMode(DX_FSRESOLUTIONMODE_DESKTOP);
-		ChangeWindowMode(0);
-		break;
-	}
-	case 1:
-		g_exclusiveDisplayIndex = -1;
-		ChangeWindowMode(1);
-		break;
-	case 2:
-	default:
-		g_exclusiveDisplayIndex = -1;
-		ApplyCurrentWindowDisplayIndex();
-		SetFullScreenResolutionMode(DX_FSRESOLUTIONMODE_BORDERLESS_WINDOW);
-		ChangeWindowMode(0);
-		break;
+		case 0: {
+			const int displayIndex = GetWindowDisplayIndex();
+			if (displayIndex >= 0) {
+				SetUseDisplayIndex(displayIndex);
+				g_exclusiveDisplayIndex = displayIndex;
+			}
+			SetFullScreenResolutionMode(DX_FSRESOLUTIONMODE_DESKTOP);
+			ChangeWindowMode(0);
+			break;
+		}
+		case 1:
+			g_exclusiveDisplayIndex = -1;
+			ChangeWindowMode(1);
+			break;
+		case 2:
+		default: {
+			g_exclusiveDisplayIndex = -1;
+			const int displayIndex = GetWindowDisplayIndex();
+			if (displayIndex >= 0) SetUseDisplayIndex(displayIndex);
+			SetFullScreenResolutionMode(DX_FSRESOLUTIONMODE_BORDERLESS_WINDOW);
+			ChangeWindowMode(0);
+			break;
+		}
 	}
 }
 #endif // _WIN32
