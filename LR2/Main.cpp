@@ -103,6 +103,42 @@ static int FindMonitorThatContainsWindowCenter() {
 	return -1;
 }
 
+static int GetUseDisplayIndex(int displayInfoIndex) {
+	if (displayInfoIndex < 0) return -1;
+
+	int targetPrimary = 0;
+	if (GetDisplayInfo(displayInfoIndex, nullptr, nullptr, nullptr, nullptr, &targetPrimary) != 0) return -1;
+	if (targetPrimary) return 0;
+
+	int useDisplayIndex = 1;
+	const int displayCount = GetDisplayNum();
+	for (int i = 0; i < displayCount; i++) {
+		if (i == displayInfoIndex) return useDisplayIndex;
+
+		int primary = 0;
+		if (GetDisplayInfo(i, nullptr, nullptr, nullptr, nullptr, &primary) != 0) continue;
+		if (!primary) useDisplayIndex++;
+	}
+
+	return -1;
+}
+
+// After Windows changes the primary monitor at runtime, DxLib can restore the
+// windowed mode on the wrong display when leaving exclusive fullscreen. Move it
+// back to the target display while keeping the same relative offset.
+static void MoveWindowToDisplay(int targetDisplayIndex, int sourceDisplayIndex) {
+	if (targetDisplayIndex < 0 || sourceDisplayIndex < 0) return;
+
+	int targetX = 0, targetY = 0;
+	int sourceX = 0, sourceY = 0;
+	if (GetDisplayInfo(targetDisplayIndex, &targetX, &targetY, nullptr, nullptr, nullptr) != 0) return;
+	if (GetDisplayInfo(sourceDisplayIndex, &sourceX, &sourceY, nullptr, nullptr, nullptr) != 0) return;
+
+	int wx = 0, wy = 0;
+	GetWindowPosition(&wx, &wy);
+	SetWindowPosition(targetX + wx - sourceX, targetY + wy - sourceY);
+}
+
 // Applies the configured screen mode.
 //   0 = desktop fullscreen (exclusive, bypasses the DWM -> lower input latency)
 //   1 = windowed
@@ -112,19 +148,27 @@ static int FindMonitorThatContainsWindowCenter() {
 static void ApplyScreenMode(int screenmode) {
 	switch (screenmode) {
 		case 0: {
-			const int displayIndex = FindMonitorThatContainsWindowCenter();
-			if (displayIndex >= 0) {
-				SetUseDisplayIndex(displayIndex);
-				g_exclusiveDisplayIndex = displayIndex;
+			const int displayInfoIndex = FindMonitorThatContainsWindowCenter();
+			const int useDisplayIndex = GetUseDisplayIndex(displayInfoIndex);
+			if (useDisplayIndex >= 0) {
+				SetUseDisplayIndex(useDisplayIndex);
+				g_exclusiveDisplayIndex = displayInfoIndex;
 			}
 			SetFullScreenResolutionMode(DX_FSRESOLUTIONMODE_DESKTOP);
 			ChangeWindowMode(0);
 			break;
 		}
 		case 1:
+		{
+			const int displayIndex = FindMonitorThatContainsWindowCenter();
 			g_exclusiveDisplayIndex = -1;
 			ChangeWindowMode(1);
+			const int restoredDisplayIndex = FindMonitorThatContainsWindowCenter();
+			if (displayIndex >= 0 && restoredDisplayIndex >= 0 && displayIndex != restoredDisplayIndex) {
+				MoveWindowToDisplay(displayIndex, restoredDisplayIndex);
+			}
 			break;
+		}
 		case 2:
 		default: {
 			g_exclusiveDisplayIndex = -1;
